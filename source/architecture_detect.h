@@ -7,7 +7,12 @@
  */
 
 #ifndef __MASTER_ARCHITECTURE_DETECT_INCLUDE_H__
-#define __MASTER_ARCHITECTURE_DETECT_INCLUDE_H__
+#define __MASTER_ARCHITECTURE_DETECT_INCLUDE_H__ (MASTER_LIBRARY_AVAILABLE + \
+												  MASTER_LIBRARY_INCREMENTHATE + \
+												  MASTER_LIBRARY_FiCViN + \
+												  MASTER_LIBRARY_NO_FUNCTIONS + \
+												  MASTER_LIBRARY_GRAPHSHATE + \
+												  MASTER_LIBRARY_FREESTANDING)
 
 #include <master_enum.h>
 
@@ -24,6 +29,9 @@
 	#if !defined(MASTER_ARCHITECTURE_UNALIGN_FRIENDLY)
 		#warning "Custom architecture needs to know about unalign friendly, printed as boolean 1 or 0 in macros \"MASTER_ARCHITECTURE_UNALIGN_FRIENDLY\" (optional)"
 	#endif /* #! MASTER_ARCHITECTURE_UNALIGN_FRIENDLY !# */
+	#if !defined(MASTER_ARCHITECTURE_ENDIAN)
+		#warning "Custom architecture needs to know about endian, printed as macros MASTER_(LITTLE|BIG|PDP|UNKNOWN)_ENDIAN from master_enum.h in macros \"MASTER_ARCHITECTURE_ENDIAN\" (optional)"
+	#endif /* #! MASTER_ARCHITECTURE_ENDIAN !# */
 	
 #elif defined(__alpha__) || defined(__alpha) || defined(_M_ALPHA)
 	#define MASTER_ARCHITECTURE_NAME "Alpha"
@@ -145,6 +153,54 @@
 	#define MASTER_ARCHITECTURE_INSTRUCTIONS_TYPE "undefined"
 
 #endif /* #! ARCHITECTURE !# */
+
+#if defined(__amd64__) || \
+	defined(__x86_64__) || \
+	defined(_M_X64) || \
+	defined(__i386__) || \
+	defined(_M_IX86) || \
+	defined(__alpha__) || \
+	defined(__ia64__) || \
+	defined(_M_IA64) || \
+	defined(__bfin)
+	#define MASTER_ARCHITECTURE_ENDIAN MASTER_LITTLE_ENDIAN
+	
+#elif defined(__m68k__) || \
+	  defined(__sparc__) || \
+	  defined(__hppa__) || \
+	  defined(__s390x__) || \
+	  defined(__zarch__) || \
+	  defined(pyr)
+	#define MASTER_ARCHITECTURE_ENDIAN MASTER_BIG_ENDIAN
+
+#elif defined(__arm__) || defined(__aarch64__)
+	#if defined(__ARMEB__) || defined(__AARCH64EB__)
+		#define MASTER_ARCHITECTURE_ENDIAN MASTER_BIG_ENDIAN
+	
+	#else
+		#define MASTER_ARCHITECTURE_ENDIAN MASTER_LITTLE_ENDIAN
+	
+	#endif /* #! ARM / AARCH64 !# */
+
+#elif defined(__powerpc__) || defined(__ppc__) || defined(_ARCH_PPC)
+	#if defined(_LITTLE_ENDIAN) || defined(__LITTLE_ENDIAN__)
+		#define MASTER_ARCHITECTURE_ENDIAN MASTER_LITTLE_ENDIAN
+		
+	#else
+		#define MASTER_ARCHITECTURE_ENDIAN MASTER_BIG_ENDIAN
+	
+	#endif /* #! POWERPC !# */
+	
+#elif defined(__mips__)
+	#if defined(__MIPSEL__)
+		#define MASTER_ARCHITECTURE_ENDIAN MASTER_LITTLE_ENDIAN
+		
+	#else
+		#define MASTER_ARCHITECTURE_ENDIAN MASTER_BIG_ENDIAN
+	
+	#endif /* #! MIPS !# */
+	
+#endif /* #! Architecture Endian !# */
 
 #if !defined(MASTER_ARCHITECTURE_UNALIGN_FRIENDLY)
 	#define MASTER_ARCHITECTURE_UNALIGN_FRIENDLY 0
