@@ -274,7 +274,11 @@ typedef UI4 UT;
 		#define MASTER_PREFER_CONST
 		#define MASTER_PREFER_INLINE
 		#define MASTER_PREFER_STATIC
-		#define MASTER_PREFER_EXTERN
+		#ifdef __cplusplus
+			#define MASTER_PREFER_EXTERN extern
+		#else
+			#define MASTER_PREFER_EXTERN
+		#endif /* #! C++ !# */
 		#define MASTER_PREFER_HOT
 		#define MASTER_PREFER_COLD
 		#define MASTER_PREFER_HIDDEN

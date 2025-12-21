@@ -24,13 +24,16 @@ MASTER_PREFER_EXTERN MASTER_PREFER_STATIC UI4 MASTER_Distance_Levenshtein_( cons
 MASTER_PREFER_EXTERN UI4 MASTER_Distance_LevenshteinRaw( const UI1 * const, const UI4, const UI1 * const, const UI4 );
 MASTER_PREFER_EXTERN MASTER_PREFER_INLINE UI4 MASTER_Distance_Levenshtein( const char * const, const char * const );
 
-UI4
-MASTER_Distance_HammingRaw( bytes1, length1, bytes2, length2 )
-	const UI1 * const bytes1;
-	const UI4 length1;
-	const UI1 * const bytes2;
-	const UI4 length2;
-{
+MASTER_DEFINE_FUNCTION4(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_Distance_HammingRaw /* ! */,
+	UI4,
+	( const UI1 * const, bytes1 ),
+	( const UI4, length1 ),
+	( const UI1 * const, bytes2 ),
+	( const UI4, length2 )
+) {
 	UI4 score = 0;
 	UI4 index = 0;
 	if (bytes1 == nul || length1 == 0) return length2;
@@ -42,11 +45,14 @@ MASTER_Distance_HammingRaw( bytes1, length1, bytes2, length2 )
 	return score;
 }
 
-MASTER_PREFER_INLINE UI4
-MASTER_Distance_Hamming( string1, string2 )
-	const char * const string1;
-	const char * const string2;
-{
+MASTER_DEFINE_FUNCTION2(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_Distance_Hamming /* ! */,
+	MASTER_PREFER_INLINE UI4,
+	( const char * const, string1 ),
+	( const char * const, string2 )
+) {
 	return MASTER_Distance_HammingRaw((UI1 *)string1, MASTER_CPRLEN(string1), (UI1 *)string2, MASTER_CPRLEN(string2));
 }
 
@@ -60,13 +66,16 @@ MASTER_CountOnes( UI4 number ) {
 	return res;
 }
 
-UI4
-MASTER_Distance_BitHammingRaw( bytes1, length1, bytes2, length2 )
-	const UI1 * const bytes1;
-	const UI4 length1;
-	const UI1 * const bytes2;
-	const UI4 length2;
-{
+MASTER_DEFINE_FUNCTION4(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_Distance_BitHammingRaw /* ! */,
+	UI4,
+	( const UI1 * const, bytes1 ),
+	( const UI4, length1 ),
+	( const UI1 * const, bytes2 ),
+	( const UI4, length2 )
+) {
 	UI4 score = 0;
 	UI4 index = 0;
 	if (bytes1 == nul || length1 == 0) return length2;
@@ -77,21 +86,27 @@ MASTER_Distance_BitHammingRaw( bytes1, length1, bytes2, length2 )
 	return score;
 }
 
-MASTER_PREFER_INLINE UI4
-MASTER_Distance_BitHamming( string1, string2 )
-	const char * const string1;
-	const char * const string2;
-{
+MASTER_DEFINE_FUNCTION2(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_Distance_BitHamming /* ! */,
+	MASTER_PREFER_INLINE UI4,
+	( const char * const, string1 ),
+	( const char * const, string2 )
+) {
 	return MASTER_Distance_BitHammingRaw((UI1 *)string1, MASTER_CPRLEN(string1), (UI1 *)string2, MASTER_CPRLEN(string2));
 }
 
-MASTER_PREFER_STATIC UI4
-MASTER_Distance_Levenshtein_( bytes1, length1, bytes2, length2 )
-	const UI1 * const bytes1;
-	const UI4 length1;
-	const UI1 * const bytes2;
-	const UI4 length2;
-{
+MASTER_DEFINE_FUNCTION4(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_Distance_Levenshtein_ /* ! */,
+	MASTER_PREFER_STATIC UI4,
+	( const UI1 * const, bytes1 ),
+	( const UI4, length1 ),
+	( const UI1 * const, bytes2 ),
+	( const UI4, length2 )
+) {
 	/* #! length1 <= length2 !# */
 	UI4 * upperRaw;
 	UI4 * lowerRaw;
@@ -103,8 +118,8 @@ MASTER_Distance_Levenshtein_( bytes1, length1, bytes2, length2 )
 	UI4 jndex;
 	if (bytes1 == nul || length1 == 0) return length2;
 	if (bytes2 == nul || length2 == 0) return length1;
-	upperRaw = MASTER_MALLOC((length1 + 1) * sizeof(UI4));
-	lowerRaw = MASTER_MALLOC((length1 + 1) * sizeof(UI4));
+	upperRaw = (UI4 *)MASTER_MALLOC((length1 + 1) * sizeof(UI4));
+	lowerRaw = (UI4 *)MASTER_MALLOC((length1 + 1) * sizeof(UI4));
 	for (index = 0; index <= length1; index += 1)
 		upperRaw[index] = index;
 	for (index = 0; index < length2; index += 1) {
@@ -129,23 +144,29 @@ MASTER_Distance_Levenshtein_( bytes1, length1, bytes2, length2 )
 	return score1;
 }
 
-UI4
-MASTER_Distance_LevenshteinRaw( bytes1, length1, bytes2, length2 )
-	const UI1 * const bytes1;
-	const UI4 length1;
-	const UI1 * const bytes2;
-	const UI4 length2;
-{
+MASTER_DEFINE_FUNCTION4(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_Distance_LevenshteinRaw /* ! */,
+	UI4,
+	( const UI1 * const, bytes1 ),
+	( const UI4, length1 ),
+	( const UI1 * const, bytes2 ),
+	( const UI4, length2 )
+) {
 	if (length1 < length2)
 		return MASTER_Distance_Levenshtein_(bytes1, length1, bytes2, length2);
 	return MASTER_Distance_Levenshtein_(bytes2, length2, bytes1, length1);
 }
 
-MASTER_PREFER_INLINE UI4
-MASTER_Distance_Levenshtein( string1, string2 )
-	const char * const string1;
-	const char * const string2;
-{
+MASTER_DEFINE_FUNCTION2(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_Distance_Levenshtein /* ! */,
+	MASTER_PREFER_INLINE UI4,
+	( const char * const, string1 ),
+	( const char * const, string2 )
+) {
 	return MASTER_Distance_LevenshteinRaw((UI1 *)string1, MASTER_CPRLEN(string1), (UI1 *)string2, MASTER_CPRLEN(string2));
 }
 

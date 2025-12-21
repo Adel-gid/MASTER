@@ -122,7 +122,7 @@ MASTER_PREFER_EXTERN UI4
 MASTER_Checksum_Finish( MASTER_Checksum_Context * const checksum, UI1 * const out );
 MASTER_PREFER_EXTERN UI4
 MASTER_Checksum_Calculate( const UI1 id, const void * const bytes, const MASTER_maxint len, UI1 * const out );
-MASTER_PREFER_EXTERN char *
+MASTER_PREFER_EXTERN const char *
 MASTER_Checksum_GetAlgorithmName( const UI1 id );
 MASTER_PREFER_EXTERN MASTER_maxint
 MASTER_Checksum_GetAlgorithmOutputSize( const UI1 id );
@@ -205,13 +205,13 @@ MASTER_Checksum_Calculate( const UI1 id, const void * const bytes, const MASTER_
 	return MASTER_UI4_MAX;
 }
 
-char *
+const char *
 MASTER_Checksum_GetAlgorithmName( const UI1 id ) {
 	switch (id) {
 #define MASTER_CHECKSUM_API_CREATE_HANDLER_GETALGORITHMNAME( macro_name, algorithm_name, __not_used_1__ ) \
-		case MASTER_CHECKSUM_## macro_name ##_ID : return #algorithm_name;
+		case MASTER_CHECKSUM_## macro_name ##_ID : return (const char *)#algorithm_name;
 		MASTER_CHECKSUM_XMACRO_FOR_DEFINING_ALGORITHMS( MASTER_CHECKSUM_API_CREATE_HANDLER_GETALGORITHMNAME )
-		default : return "Unknown";
+		default : return (const char *)"Unknown";
 	}
 }
 
