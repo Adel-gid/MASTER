@@ -27,6 +27,9 @@
 #include <hashlib.h>
 #include <checksum.h>
 
+/* #! Encodings !# */
+#include <charmaplib.h>
+
 #endif /* #! __MASTER_INCLUDE_ALL_INCLUDE_H__ !# */
 
 /* #! be master~ !# */

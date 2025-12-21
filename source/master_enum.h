@@ -667,18 +667,28 @@ const char * const MASTER_error_codes[] = {
 #define MASTER_2BYTES_TO_INT( a, b ) (((a) << 8) | (b))
 #define MASTER_4BYTES_TO_INT( a, b, c, d ) (((a) << 24) | ((b) << 16) | ((c) << 8) | (d))
 
-#define MASTER_DIV_CEIL2( value ) (((value) + 1) >> 1)
-#define MASTER_DIV_CEIL4( value ) (((value) + 3) >> 2)
-#define MASTER_DIV_CEIL8( value ) (((value) + 7) >> 3)
-#define MASTER_DIV_CEIL16( value ) (((value) + 15) >> 4)
-#define MASTER_DIV_CEIL_POW2( value, bits ) (((value) + ((1 << bits) - 1)) >> (bits))
+#ifndef MASTER_UNSAFE_HOWMANY
+	#define MASTER_DIV_CEIL2( value ) (((value) >> 1) + !!((value) & 1))
+	#define MASTER_DIV_CEIL4( value ) (((value) >> 2) + !!((value) & 3))
+	#define MASTER_DIV_CEIL8( value ) (((value) >> 3) + !!((value) & 7))
+	#define MASTER_DIV_CEIL16( value ) (((value) >> 4) + !!((value) & 15))
+	#define MASTER_DIV_CEIL_POW2( value, bits ) (((value) >> bits) + !!((value) & ((1 << (bits)) - 1)))
+	#define MASTER_HOWMANY( value, subvalue ) (((value) / (subvalue)) + !!((value) % (subvalue)))
+#else
+	/* #! Value can be overflowed after plus and there will be information loses !# */
+	#define MASTER_DIV_CEIL2( value ) (((value) + 1) >> 1)
+	#define MASTER_DIV_CEIL4( value ) (((value) + 3) >> 2)
+	#define MASTER_DIV_CEIL8( value ) (((value) + 7) >> 3)
+	#define MASTER_DIV_CEIL16( value ) (((value) + 15) >> 4)
+	#define MASTER_DIV_CEIL_POW2( value, bits ) (((value) + ((1 << (bits)) - 1)) >> (bits))
+	#define MASTER_HOWMANY( value, subvalue ) (((value) + ((subvalue) - 1)) / (subvalue))
+#endif /* #! MASTER_UNSAFE_HOWMANY !# */
 
 #define MASTER_HOWMANY2( value ) MASTER_DIV_CEIL2( value )
 #define MASTER_HOWMANY4( value ) MASTER_DIV_CEIL4( value )
 #define MASTER_HOWMANY8( value ) MASTER_DIV_CEIL8( value )
 #define MASTER_HOWMANY16( value ) MASTER_DIV_CEIL16( value )
 #define MASTER_HOWMANY_POW2( value, bits ) MASTER_DIV_CEIL_POW2( value, bits )
-#define MASTER_HOWMANY( value, bits ) (((value) + ((bits) - 1)) / (bits))
 #define MASTER_BITS_TO_BYTES( value ) MASTER_DIV_CEIL8( value )
 
 #define MASTER_PADDINGLEN( value, modulo, residue ) (((residue) - ((value) + 1) % (modulo) + (modulo)) % (modulo))
@@ -790,10 +800,14 @@ MASTER_DEFINE_FUNCTION1(
 		} \
 	} while (0)
 
-MASTER_PREFER_INLINE UI1
-MASTER_BITLEN1( value )
-	UI1 value;
-{
+
+MASTER_DEFINE_FUNCTION1(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_BITLEN1 /* ! */,
+	MASTER_PREFER_INLINE UI1,
+	( UI1, value )
+) {
 	UI1 bitcount = 0;
 	__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 4, U);
 	__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 2, U);
@@ -802,10 +816,13 @@ MASTER_BITLEN1( value )
 	return bitcount;
 }
 
-MASTER_PREFER_INLINE UI2
-MASTER_BITLEN2( value ) 
-	UI2 value;
-{
+MASTER_DEFINE_FUNCTION1(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_BITLEN2 /* ! */,
+	MASTER_PREFER_INLINE UI2,
+	( UI2, value )
+) {
 	UI1 bitcount = 0;
 	__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 8, U);
 	__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 4, U);
@@ -815,10 +832,13 @@ MASTER_BITLEN2( value )
 	return bitcount;
 }
 
-MASTER_PREFER_INLINE UI4
-MASTER_BITLEN4( value )
-	UI4 value;
-{
+MASTER_DEFINE_FUNCTION1(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_BITLEN4 /* ! */,
+	MASTER_PREFER_INLINE UI4,
+	( UI4, value )
+) {
 	UI1 bitcount = 0;
 	__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 16, U);
 	__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 8, U);
@@ -830,10 +850,13 @@ MASTER_BITLEN4( value )
 }
 
 #if MASTER_64_AVAILABLE == 1
-MASTER_PREFER_INLINE UI8
-MASTER_BITLEN8( value )
-	UI8 value;
-{
+MASTER_DEFINE_FUNCTION1(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_BITLEN8 /* ! */,
+	MASTER_PREFER_INLINE UI8,
+	( UI8, value )
+) {
 	UI1 bitcount = 0;
 	__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 32, ULL);
 	__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 16, U);
@@ -880,22 +903,28 @@ MASTER_BITLEN8( value )
 	#endif /* #! MASTER_64_AVAILABLE !# */
 #else
 	#define __MASTER_POW2ROUNDX_GENERATE_MACRO( suff ) \
-		MASTER_PREFER_INLINE UI##suff \
-		MASTER_POW2ROUND##suff( value ) \
-			UI##suff value; \
-		{ \
-			UI##suff floored = MASTER_POW2FLOOR##suff(value); \
+		MASTER_DEFINE_FUNCTION1( \
+			MASTER_NO_FLAGS, \
+			MASTER_EMPTY_DESCRIPTION, \
+			/* ! */ MASTER_POW2ROUND ## suff /* ! */, \
+			MASTER_PREFER_INLINE UI ## suff, \
+			( UI ## suff, value ) \
+		) { \
+			UI ## suff floored = MASTER_POW2FLOOR ## suff(value); \
 			floored |= floored >> 1; \
 			if (value < floored) return floored & (floored << 1); \
-			return MASTER_POW2CEIL##suff(value); \
+			return MASTER_POW2CEIL ## suff(value); \
 		}
 	#define __MASTER_LOG2ROUNDX_GENERATE_MACRO( suff, numsuff ) \
-		MASTER_PREFER_INLINE UI##suff \
-		MASTER_LOG2ROUND##suff( value ) \
-			UI##suff value; \
-		{ \
-			const UI1 bits = MASTER_LOG2FLOOR##suff(value); \
-			UI##suff floored = 1##numsuff << bits; \
+		MASTER_DEFINE_FUNCTION1( \
+			MASTER_NO_FLAGS, \
+			MASTER_EMPTY_DESCRIPTION, \
+			/* ! */ MASTER_LOG2ROUND ## suff /* ! */, \
+			MASTER_PREFER_INLINE UI ## suff, \
+			( UI ## suff, value ) \
+		) { \
+			const UI1 bits = MASTER_LOG2FLOOR ## suff(value); \
+			UI ## suff floored = 1 ## numsuff << bits; \
 			if (value <= 1) return value - 1; \
 			floored |= floored >> 1; \
 			return bits + (value >= floored); \
@@ -914,10 +943,13 @@ MASTER_BITLEN8( value )
 	#undef __MASTER_LOG2ROUNDX_GENERATE_MACRO
 #endif /* #! MASTER_ROUND_FUNCS_INSTEAD_OF_MACROS !# */
 
-MASTER_PREFER_INLINE UI1
-MASTER_LOG2MATHROUND1( value )
-	UI1 value;
-{
+MASTER_DEFINE_FUNCTION1(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_LOG2MATHROUND1 /* ! */,
+	MASTER_PREFER_INLINE UI1,
+	( UI1, value )
+) {
 	if (value >= 0xB6) return 8;
 	if (value >= 0x5B) return 7;
 	if (value >= 0x2E) return 6;
@@ -928,10 +960,13 @@ MASTER_LOG2MATHROUND1( value )
 	return value - 1;
 }
 
-MASTER_PREFER_INLINE UI1
-MASTER_LOG2MATHROUND2( value )
-	UI2 value;
-{
+MASTER_DEFINE_FUNCTION1(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_LOG2MATHROUND2 /* ! */,
+	MASTER_PREFER_INLINE UI1,
+	( UI2, value )
+) {
 	if (value >= 0xB505) return 16;
 	if (value >= 0x5A83) return 15;
 	if (value >= 0x2D42) return 14;
@@ -943,10 +978,13 @@ MASTER_LOG2MATHROUND2( value )
 	return MASTER_LOG2MATHROUND1(value);
 }
 
-MASTER_PREFER_INLINE UI1
-MASTER_LOG2MATHROUND4( value )
-	UI4 value;
-{
+MASTER_DEFINE_FUNCTION1(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_LOG2MATHROUND4 /* ! */,
+	MASTER_PREFER_INLINE UI1,
+	( UI4, value )
+) {
 	if (value >= 0xB504F334) return 32;
 	if (value >= 0x5A82799A) return 31;
 	if (value >= 0x2D413CCD) return 30;
@@ -967,10 +1005,13 @@ MASTER_LOG2MATHROUND4( value )
 }
 
 #if MASTER_64_AVAILABLE == 1
-MASTER_PREFER_INLINE UI1
-MASTER_LOG2MATHROUND8( value )
-	UI8 value;
-{
+MASTER_DEFINE_FUNCTION1(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_LOG2MATHROUND8 /* ! */,
+	MASTER_PREFER_INLINE UI1,
+	( UI8, value )
+) {
 	if (value >= 0xB504F333F9DDE401) return 64;
 	if (value >= 0x5A827999FCEEF201) return 63;
 	if (value >= 0x2D413CCCFE777901) return 62;
@@ -1303,69 +1344,87 @@ define_macros( long double, ld ); \
 #define MASTER_SaturateUI4( value ) (UI4)MASTER_CLAMP(value, MASTER_UI4_MIN, MASTER_UI4_MAX)
 
 #define __MASTER_MACROS_DEFINE_AddSaturateSIx( type ) \
-type \
-MASTER_AddSaturate##type( a, b ) \
-	const type a; \
-	const type b; \
-{ \
+MASTER_DEFINE_FUNCTION2( \
+	MASTER_NO_FLAGS, \
+	MASTER_EMPTY_DESCRIPTION, \
+	/* ! */ MASTER_AddSaturate ## type /* ! */, \
+	type, \
+	( const type, a ), \
+	( const type, b ) \
+) { \
 	const type c = a + b; \
-	if (a > 0 && b > 0 && c < 0) return MASTER_##type##_MAX; \
-	if (a < 0 && b < 0 && c > 0) return MASTER_##type##_MIN; \
+	if (a > 0 && b > 0 && c < 0) return MASTER_ ## type ## _MAX; \
+	if (a < 0 && b < 0 && c > 0) return MASTER_ ## type ## _MIN; \
 	return c; \
 }
 
 #define __MASTER_MACROS_DEFINE_AddSaturateUIx( type ) \
-type \
-MASTER_AddSaturate##type( a, b ) \
-	const type a; \
-	const type b; \
-{ \
+MASTER_DEFINE_FUNCTION2( \
+	MASTER_NO_FLAGS, \
+	MASTER_EMPTY_DESCRIPTION, \
+	/* ! */ MASTER_AddSaturate ## type /* ! */, \
+	type, \
+	( const type, a ), \
+	( const type, b ) \
+) { \
 	const type c = a + b; \
-	if (c < a) return MASTER_##type##_MAX; \
+	if (c < a) return MASTER_ ## type ## _MAX; \
 	return c; \
 }
 
 #define __MASTER_MACROS_DEFINE_SubSaturateSIx( type ) \
-type \
-MASTER_SubSaturate##type( a, b ) \
-	const type a; \
-	const type b; \
-{ \
+MASTER_DEFINE_FUNCTION2( \
+	MASTER_NO_FLAGS, \
+	MASTER_EMPTY_DESCRIPTION, \
+	/* ! */ MASTER_SubSaturate ## type /* ! */, \
+	type, \
+	( const type, a ), \
+	( const type, b ) \
+) { \
 	const type c = a - b; \
-	if (a >= 0 && b < 0 && c < 0) return MASTER_##type##_MAX; \
-	if (a < 0 && b > 0 && c > 0) return MASTER_##type##_MIN; \
+	if (a >= 0 && b < 0 && c < 0) return MASTER_ ## type ## _MAX; \
+	if (a < 0 && b > 0 && c > 0) return MASTER_ ## type ## _MIN; \
 	return c; \
 }
 
 #define __MASTER_MACROS_DEFINE_SubSaturateUIx( type ) \
-type \
-MASTER_SubSaturate##type( a, b ) \
-	const type a; \
-	const type b; \
-{ \
+MASTER_DEFINE_FUNCTION2( \
+	MASTER_NO_FLAGS, \
+	MASTER_EMPTY_DESCRIPTION, \
+	/* ! */ MASTER_SubSaturate ## type /* ! */, \
+	type, \
+	( const type, a ), \
+	( const type, b ) \
+) { \
 	const type c = a - b; \
-	if (c > a) return MASTER_##type##_MIN; \
+	if (c > a) return MASTER_ ## type ## _MIN; \
 	return c; \
 }
 
 #define __MASTER_MACROS_DEFINE_MulSaturateSIx( type ) \
-type \
-MASTER_MulSaturate##type( a, b ) \
-	const type a; \
-	const type b; \
-{ \
+MASTER_DEFINE_FUNCTION2( \
+	MASTER_NO_FLAGS, \
+	MASTER_EMPTY_DESCRIPTION, \
+	/* ! */ MASTER_MulSaturate ## type /* ! */, \
+	type, \
+	( const type, a ), \
+	( const type, b ) \
+) { \
 	const type c = a * b; \
-	return (b != 0 && c / b != a) ? ( ((a > 0) == (b > 0)) ? MASTER_##type##_MAX : MASTER_##type##_MIN ) : c; \
+	return (b != 0 && c / b != a) ? ( ((a > 0) == (b > 0)) ? (MASTER_ ## type ## _MAX) : (MASTER_ ## type ## _MIN) ) : (c); \
 }
 
 #define __MASTER_MACROS_DEFINE_MulSaturateUIx( type ) \
-type \
-MASTER_MulSaturate##type( a, b ) \
-	const type a; \
-	const type b; \
-{ \
+MASTER_DEFINE_FUNCTION2( \
+	MASTER_NO_FLAGS, \
+	MASTER_EMPTY_DESCRIPTION, \
+	/* ! */ MASTER_MulSaturate ## type /* ! */, \
+	type, \
+	( const type, a ), \
+	( const type, b ) \
+) { \
 	const type c = a * b; \
-	if (b != 0 && c / b != a) return MASTER_##type##_MAX; \
+	if (b != 0 && c / b != a) return MASTER_ ## type ## _MAX; \
 	return c; \
 }
 

@@ -7,6 +7,7 @@ Current available algorithms:
 * Some hash-functions (MD2, MD4, MD5, SHA1) ("./source/hashlib.h");
 * Some checksum-functions (Adler32, unoptimized) ("./source/checksum.h");
 * Some random generate algorithms (soon) ("./source/randomlib.h");
+* Enumerating tables for some encodings (cp437) ("./source/charmaplib.h");
 
 Also available:
 * Listing some useful macros & main header file ("./source/master_enum.h");
