@@ -7,12 +7,7 @@
  */
 
 #ifndef __MASTER_CODE_STYLE_INCLUDE_H__
-#define __MASTER_CODE_STYLE_INCLUDE_H__ (MASTER_LIBRARY_AVAILABLE + \
-										 MASTER_LIBRARY_INCREMENTHATE + \
-										 MASTER_LIBRARY_OCViN + \
-										 MASTER_LIBRARY_STDARGS + \
-										 MASTER_LIBRARY_GRAPHSHATE + \
-										 MASTER_LIBRARY_LIBC)
+#define __MASTER_CODE_STYLE_INCLUDE_H__
 
 /* #! High priority !# */
 
@@ -45,8 +40,13 @@
 
 #ifndef MASTER_64_AVAILABLE
 	#ifdef __cplusplus
-		typedef unsigned long long MASTER_maxint;
-		#define MASTER_64_AVAILABLE 1
+		#if __cplusplus >= 201103L
+			typedef unsigned long long MASTER_maxint;
+			#define MASTER_64_AVAILABLE 1
+		#else
+			typedef unsigned long MASTER_maxint;
+			#define MASTER_64_AVAILABLE 0
+		#endif /* #! C++98 Check !# */
 	#elif !defined(MASTER_NO_LIMITS_DEPENDENCY) && defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
 		#include <limits.h>
 		#if defined(ULLONG_MAX)
@@ -103,7 +103,6 @@
 #if MASTER_64_AVAILABLE == 1
 	#define MASTER_UI8_TYPE unsigned long long int
 	#define MASTER_SI8_TYPE signed long long int
-	
 #endif /* #! MASTER_64_AVAILABLE !# */
 
 typedef unsigned char UI1;
@@ -112,57 +111,36 @@ typedef unsigned int UI4;
 
 #ifdef MASTER_UI8_TYPE
 	typedef MASTER_UI8_TYPE UI8;
-	#define MASTER_UI8_ADD( a, b ) (UI8)(a) + (UI8)(b)
-	#define MASTER_UI8_SUB( a, b ) (UI8)(a) - (UI8)(b)
-	#define MASTER_UI8_MUL( a, b ) (UI8)(a) * (UI8)(b)
-	#define MASTER_UI8_DIV( a, b ) (UI8)(a) / (UI8)(b)
-	#define MASTER_UI8_MOD( a, b ) (UI8)(a) % (UI8)(b)
-	#define MASTER_UI8_AND( a, b ) (UI8)(a) && (UI8)(b)
-	#define MASTER_UI8_OR( a, b ) (UI8)(a) || (UI8)(b)
-	#define MASTER_UI8_XOR( a, b ) (!!(UI8)(a)) ^ (!!(UI8)(b))
-	#define MASTER_UI8_BAND( a, b ) (UI8)(a) & (UI8)(b)
-	#define MASTER_UI8_BOR( a, b ) (UI8)(a) | (UI8)(b)
-	#define MASTER_UI8_BXOR( a, b ) (UI8)(a) ^ (UI8)(b)
-	#define MASTER_UI8_EQ( a, b ) (UI8)(a) == (UI8)(b)
-	#define MASTER_UI8_NQ( a, b ) (UI8)(a) != (UI8)(b)
-	#define MASTER_UI8_LS( a, b ) (UI8)(a) < (UI8)(b)
-	#define MASTER_UI8_LE( a, b ) (UI8)(a) <= (UI8)(b)
-	#define MASTER_UI8_GT( a, b ) (UI8)(a) > (UI8)(b)
-	#define MASTER_UI8_GE( a, b ) (UI8)(a) >= (UI8)(b)
-	#define MASTER_UI8_LSH( a, b ) (UI8)(a) << (UI8)(b)
-	#define MASTER_UI8_RSH( a, b ) (UI8)(a) >> (UI8)(b)
-	#define MASTER_UI8_SRA( a, b ) (UI8)(a) << (UI8)(b)
-	#define MASTER_UI8_CLSH( a, b ) (UI8)(a) << (UI8)(b)
-	#define MASTER_UI8_CLSH( a, b ) (UI8)(a) << (UI8)(b)
-	#define MASTER_UI8_NEG( a ) (-(UI8)(a))
-	#define MASTER_UI8_NOT( a ) (!(UI8)(a))
-	#define MASTER_UI8_BNOT( a ) (~(UI8)(a))
-	#define MASTER_UI8_EXI( a ) (!!(UI8)(a))
 #else
+	#define MASTER_UI8_ARRAY_TYPE 1
 	typedef UI4 UI8[2];
 #endif /* #! UI8 Type !# */
 
 #ifdef MASTER_UI16_TYPE
 	typedef MASTER_UI16_TYPE UI16;
 #else
+	#define MASTER_UI16_ARRAY_TYPE 1
 	typedef UI4 UI16[4];
 #endif /* #! UI16 Type !# */
 
 #ifdef MASTER_UI32_TYPE
 	typedef MASTER_UI32_TYPE UI32;
 #else
+	#define MASTER_UI32_ARRAY_TYPE 1
 	typedef UI4 UI32[8];
 #endif /* #! UI32 Type !# */
 
 #ifdef MASTER_UI64_TYPE
 	typedef MASTER_UI64_TYPE UI64;
 #else
+	#define MASTER_UI64_ARRAY_TYPE 1
 	typedef UI4 UI64[16];
 #endif /* #! UI64 Type !# */
 
 #ifdef MASTER_UI128_TYPE
 	typedef MASTER_UI128_TYPE UI128;
 #else
+	#define MASTER_UI128_ARRAY_TYPE 1
 	typedef UI4 UI128[32];
 #endif /* #! UI128 Type !# */
 
@@ -269,7 +247,8 @@ typedef UI4 UT;
 
 #ifndef MASTER_COMPILER_SETTINGS
 	#if !defined(MASTER_NO_COMPILER_SETTINGS_DEPENDENCY) && defined(MASTER_PREFER_USE_COMPILER_SETTING) && 0
-		#include <compiler_settings.h>
+		/* #! todo !# */
+		/* #! #include <compiler_settings.h> !# */
 	#else
 		#define MASTER_PREFER_CONST
 		#define MASTER_PREFER_INLINE
@@ -290,7 +269,21 @@ typedef UI4 UT;
 
 #ifdef __cplusplus
 	#define MASTER_C_STANDARD 0
+	#if __cplusplus >= 202302L
+		#define MASTER_CPP_STANDARD 2023
+	#elif __cplusplus >= 202002L
+		#define MASTER_CPP_STANDARD 2020
+	#elif __cplusplus >= 201703L
+		#define MASTER_CPP_STANDARD 2017
+	#elif __cplusplus >= 201402L
+		#define MASTER_CPP_STANDARD 2014
+	#elif __cplusplus >= 201103L
+		#define MASTER_CPP_STANDARD 2011
+	#elif __cplusplus >= 199711L
+		#define MASTER_CPP_STANDARD 1997
+	#endif /* #! __cplusplus !# */
 #elif defined(__STDC__)
+	#define MASTER_CPP_STANDARD 0
 	#if defined(__STDC_VERSION__)
 		#if __STDC_VERSION__ >= 202311L
 			#define MASTER_C_STANDARD 2023
@@ -300,6 +293,8 @@ typedef UI4 UT;
 			#define MASTER_C_STANDARD 2011
 		#elif __STDC_VERSION__ >= 199901L
 			#define MASTER_C_STANDARD 1999
+		#elif __STDC_VERSION__ >= 199409L
+			#define MASTER_C_STANDARD 1994
 		#else
 			#define MASTER_C_STANDARD 1990
 		#endif /* #! __STDC_VERSION__ !# */
@@ -311,26 +306,18 @@ typedef UI4 UT;
 #endif /* #! __STDC__ !# */
 
 #define MASTER_PREFER_C89_SUPPORTED (MASTER_C_STANDARD >= 1990)
+#define MASTER_PREFER_C94_SUPPORTED (MASTER_C_STANDARD >= 1994)
 #define MASTER_PREFER_C99_SUPPORTED (MASTER_C_STANDARD >= 1999)
 #define MASTER_PREFER_C11_SUPPORTED (MASTER_C_STANDARD >= 2011)
 #define MASTER_PREFER_C17_SUPPORTED (MASTER_C_STANDARD >= 2017)
 #define MASTER_PREFER_C23_SUPPORTED (MASTER_C_STANDARD >= 2023)
 
-#ifdef __cplusplus
-	#define MASTER_PREFER_CPP98_SUPPORTED (__cplusplus >= 199711L)
-	#define MASTER_PREFER_CPP11_SUPPORTED (__cplusplus >= 201103L)
-	#define MASTER_PREFER_CPP14_SUPPORTED (__cplusplus >= 201402L)
-	#define MASTER_PREFER_CPP17_SUPPORTED (__cplusplus >= 201703L)
-	#define MASTER_PREFER_CPP20_SUPPORTED (__cplusplus >= 202002L)
-	#define MASTER_PREFER_CPP23_SUPPORTED (__cplusplus >= 202302L)
-#else
-	#define MASTER_PREFER_CPP98_SUPPORTED 0
-	#define MASTER_PREFER_CPP11_SUPPORTED 0
-	#define MASTER_PREFER_CPP14_SUPPORTED 0
-	#define MASTER_PREFER_CPP17_SUPPORTED 0
-	#define MASTER_PREFER_CPP20_SUPPORTED 0
-	#define MASTER_PREFER_CPP23_SUPPORTED 0
-#endif /* #! __cplusplus !# */
+#define MASTER_PREFER_CPP98_SUPPORTED (MASTER_CPP_STANDARD >= 1997)
+#define MASTER_PREFER_CPP11_SUPPORTED (MASTER_CPP_STANDARD >= 2011)
+#define MASTER_PREFER_CPP14_SUPPORTED (MASTER_CPP_STANDARD >= 2014)
+#define MASTER_PREFER_CPP17_SUPPORTED (MASTER_CPP_STANDARD >= 2017)
+#define MASTER_PREFER_CPP20_SUPPORTED (MASTER_CPP_STANDARD >= 2020)
+#define MASTER_PREFER_CPP23_SUPPORTED (MASTER_CPP_STANDARD >= 2023)
 
 /* #! MASTER Errors !# */
 
@@ -435,19 +422,19 @@ const char * const MASTER_error_codes[] = {
 		#error \
 		With defined "MASTER_MEMORY_SAFE" function "MASTER_FUNCTION_ON_NULL_IN_FREE" must be defined.
 	#endif /* MASTER_FUNCTION_ON_NULL_IN_FREE */
-	#define MASTER_MALLOC(__size) ({ \
+	#define MASTER_MALLOC( __size ) ({ \
 		void * __ptr = malloc(__size); \
 		if (__ptr == 0 && __size > 0) MASTER_FUNCTION_ON_FAILURE_MALLOC; \
 		__ptr; })
-	#define MASTER_CALLOC(__count, __size) ({ \
+	#define MASTER_CALLOC( __count, __size ) ({ \
 		void * __ptr = calloc(__count, __size); \
 		if (__ptr == 0 && __size > 0) MASTER_FUNCTION_ON_FAILURE_CALLOC; \
 		__ptr; })
-	#define MASTER_REALLOC(__ptr, __size) ({ \
+	#define MASTER_REALLOC( __ptr, __size ) ({ \
 		void * __new_ptr = realloc(__ptr, __size); \
 		if (__ptr == 0 && __size > 0) MASTER_FUNCTION_ON_FAILURE_REALLOC; \
 		__new_ptr; })
-	#define MASTER_FREE(__ptr) do { \
+	#define MASTER_FREE( __ptr ) do { \
 		if (__ptr == 0) MASTER_FUNCTION_ON_NULL_IN_FREE; \
 		free(__ptr, __size); } while (0)
 #else
@@ -465,9 +452,15 @@ const char * const MASTER_error_codes[] = {
 
 /* #! MASTER Code Manipulations !# */
 
-#define MASTER_REPEAT2( code ) do { code; code; } while (0)
-#define MASTER_REPEAT3( code ) do { code; code; code; } while (0)
-#define MASTER_REPEAT4( code ) do { code; code; code; code; } while (0)
+#define MASTER_REPEAT2( code ) code code
+#define MASTER_REPEAT3( code ) code code code
+#define MASTER_REPEAT4( code ) code code code code
+#define MASTER_CODE_REPEAT2( code ) code; code
+#define MASTER_CODE_REPEAT3( code ) code; code; code
+#define MASTER_CODE_REPEAT4( code ) code; code; code; code
+#define MASTER_DO_CODE_REPEAT2( code ) do { MASTER_REPEAT2(code); } while (0)
+#define MASTER_DO_CODE_REPEAT3( code ) do { MASTER_REPEAT3(code); } while (0)
+#define MASTER_DO_CODE_REPEAT4( code ) do { MASTER_REPEAT4(code); } while (0)
 #define MASTER_XMACRO_CREATE_ENUM( name, value, Unused3_ ) name = value,
 #define MASTER_XMACRO_CASE_STRING( name, Unused2_, string ) case name: return string;
 #define MASTER_XMACRO_CREATE_NAME_ARRAY( name, Unused2_, Unused3_ ) #name,
@@ -475,7 +468,7 @@ const char * const MASTER_error_codes[] = {
 #define MASTER_XMACRO_CREATE_STRING_DICTIONARY( name, Unused2_, string ) #name " : " #string,
 #define MASTER_ERRORRISE ;!@;
 #define MASTER_NOTHING ;
-#define MASTER_TO_BOOL( expression ) (!!(expressopm))
+#define MASTER_TO_BOOL( expression ) (!!(expression))
 
 /* #! MASTER Checks !# */
 
@@ -526,57 +519,57 @@ const char * const MASTER_error_codes[] = {
 #define MASTER_KAIR_ARG( arg_type, argument ) argument
 #define MASTER_KAIR_DECL( arg_type, argument ) arg_type argument
 #define MASTER_KAIR_FORMAT0() ( void )
-#define MASTER_KAIR_FORMAT1( arg ) ( MASTER_KAIR_ARG arg ) MASTER_KAIR_DECL arg;
-#define MASTER_KAIR_FORMAT2( arg1, arg2 ) ( MASTER_KAIR_ARG arg1, MASTER_KAIR_ARG arg2 ) MASTER_KAIR_DECL arg1; MASTER_KAIR_DECL arg2;
-#define MASTER_KAIR_FORMAT3( arg1, arg2, arg3 ) ( MASTER_KAIR_ARG arg1, MASTER_KAIR_ARG arg2, MASTER_KAIR_ARG arg3 ) MASTER_KAIR_DECL arg1; MASTER_KAIR_DECL arg2; MASTER_KAIR_DECL arg3;
-#define MASTER_KAIR_FORMAT4( arg1, arg2, arg3, arg4 ) ( MASTER_KAIR_ARG arg1, MASTER_KAIR_ARG arg2, MASTER_KAIR_ARG arg3, MASTER_KAIR_ARG arg4 ) MASTER_KAIR_DECL arg1; MASTER_KAIR_DECL arg2; MASTER_KAIR_DECL arg3; MASTER_KAIR_DECL arg4;
-#define MASTER_KAIR_FORMAT5( arg1, arg2, arg3, arg4, arg5 ) ( MASTER_KAIR_ARG arg1, MASTER_KAIR_ARG arg2, MASTER_KAIR_ARG arg3, MASTER_KAIR_ARG arg4, MASTER_KAIR_ARG arg5 ) MASTER_KAIR_DECL arg1; MASTER_KAIR_DECL arg2; MASTER_KAIR_DECL arg3; MASTER_KAIR_DECL arg4; MASTER_KAIR_DECL arg5;
-#define MASTER_KAIR_FORMAT6( arg1, arg2, arg3, arg4, arg5, arg6 ) ( MASTER_KAIR_ARG arg1, MASTER_KAIR_ARG arg2, MASTER_KAIR_ARG arg3, MASTER_KAIR_ARG arg4, MASTER_KAIR_ARG arg5, MASTER_KAIR_ARG arg6 ) MASTER_KAIR_DECL arg1; MASTER_KAIR_DECL arg2; MASTER_KAIR_DECL arg3; MASTER_KAIR_DECL arg4; MASTER_KAIR_DECL arg5; MASTER_KAIR_DECL arg6;
-#define MASTER_KAIR_FORMAT7( arg1, arg2, arg3, arg4, arg5, arg6, arg7 ) ( MASTER_KAIR_ARG arg1, MASTER_KAIR_ARG arg2, MASTER_KAIR_ARG arg3, MASTER_KAIR_ARG arg4, MASTER_KAIR_ARG arg5, MASTER_KAIR_ARG arg6, MASTER_KAIR_ARG arg7 ) MASTER_KAIR_DECL arg1; MASTER_KAIR_DECL arg2; MASTER_KAIR_DECL arg3; MASTER_KAIR_DECL arg4; MASTER_KAIR_DECL arg5; MASTER_KAIR_DECL arg6; MASTER_KAIR_DECL arg7;
-#define MASTER_KAIR_FORMAT8( arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 ) ( MASTER_KAIR_ARG arg1, MASTER_KAIR_ARG arg2, MASTER_KAIR_ARG arg3, MASTER_KAIR_ARG arg4, MASTER_KAIR_ARG arg5, MASTER_KAIR_ARG arg6, MASTER_KAIR_ARG arg7, MASTER_KAIR_ARG arg8 ) MASTER_KAIR_DECL arg1; MASTER_KAIR_DECL arg2; MASTER_KAIR_DECL arg3; MASTER_KAIR_DECL arg4; MASTER_KAIR_DECL arg5; MASTER_KAIR_DECL arg6; MASTER_KAIR_DECL arg7; MASTER_KAIR_DECL arg8;
+#define MASTER_KAIR_FORMAT1( argument ) ( MASTER_KAIR_ARG argument ) MASTER_KAIR_DECL argument;
+#define MASTER_KAIR_FORMAT2( argument1, argument2 ) ( MASTER_KAIR_ARG argument1, MASTER_KAIR_ARG argument2 ) MASTER_KAIR_DECL argument1; MASTER_KAIR_DECL argument2;
+#define MASTER_KAIR_FORMAT3( argument1, argument2, argument3 ) ( MASTER_KAIR_ARG argument1, MASTER_KAIR_ARG argument2, MASTER_KAIR_ARG argument3 ) MASTER_KAIR_DECL argument1; MASTER_KAIR_DECL argument2; MASTER_KAIR_DECL argument3;
+#define MASTER_KAIR_FORMAT4( argument1, argument2, argument3, argument4 ) ( MASTER_KAIR_ARG argument1, MASTER_KAIR_ARG argument2, MASTER_KAIR_ARG argument3, MASTER_KAIR_ARG argument4 ) MASTER_KAIR_DECL argument1; MASTER_KAIR_DECL argument2; MASTER_KAIR_DECL argument3; MASTER_KAIR_DECL argument4;
+#define MASTER_KAIR_FORMAT5( argument1, argument2, argument3, argument4, argument5 ) ( MASTER_KAIR_ARG argument1, MASTER_KAIR_ARG argument2, MASTER_KAIR_ARG argument3, MASTER_KAIR_ARG argument4, MASTER_KAIR_ARG argument5 ) MASTER_KAIR_DECL argument1; MASTER_KAIR_DECL argument2; MASTER_KAIR_DECL argument3; MASTER_KAIR_DECL argument4; MASTER_KAIR_DECL argument5;
+#define MASTER_KAIR_FORMAT6( argument1, argument2, argument3, argument4, argument5, argument6 ) ( MASTER_KAIR_ARG argument1, MASTER_KAIR_ARG argument2, MASTER_KAIR_ARG argument3, MASTER_KAIR_ARG argument4, MASTER_KAIR_ARG argument5, MASTER_KAIR_ARG argument6 ) MASTER_KAIR_DECL argument1; MASTER_KAIR_DECL argument2; MASTER_KAIR_DECL argument3; MASTER_KAIR_DECL argument4; MASTER_KAIR_DECL argument5; MASTER_KAIR_DECL argument6;
+#define MASTER_KAIR_FORMAT7( argument1, argument2, argument3, argument4, argument5, argument6, argument7 ) ( MASTER_KAIR_ARG argument1, MASTER_KAIR_ARG argument2, MASTER_KAIR_ARG argument3, MASTER_KAIR_ARG argument4, MASTER_KAIR_ARG argument5, MASTER_KAIR_ARG argument6, MASTER_KAIR_ARG argument7 ) MASTER_KAIR_DECL argument1; MASTER_KAIR_DECL argument2; MASTER_KAIR_DECL argument3; MASTER_KAIR_DECL argument4; MASTER_KAIR_DECL argument5; MASTER_KAIR_DECL argument6; MASTER_KAIR_DECL argument7;
+#define MASTER_KAIR_FORMAT8( argument1, argument2, argument3, argument4, argument5, argument6, argument7, argument8 ) ( MASTER_KAIR_ARG argument1, MASTER_KAIR_ARG argument2, MASTER_KAIR_ARG argument3, MASTER_KAIR_ARG argument4, MASTER_KAIR_ARG argument5, MASTER_KAIR_ARG argument6, MASTER_KAIR_ARG argument7, MASTER_KAIR_ARG argument8 ) MASTER_KAIR_DECL argument1; MASTER_KAIR_DECL argument2; MASTER_KAIR_DECL argument3; MASTER_KAIR_DECL argument4; MASTER_KAIR_DECL argument5; MASTER_KAIR_DECL argument6; MASTER_KAIR_DECL argument7; MASTER_KAIR_DECL argument8;
 
 #define MASTER_STD_DECL( arg_type, argument ) arg_type argument
 #define MASTER_STD_FORMAT0() ( void )
-#define MASTER_STD_FORMAT1( arg ) ( MASTER_STD_DECL arg )
-#define MASTER_STD_FORMAT2( arg1, arg2 ) ( MASTER_STD_DECL arg1, MASTER_STD_DECL arg2 )
-#define MASTER_STD_FORMAT3( arg1, arg2, arg3 ) ( MASTER_STD_DECL arg1, MASTER_STD_DECL arg2, MASTER_STD_DECL arg3 )
-#define MASTER_STD_FORMAT4( arg1, arg2, arg3, arg4 ) ( MASTER_STD_DECL arg1, MASTER_STD_DECL arg2, MASTER_STD_DECL arg3, MASTER_STD_DECL arg4 )
-#define MASTER_STD_FORMAT5( arg1, arg2, arg3, arg4, arg5 ) ( MASTER_STD_DECL arg1, MASTER_STD_DECL arg2, MASTER_STD_DECL arg3, MASTER_STD_DECL arg4, MASTER_STD_DECL arg5 )
-#define MASTER_STD_FORMAT6( arg1, arg2, arg3, arg4, arg5, arg6 ) ( MASTER_STD_DECL arg1, MASTER_STD_DECL arg2, MASTER_STD_DECL arg3, MASTER_STD_DECL arg4, MASTER_STD_DECL arg5, MASTER_STD_DECL arg6 )
-#define MASTER_STD_FORMAT7( arg1, arg2, arg3, arg4, arg5, arg6, arg7 ) ( MASTER_STD_DECL arg1, MASTER_STD_DECL arg2, MASTER_STD_DECL arg3, MASTER_STD_DECL arg4, MASTER_STD_DECL arg5, MASTER_STD_DECL arg6, MASTER_STD_DECL arg7 )
-#define MASTER_STD_FORMAT8( arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 ) ( MASTER_STD_DECL arg1, MASTER_STD_DECL arg2, MASTER_STD_DECL arg3, MASTER_STD_DECL arg4, MASTER_STD_DECL arg5, MASTER_STD_DECL arg6, MASTER_STD_DECL arg7, MASTER_STD_DECL arg8 )
+#define MASTER_STD_FORMAT1( argument ) ( MASTER_STD_DECL argument )
+#define MASTER_STD_FORMAT2( argument1, argument2 ) ( MASTER_STD_DECL argument1, MASTER_STD_DECL argument2 )
+#define MASTER_STD_FORMAT3( argument1, argument2, argument3 ) ( MASTER_STD_DECL argument1, MASTER_STD_DECL argument2, MASTER_STD_DECL argument3 )
+#define MASTER_STD_FORMAT4( argument1, argument2, argument3, argument4 ) ( MASTER_STD_DECL argument1, MASTER_STD_DECL argument2, MASTER_STD_DECL argument3, MASTER_STD_DECL argument4 )
+#define MASTER_STD_FORMAT5( argument1, argument2, argument3, argument4, argument5 ) ( MASTER_STD_DECL argument1, MASTER_STD_DECL argument2, MASTER_STD_DECL argument3, MASTER_STD_DECL argument4, MASTER_STD_DECL argument5 )
+#define MASTER_STD_FORMAT6( argument1, argument2, argument3, argument4, argument5, argument6 ) ( MASTER_STD_DECL argument1, MASTER_STD_DECL argument2, MASTER_STD_DECL argument3, MASTER_STD_DECL argument4, MASTER_STD_DECL argument5, MASTER_STD_DECL argument6 )
+#define MASTER_STD_FORMAT7( argument1, argument2, argument3, argument4, argument5, argument6, argument7 ) ( MASTER_STD_DECL argument1, MASTER_STD_DECL argument2, MASTER_STD_DECL argument3, MASTER_STD_DECL argument4, MASTER_STD_DECL argument5, MASTER_STD_DECL argument6, MASTER_STD_DECL argument7 )
+#define MASTER_STD_FORMAT8( argument1, argument2, argument3, argument4, argument5, argument6, argument7, argument8 ) ( MASTER_STD_DECL argument1, MASTER_STD_DECL argument2, MASTER_STD_DECL argument3, MASTER_STD_DECL argument4, MASTER_STD_DECL argument5, MASTER_STD_DECL argument6, MASTER_STD_DECL argument7, MASTER_STD_DECL argument8 )
 
 #ifdef __cplusplus
 	#define MASTER_ARGLIST_FORMAT0() MASTER_STD_FORMAT0()
-	#define MASTER_ARGLIST_FORMAT1( arg ) MASTER_STD_FORMAT1(arg)
-	#define MASTER_ARGLIST_FORMAT2( arg1, arg2 ) MASTER_STD_FORMAT2( arg1, arg2 )
-	#define MASTER_ARGLIST_FORMAT3( arg1, arg2, arg3 ) MASTER_STD_FORMAT3( arg1, arg2, arg3 )
-	#define MASTER_ARGLIST_FORMAT4( arg1, arg2, arg3, arg4 ) MASTER_STD_FORMAT4( arg1, arg2, arg3, arg4 )
-	#define MASTER_ARGLIST_FORMAT5( arg1, arg2, arg3, arg4, arg5 ) MASTER_STD_FORMAT5( arg1, arg2, arg3, arg4, arg5 )
-	#define MASTER_ARGLIST_FORMAT6( arg1, arg2, arg3, arg4, arg5, arg6 ) MASTER_STD_FORMAT6( arg1, arg2, arg3, arg4, arg5, arg6 )
-	#define MASTER_ARGLIST_FORMAT7( arg1, arg2, arg3, arg4, arg5, arg6, arg7 ) MASTER_STD_FORMAT7( arg1, arg2, arg3, arg4, arg5, arg6, arg7 )
-	#define MASTER_ARGLIST_FORMAT8( arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 ) MASTER_STD_FORMAT8( arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 )
+	#define MASTER_ARGLIST_FORMAT1( argument ) MASTER_STD_FORMAT1(argument)
+	#define MASTER_ARGLIST_FORMAT2( argument1, argument2 ) MASTER_STD_FORMAT2( argument1, argument2 )
+	#define MASTER_ARGLIST_FORMAT3( argument1, argument2, argument3 ) MASTER_STD_FORMAT3( argument1, argument2, argument3 )
+	#define MASTER_ARGLIST_FORMAT4( argument1, argument2, argument3, argument4 ) MASTER_STD_FORMAT4( argument1, argument2, argument3, argument4 )
+	#define MASTER_ARGLIST_FORMAT5( argument1, argument2, argument3, argument4, argument5 ) MASTER_STD_FORMAT5( argument1, argument2, argument3, argument4, argument5 )
+	#define MASTER_ARGLIST_FORMAT6( argument1, argument2, argument3, argument4, argument5, argument6 ) MASTER_STD_FORMAT6( argument1, argument2, argument3, argument4, argument5, argument6 )
+	#define MASTER_ARGLIST_FORMAT7( argument1, argument2, argument3, argument4, argument5, argument6, argument7 ) MASTER_STD_FORMAT7( argument1, argument2, argument3, argument4, argument5, argument6, argument7 )
+	#define MASTER_ARGLIST_FORMAT8( argument1, argument2, argument3, argument4, argument5, argument6, argument7, argument8 ) MASTER_STD_FORMAT8( argument1, argument2, argument3, argument4, argument5, argument6, argument7, argument8 )
 #else
 	#define MASTER_ARGLIST_FORMAT0() MASTER_KAIR_FORMAT0()
-	#define MASTER_ARGLIST_FORMAT1( arg ) MASTER_KAIR_FORMAT1(arg)
-	#define MASTER_ARGLIST_FORMAT2( arg1, arg2 ) MASTER_KAIR_FORMAT2( arg1, arg2 )
-	#define MASTER_ARGLIST_FORMAT3( arg1, arg2, arg3 ) MASTER_KAIR_FORMAT3( arg1, arg2, arg3 )
-	#define MASTER_ARGLIST_FORMAT4( arg1, arg2, arg3, arg4 ) MASTER_KAIR_FORMAT4( arg1, arg2, arg3, arg4 )
-	#define MASTER_ARGLIST_FORMAT5( arg1, arg2, arg3, arg4, arg5 ) MASTER_KAIR_FORMAT5( arg1, arg2, arg3, arg4, arg5 )
-	#define MASTER_ARGLIST_FORMAT6( arg1, arg2, arg3, arg4, arg5, arg6 ) MASTER_KAIR_FORMAT6( arg1, arg2, arg3, arg4, arg5, arg6 )
-	#define MASTER_ARGLIST_FORMAT7( arg1, arg2, arg3, arg4, arg5, arg6, arg7 ) MASTER_KAIR_FORMAT7( arg1, arg2, arg3, arg4, arg5, arg6, arg7 )
-	#define MASTER_ARGLIST_FORMAT8( arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 ) MASTER_KAIR_FORMAT8( arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 )
+	#define MASTER_ARGLIST_FORMAT1( argument ) MASTER_KAIR_FORMAT1(argument)
+	#define MASTER_ARGLIST_FORMAT2( argument1, argument2 ) MASTER_KAIR_FORMAT2( argument1, argument2 )
+	#define MASTER_ARGLIST_FORMAT3( argument1, argument2, argument3 ) MASTER_KAIR_FORMAT3( argument1, argument2, argument3 )
+	#define MASTER_ARGLIST_FORMAT4( argument1, argument2, argument3, argument4 ) MASTER_KAIR_FORMAT4( argument1, argument2, argument3, argument4 )
+	#define MASTER_ARGLIST_FORMAT5( argument1, argument2, argument3, argument4, argument5 ) MASTER_KAIR_FORMAT5( argument1, argument2, argument3, argument4, argument5 )
+	#define MASTER_ARGLIST_FORMAT6( argument1, argument2, argument3, argument4, argument5, argument6 ) MASTER_KAIR_FORMAT6( argument1, argument2, argument3, argument4, argument5, argument6 )
+	#define MASTER_ARGLIST_FORMAT7( argument1, argument2, argument3, argument4, argument5, argument6, argument7 ) MASTER_KAIR_FORMAT7( argument1, argument2, argument3, argument4, argument5, argument6, argument7 )
+	#define MASTER_ARGLIST_FORMAT8( argument1, argument2, argument3, argument4, argument5, argument6, argument7, argument8 ) MASTER_KAIR_FORMAT8( argument1, argument2, argument3, argument4, argument5, argument6, argument7, argument8 )
 #endif /* #! Detect Argument List Compability !# */
 
 #define MASTER_DEFINE_FUNCTION0( flags, description, function_name, return_value_and_extras ) return_value_and_extras function_name MASTER_ARGLIST_FORMAT0()
-#define MASTER_DEFINE_FUNCTION1( flags, description, function_name, return_value_and_extras, arg ) return_value_and_extras function_name MASTER_ARGLIST_FORMAT1(arg)
-#define MASTER_DEFINE_FUNCTION2( flags, description, function_name, return_value_and_extras, arg1, arg2 ) return_value_and_extras function_name MASTER_ARGLIST_FORMAT2(arg1, arg2)
-#define MASTER_DEFINE_FUNCTION3( flags, description, function_name, return_value_and_extras, arg1, arg2, arg3 ) return_value_and_extras function_name MASTER_ARGLIST_FORMAT3(arg1, arg2, arg3)
-#define MASTER_DEFINE_FUNCTION4( flags, description, function_name, return_value_and_extras, arg1, arg2, arg3, arg4 ) return_value_and_extras function_name MASTER_ARGLIST_FORMAT4(arg1, arg2, arg3, arg4)
-#define MASTER_DEFINE_FUNCTION5( flags, description, function_name, return_value_and_extras, arg1, arg2, arg3, arg4, arg5 ) return_value_and_extras function_name MASTER_ARGLIST_FORMAT5(arg1, arg2, arg3, arg4, arg5)
-#define MASTER_DEFINE_FUNCTION6( flags, description, function_name, return_value_and_extras, arg1, arg2, arg3, arg4, arg5, arg6 ) return_value_and_extras function_name MASTER_ARGLIST_FORMAT6(arg1, arg2, arg3, arg4, arg5, arg6)
-#define MASTER_DEFINE_FUNCTION7( flags, description, function_name, return_value_and_extras, arg1, arg2, arg3, arg4, arg5, arg6, arg7 ) return_value_and_extras function_name MASTER_ARGLIST_FORMAT7(arg1, arg2, arg3, arg4, arg5, arg6, arg7)
-#define MASTER_DEFINE_FUNCTION8( flags, description, function_name, return_value_and_extras, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8 ) return_value_and_extras function_name MASTER_ARGLIST_FORMAT8(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8)
+#define MASTER_DEFINE_FUNCTION1( flags, description, function_name, return_value_and_extras, argument ) return_value_and_extras function_name MASTER_ARGLIST_FORMAT1(argument)
+#define MASTER_DEFINE_FUNCTION2( flags, description, function_name, return_value_and_extras, argument1, argument2 ) return_value_and_extras function_name MASTER_ARGLIST_FORMAT2(argument1, argument2)
+#define MASTER_DEFINE_FUNCTION3( flags, description, function_name, return_value_and_extras, argument1, argument2, argument3 ) return_value_and_extras function_name MASTER_ARGLIST_FORMAT3(argument1, argument2, argument3)
+#define MASTER_DEFINE_FUNCTION4( flags, description, function_name, return_value_and_extras, argument1, argument2, argument3, argument4 ) return_value_and_extras function_name MASTER_ARGLIST_FORMAT4(argument1, argument2, argument3, argument4)
+#define MASTER_DEFINE_FUNCTION5( flags, description, function_name, return_value_and_extras, argument1, argument2, argument3, argument4, argument5 ) return_value_and_extras function_name MASTER_ARGLIST_FORMAT5(argument1, argument2, argument3, argument4, argument5)
+#define MASTER_DEFINE_FUNCTION6( flags, description, function_name, return_value_and_extras, argument1, argument2, argument3, argument4, argument5, argument6 ) return_value_and_extras function_name MASTER_ARGLIST_FORMAT6(argument1, argument2, argument3, argument4, argument5, argument6)
+#define MASTER_DEFINE_FUNCTION7( flags, description, function_name, return_value_and_extras, argument1, argument2, argument3, argument4, argument5, argument6, argument7 ) return_value_and_extras function_name MASTER_ARGLIST_FORMAT7(argument1, argument2, argument3, argument4, argument5, argument6, argument7)
+#define MASTER_DEFINE_FUNCTION8( flags, description, function_name, return_value_and_extras, argument1, argument2, argument3, argument4, argument5, argument6, argument7, argument8 ) return_value_and_extras function_name MASTER_ARGLIST_FORMAT8(argument1, argument2, argument3, argument4, argument5, argument6, argument7, argument8)
 
 #define MASTER_EMPTY_DESCRIPTION /* #! No description is provided !# */
 #define MASTER_NO_FLAGS
@@ -605,29 +598,29 @@ const char * const MASTER_error_codes[] = {
 	MASTER_MACRO_OPERATORS_UB_CALLBACK_DEFINE( 1, 8 )
 	MASTER_MACRO_OPERATORS_UB_CALLBACK_DEFINE( 2, 16 )
 	MASTER_MACRO_OPERATORS_UB_CALLBACK_DEFINE( 4, 32 )
-	#define MASTER_RSH1( value, bits ) MASTER_RSH1_Callback(value, bits, MASTER_FILE, MASTER_LINE)
-	#define MASTER_RSH2( value, bits ) MASTER_RSH2_Callback(value, bits, MASTER_FILE, MASTER_LINE)
-	#define MASTER_RSH4( value, bits ) MASTER_RSH4_Callback(value, bits, MASTER_FILE, MASTER_LINE)
-	#define MASTER_LSH1( value, bits ) MASTER_LSH1_Callback(value, bits, MASTER_FILE, MASTER_LINE)
-	#define MASTER_LSH2( value, bits ) MASTER_LSH2_Callback(value, bits, MASTER_FILE, MASTER_LINE)
-	#define MASTER_LSH4( value, bits ) MASTER_LSH4_Callback(value, bits, MASTER_FILE, MASTER_LINE)
+	#define MASTER_RSH1( value, bit_count ) MASTER_RSH1_Callback(value, bit_count, MASTER_FILE, MASTER_LINE)
+	#define MASTER_RSH2( value, bit_count ) MASTER_RSH2_Callback(value, bit_count, MASTER_FILE, MASTER_LINE)
+	#define MASTER_RSH4( value, bit_count ) MASTER_RSH4_Callback(value, bit_count, MASTER_FILE, MASTER_LINE)
+	#define MASTER_LSH1( value, bit_count ) MASTER_LSH1_Callback(value, bit_count, MASTER_FILE, MASTER_LINE)
+	#define MASTER_LSH2( value, bit_count ) MASTER_LSH2_Callback(value, bit_count, MASTER_FILE, MASTER_LINE)
+	#define MASTER_LSH4( value, bit_count ) MASTER_LSH4_Callback(value, bit_count, MASTER_FILE, MASTER_LINE)
 #else
-	#define MASTER_RSH1( value, bits ) (UI1)(((UI1)(value)) >> (bits))
-	#define MASTER_RSH2( value, bits ) (UI2)(((UI2)(value)) >> (bits))
-	#define MASTER_RSH4( value, bits ) (UI4)(((UI4)(value)) >> (bits))
-	#define MASTER_LSH1( value, bits ) (UI1)(((UI1)(value)) << (bits))
-	#define MASTER_LSH2( value, bits ) (UI2)(((UI2)(value)) << (bits))
-	#define MASTER_LSH4( value, bits ) (UI4)(((UI4)(value)) << (bits))
+	#define MASTER_RSH1( value, bit_count ) (UI1)(((UI1)(value)) >> (bit_count))
+	#define MASTER_RSH2( value, bit_count ) (UI2)(((UI2)(value)) >> (bit_count))
+	#define MASTER_RSH4( value, bit_count ) (UI4)(((UI4)(value)) >> (bit_count))
+	#define MASTER_LSH1( value, bit_count ) (UI1)(((UI1)(value)) << (bit_count))
+	#define MASTER_LSH2( value, bit_count ) (UI2)(((UI2)(value)) << (bit_count))
+	#define MASTER_LSH4( value, bit_count ) (UI4)(((UI4)(value)) << (bit_count))
 #endif /* #! MASTER_RUNTIME_UB_CHECKS !# */
 
 /* #! MASTER Align !# */
 
-#define MASTER_ALIGNPOW2( value, bits ) ((((value) >> (bits)) + !!((value) & ((1 << (bits)) - 1))) << (bits))
+#define MASTER_ALIGNPOW2( value, bit_count ) ((((value) >> (bit_count)) + !!((value) & ((1 << (bit_count)) - 1))) << (bit_count))
 #define MASTER_ALIGN2( value ) MASTER_ALIGNPOW2( value, 1 )
 #define MASTER_ALIGN4( value ) MASTER_ALIGNPOW2( value, 2 )
 #define MASTER_ALIGN8( value ) MASTER_ALIGNPOW2( value, 3 )
 #define MASTER_ALIGN16( value ) MASTER_ALIGNPOW2( value, 4 )
-#define MASTER_ALIGN( value, bits ) ((((value) / (bits)) + !!((value) % (bits))) * (bits))
+#define MASTER_ALIGN( value, bit_count ) ((((value) / (bit_count)) + !!((value) % (bit_count))) * (bit_count))
 
 /* #! MASTER String !# */
 
@@ -668,15 +661,15 @@ const char * const MASTER_error_codes[] = {
 #define MASTER_ABS( value ) (((value) < 0) ? (-(value)) : (value))
 #define MASTER_SIGN( value ) (((value) < 0) ? (-1) : ((value) > 0) ? (+1) : (0))
 #define MASTER_SQUARE( value ) ((value) * (value))
-#define MASTER_2BYTES_TO_INT( a, b ) (((a) << 8) | (b))
-#define MASTER_4BYTES_TO_INT( a, b, c, d ) (((a) << 24) | ((b) << 16) | ((c) << 8) | (d))
+#define MASTER_2BYTES_TO_INT( value1, value2 ) (((value1) << 8) | (value2))
+#define MASTER_4BYTES_TO_INT( value1, value2, value3, value4 ) (((value1) << 24) | ((value2) << 16) | ((value3) << 8) | (value4))
 
 #ifndef MASTER_UNSAFE_HOWMANY
 	#define MASTER_DIV_CEIL2( value ) (((value) >> 1) + !!((value) & 1))
 	#define MASTER_DIV_CEIL4( value ) (((value) >> 2) + !!((value) & 3))
 	#define MASTER_DIV_CEIL8( value ) (((value) >> 3) + !!((value) & 7))
 	#define MASTER_DIV_CEIL16( value ) (((value) >> 4) + !!((value) & 15))
-	#define MASTER_DIV_CEIL_POW2( value, bits ) (((value) >> bits) + !!((value) & ((1 << (bits)) - 1)))
+	#define MASTER_DIV_CEIL_POW2( value, bit_count ) (((value) >> bit_count) + !!((value) & ((1 << (bit_count)) - 1)))
 	#define MASTER_HOWMANY( value, subvalue ) (((value) / (subvalue)) + !!((value) % (subvalue)))
 #else
 	/* #! Value can be overflowed after plus and there will be information loses !# */
@@ -684,7 +677,7 @@ const char * const MASTER_error_codes[] = {
 	#define MASTER_DIV_CEIL4( value ) (((value) + 3) >> 2)
 	#define MASTER_DIV_CEIL8( value ) (((value) + 7) >> 3)
 	#define MASTER_DIV_CEIL16( value ) (((value) + 15) >> 4)
-	#define MASTER_DIV_CEIL_POW2( value, bits ) (((value) + ((1 << (bits)) - 1)) >> (bits))
+	#define MASTER_DIV_CEIL_POW2( value, bit_count ) (((value) + ((1 << (bit_count)) - 1)) >> (bit_count))
 	#define MASTER_HOWMANY( value, subvalue ) (((value) + ((subvalue) - 1)) / (subvalue))
 #endif /* #! MASTER_UNSAFE_HOWMANY !# */
 
@@ -692,7 +685,7 @@ const char * const MASTER_error_codes[] = {
 #define MASTER_HOWMANY4( value ) MASTER_DIV_CEIL4( value )
 #define MASTER_HOWMANY8( value ) MASTER_DIV_CEIL8( value )
 #define MASTER_HOWMANY16( value ) MASTER_DIV_CEIL16( value )
-#define MASTER_HOWMANY_POW2( value, bits ) MASTER_DIV_CEIL_POW2( value, bits )
+#define MASTER_HOWMANY_POW2( value, bit_count ) MASTER_DIV_CEIL_POW2( value, bit_count )
 #define MASTER_BITS_TO_BYTES( value ) MASTER_DIV_CEIL8( value )
 
 #define MASTER_PADDINGLEN( value, modulo, residue ) (((residue) - ((value) + 1) % (modulo) + (modulo)) % (modulo))
@@ -732,9 +725,15 @@ const char * const MASTER_error_codes[] = {
 /* #! MASTER Power Manipulations !# */
 
 #define MASTER_ISPOW2( value ) (!((value) & ((value) - 1)))
-#define MASTER_ISPOW4( value ) (MASTER_ISPOW2(value) && ((value) & 0x55555555))
-#define MASTER_ISPOW8( value ) (MASTER_ISPOW2(value) && ((value) & 0x49249249))
-#define MASTER_ISPOW16( value ) (MASTER_ISPOW2(value) && ((value) & 0x11111111))
+#if MASTER_64_AVAILABLE == 1
+	#define MASTER_ISPOW4( value ) (MASTER_ISPOW2(value) && ((value) & 0x5555555555555555ULL))
+	#define MASTER_ISPOW8( value ) (MASTER_ISPOW2(value) && ((value) & 0x9249249249249249ULL))
+	#define MASTER_ISPOW16( value ) (MASTER_ISPOW2(value) && ((value) & 0x1111111111111111ULL))
+#else
+	#define MASTER_ISPOW4( value ) (MASTER_ISPOW2(value) && ((value) & 0x55555555UL))
+	#define MASTER_ISPOW8( value ) (MASTER_ISPOW2(value) && ((value) & 0x49249249UL))
+	#define MASTER_ISPOW16( value ) (MASTER_ISPOW2(value) && ((value) & 0x11111111UL))
+#endif /* #! 64 Bits !# */
 
 MASTER_DEFINE_FUNCTION1(
 	MASTER_NO_FLAGS,
@@ -862,7 +861,7 @@ MASTER_DEFINE_FUNCTION1(
 	( UI8, value )
 ) {
 	UI1 bitcount = 0;
-	__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 32, ULL);
+	__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 32, UL);
 	__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 16, U);
 	__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 8, U);
 	__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 4, U);
@@ -1084,15 +1083,25 @@ MASTER_DEFINE_FUNCTION1(
 
 /* #! MASTER Endian !# */
 
+/* #! TODO : ADD NUXI !# */
+
+#define MASTER_LITTLE_ENDIAN_ORDER 0x04030201
+#define MASTER_BIG_ENDIAN_ORDER 0x01020304
+#define MASTER_NUXI_ENDIAN_ORDER 0x03040102
+#define MASTER_PDP_ENDIAN_ORDER 0x02010403
+
 #define MASTER_UNKNOWN_ENDIAN 0
 #define MASTER_LITTLE_ENDIAN 1
 #define MASTER_BIG_ENDIAN 2
+#define MASTER_NUXI_ENDIAN 3
 #define MASTER_PDP_ENDIAN 4
 
 #if (defined(__BYTE_ORDER__) && defined(__ORDER_LITTLE_ENDIAN__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__) || (defined(__LITTLE_ENDIAN__) && __LITTLE_ENDIAN__ == 1)
 	#define MASTER_ENDIANNESS MASTER_LITTLE_ENDIAN
 #elif (defined(__BYTE_ORDER__) && defined(__ORDER_BIG_ENDIAN__) && __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__) || (defined(__BIG_ENDIAN__) && __BIG_ENDIAN__ == 1)
 	#define MASTER_ENDIANNESS MASTER_BIG_ENDIAN
+#elif 0
+	#define MASTER_ENDIANNESS MASTER_NUXI_ENDIAN
 #elif (defined(__BYTE_ORDER__) && defined(__ORDER_PDP_ENDIAN__) && __BYTE_ORDER__ == __ORDER_PDP_ENDIAN__) || (defined(__PDP_ENDIAN__) && __PDP_ENDIAN__ == 1)
 	#define MASTER_ENDIANNESS MASTER_PDP_ENDIAN
 #else
@@ -1102,6 +1111,8 @@ MASTER_DEFINE_FUNCTION1(
 			#define MASTER_ENDIANNESS MASTER_LITTLE_ENDIAN
 		#elif MASTER_ARCHITECTURE_ENDIAN == MASTER_BIG_ENDIAN
 			#define MASTER_ENDIANNESS MASTER_BIG_ENDIAN
+		#elif MASTER_ARCHITECTURE_ENDIAN == MASTER_NUXI_ENDIAN
+			#define MASTER_ENDIANNESS MASTER_NUXI_ENDIAN
 		#elif MASTER_ARCHITECTURE_ENDIAN == MASTER_PDP_ENDIAN
 			#define MASTER_ENDIANNESS MASTER_PDP_ENDIAN
 		#endif * #! Architecture Endian !# */
@@ -1110,23 +1121,29 @@ MASTER_DEFINE_FUNCTION1(
 		UI1 MASTER_ENDIANNESS = 0;
 		void
 		MASTER_getEndianness( void ) {
-			const UI4 value = 0x01020304;
-			const UI1 * bytes = (const UI1 *)&value;
-
-			if (bytes[0] == 0x04) MASTER_ENDIANNESS = MASTER_LITTLE_ENDIAN;
-			otherwise (bytes[0] == 0x01)
+			union {
+				UI4 ui4_value;
+				UI1 ui1_value[4];
+			} number;
+			number.ui1_value[0] = 0x01;
+			number.ui1_value[1] = 0x02;
+			number.ui1_value[2] = 0x03;
+			number.ui1_value[3] = 0x04;
+			if (number.ui4_value == MASTER_BIG_ENDIAN_ORDER)
 				MASTER_ENDIANNESS = MASTER_BIG_ENDIAN;
-			otherwise (bytes[0] == 0x03)
+			otherwise (number.ui4_value == MASTER_LITTLE_ENDIAN_ORDER)
+				MASTER_ENDIANNESS = MASTER_LITTLE_ENDIAN;
+			otherwise (bytes[0] == MASTER_NUXI_ENDIAN_ORDER)
+				MASTER_ENDIANNESS = MASTER_NUXI_ENDIAN;
+			otherwise (bytes[0] == MASTER_PDP_ENDIAN_ORDER)
 				MASTER_ENDIANNESS = MASTER_PDP_ENDIAN;
-			else MASTER_ENDIANNESS = MASTER_UNKNOWN_ENDIAN;
+			else
+				MASTER_ENDIANNESS = MASTER_UNKNOWN_ENDIAN;
 		}
-		#warning \
-		"Unknown endianness. Using generic. Please, use function MASTER_getEndianness() in begin in main."
+		#warning "Unknown endianness. Using generic. Please, use function MASTER_getEndianness() in begin in main."
 		#define MASTER_ENDIANNESS MASTER_getEndianness()
 		#define MASTER_UNKNOWN_ENDIANNESS
-	
 	#endif /* #! MASTER_ENDIANNESS !# */
-	
 #endif /* #! ENDIANNESS !# */
 
 #define MASTER_BSWAP16( value ) (((value) >> 8) | ((value) << 8))
@@ -1144,11 +1161,12 @@ MASTER_DEFINE_FUNCTION1(
 	(((value) << 24) & 0x0000FF0000000000) | \
 	(((value) << 40) & 0x00FF000000000000) | \
 	(((value) << 56) & 0xFF00000000000000))
-#define MASTER_BSWAP_GENERIC( value, size ) ( \
-	(((size) == 1) ? (value) : ((size) == 2) ? (MASTER_BSWAP16(value)) : ((size) == 4) ? (MASTER_BSWAP32(value)) : (MASTER_BSWAP64(value))))
+#define MASTER_BSWAP_GENERIC( value, byte_count ) ( \
+	((byte_count) == 1) ? (value) : ((byte_count) == 2) ? (MASTER_BSWAP16(value)) : ((byte_count) == 4) ? (MASTER_BSWAP32(value)) : (MASTER_BSWAP64(value)))
 
 #define MASTER_IS_LE() (MASTER_ENDIANNESS == MASTER_LITTLE_ENDIAN)
 #define MASTER_IS_BE() (MASTER_ENDIANNESS == MASTER_BIG_ENDIAN)
+#define MASTER_IS_NUXI() (MASTER_ENDIANNESS == MASTER_NUXI_ENDIAN)
 #define MASTER_IS_PDP() (MASTER_ENDIANNESS == MASTER_PDP_ENDIAN)
 #ifdef MASTER_UNKNOWN_ENDIANNESS
 	#define MASTER_IS_GENE() (1)
@@ -1156,10 +1174,19 @@ MASTER_DEFINE_FUNCTION1(
 	#define MASTER_IS_GENE() (0)
 #endif /* #! MASTER_UNKNOWN_ENDIANNESS !# */
 
-#define MASTER_L2BE( value ) MASTER_BSWAP_GENERIC(value, sizeof(value))
+#define MASTER_L2LE16( value ) (value)
+#define MASTER_L2LE32( value ) (value)
+#define MASTER_L2LE64( value ) (value)
 #define MASTER_L2BE16( value ) MASTER_BSWAP16(value)
 #define MASTER_L2BE32( value ) MASTER_BSWAP32(value)
 #define MASTER_L2BE64( value ) MASTER_BSWAP64(value)
+#define MASTER_L2NUXI16( value ) (value)
+#define MASTER_L2NUXI32( value ) ( \
+	(((value) >> 8) & 0x00FF00FF) | \
+	(((value) << 8) & 0xFF00FF00))
+#define MASTER_L2NUXI64( value ) ( \
+	(((value) >> 8) & 0x00FF00FF00FF00FF) | \
+	(((value) << 8) & 0xFF00FF00FF00FF00))
 #define MASTER_L2PDPE16( value ) MASTER_BSWAP16(value)
 #define MASTER_L2PDPE32( value ) ( \
 	(((value) >> 16) & 0x0000FFFF) | \
@@ -1169,11 +1196,28 @@ MASTER_DEFINE_FUNCTION1(
 	(((value) >> 16) & 0x00000000FFFF0000) | \
 	(((value) << 16) & 0x0000FFFF00000000) | \
 	(((value) << 48) & 0xFFFF000000000000))
+#define MASTER_L2LE( value ) (value)
+#define MASTER_L2BE( value ) MASTER_BSWAP_GENERIC(value, sizeof(value))
+#define MASTER_L2NUXI( value, byte_count ) ( \
+	((byte_count) == 1) ? (value) : ((byte_count) == 2) ? (MASTER_L2NUXI16(value)) : ((byte_count) == 4) ? (MASTER_L2NUXI32(value)) : (MASTER_L2NUXI64(value)))
+#define MASTER_L2PDPE( value, byte_count ) ( \
+	((byte_count) == 1) ? (value) : ((byte_count) == 2) ? (MASTER_L2PDPE16(value)) : ((byte_count) == 4) ? (MASTER_L2PDPE32(value)) : (MASTER_L2PDP64(value)))
 
-#define MASTER_B2LE( value ) MASTER_BSWAP_GENERIC(value, sizeof(value))
 #define MASTER_B2LE16( value ) MASTER_BSWAP16(value)
 #define MASTER_B2LE32( value ) MASTER_BSWAP32(value)
 #define MASTER_B2LE64( value ) MASTER_BSWAP64(value)
+#define MASTER_B2BE16( value ) (value)
+#define MASTER_B2BE32( value ) (value)
+#define MASTER_B2BE64( value ) (value)
+#define MASTER_B2NUXI16( value ) MASTER_BSWAP16(value)
+#define MASTER_B2NUXI32( value ) ( \
+	(((value) >> 16) & 0x0000FFFF) | \
+	(((value) << 16) & 0xFFFF0000))
+#define MASTER_B2NUXI64( value ) ( \
+	(((value) >> 48) & 0x000000000000FFFF) | \
+	(((value) >> 16) & 0x00000000FFFF0000) | \
+	(((value) << 16) & 0x0000FFFF00000000) | \
+	(((value) << 48) & 0xFFFF000000000000))
 #define MASTER_B2PDPE16( value ) (value)
 #define MASTER_B2PDPE32( value ) ( \
 	(((value) >> 8) & 0x00FF00FF) | \
@@ -1181,6 +1225,42 @@ MASTER_DEFINE_FUNCTION1(
 #define MASTER_B2PDPE64( value ) ( \
 	(((value) >> 8) & 0x00FF00FF00FF00FF) | \
 	(((value) << 8) & 0xFF00FF00FF00FF00))
+#define MASTER_B2LE( value ) MASTER_BSWAP_GENERIC(value, sizeof(value))
+#define MASTER_B2BE( value ) (value)
+#define MASTER_B2NUXI( value, byte_count ) ( \
+	((byte_count) == 1) ? (value) : ((byte_count) == 2) ? (MASTER_B2NUXI16(value)) : ((byte_count) == 4) ? (MASTER_B2NUXI32(value)) : (MASTER_B2NUXI64(value)))
+#define MASTER_B2PDPE( value, byte_count ) ( \
+	((byte_count) == 1) ? (value) : ((byte_count) == 2) ? (MASTER_B2PDPE16(value)) : ((byte_count) == 4) ? (MASTER_B2PDPE32(value)) : (MASTER_B2PDP64(value)))
+
+#define MASTER_NUXI2LE16( value ) (value)
+#define MASTER_NUXI2LE32( value ) ( \
+	(((value) >> 8) & 0x00FF00FF) | \
+	(((value) << 8) & 0xFF00FF00))
+#define MASTER_NUXI2LE64( value ) ( \
+	(((value) >> 8) & 0x00FF00FF) | \
+	(((value) << 8) & 0xFF00FF00))
+#define MASTER_NUXI2BE16( value ) MASTER_BSWAP16(value)
+#define MASTER_NUXI2BE32( value ) ( \
+	(((value) >> 16) & 0x0000FFFF) | \
+	(((value) << 16) & 0xFFFF0000))
+#define MASTER_NUXI2BE64( value ) ( \
+	(((value) >> 48) & 0x000000000000FFFF) | \
+	(((value) >> 16) & 0x00000000FFFF0000) | \
+	(((value) << 16) & 0x0000FFFF00000000) | \
+	(((value) << 48) & 0xFFFF000000000000))
+#define MASTER_NUXI2NUXI16( value ) (value)
+#define MASTER_NUXI2NUXI32( value ) (value)
+#define MASTER_NUXI2NUXI64( value ) (value)
+#define MASTER_NUXI2PDPE16( value ) MASTER_BSWAP16(value)
+#define MASTER_NUXI2PDPE32( value ) MASTER_BSWAP32(value)
+#define MASTER_NUXI2PDPE64( value ) MASTER_BSWAP64(value)
+#define MASTER_NUXI2LE( value ) ( \
+	((byte_count) == 1) ? (value) : ((byte_count) == 2) ? (MASTER_NUXI2LE16(value)) : ((byte_count) == 4) ? (MASTER_NUXI2LE32(value)) : (MASTER_NUXI2LE64(value)))
+#define MASTER_NUXI2BE( value ) ( \
+	((byte_count) == 1) ? (value) : ((byte_count) == 2) ? (MASTER_NUXI2BE16(value)) : ((byte_count) == 4) ? (MASTER_NUXI2BE32(value)) : (MASTER_NUXI2BE64(value)))
+#define MASTER_NUXI2NUXI( value ) (value)
+#define MASTER_NUXI2PDPE( value, byte_count ) ( \
+	((byte_count) == 1) ? (value) : ((byte_count) == 2) ? (MASTER_NUXI2PDPE16(value)) : ((byte_count) == 4) ? (MASTER_NUXI2PDPE32(value)) : (MASTER_NUXI2PDPE64(value)))
 
 #define MASTER_PDP2LE16( value ) MASTER_BSWAP16(value)
 #define MASTER_PDP2LE32( value ) ( \
@@ -1198,6 +1278,24 @@ MASTER_DEFINE_FUNCTION1(
 #define MASTER_PDP2BE64( value ) ( \
 	(((value) >> 8) & 0x00FF00FF00FF00FF) | \
 	(((value) << 8) & 0xFF00FF00FF00FF00))
+#define MASTER_PDP2NUXI16( value ) MASTER_BSWAP16(value)
+#define MASTER_PDP2NUXI32( value ) MASTER_BSWAP32(value)
+#define MASTER_PDP2NUXI64( value ) MASTER_BSWAP64(value)
+#define MASTER_PDP2PDPE16( value ) (value)
+#define MASTER_PDP2PDPE32( value ) (value)
+#define MASTER_PDP2PDPE64( value ) (value)
+#define MASTER_PDP2LE( value ) ( \
+	((byte_count) == 1) ? (value) : ((byte_count) == 2) ? (MASTER_PDP2LE16(value)) : ((byte_count) == 4) ? (MASTER_PDP2LE32(value)) : (MASTER_PDP2LE64(value)))
+#define MASTER_PDP2BE( value ) ( \
+	((byte_count) == 1) ? (value) : ((byte_count) == 2) ? (MASTER_PDP2BE16(value)) : ((byte_count) == 4) ? (MASTER_PDP2BE32(value)) : (MASTER_PDP2BE64(value)))
+#define MASTER_PDP2NUXI( value, byte_count ) ( \
+	((byte_count) == 1) ? (value) : ((byte_count) == 2) ? (MASTER_PDP2NUXI16(value)) : ((byte_count) == 4) ? (MASTER_PDP2NUXI32(value)) : (MASTER_PDP2NUXI64(value)))
+#define MASTER_PDP2PDPE( value, byte_count ) (value)
+
+#define MASTER_FUNC_ENDIAN( endian_little_func, endian_big_func, endian_nuxi_func, endian_pdp_func ) ( \
+	(MASTER_ENDIANNESS == MASTER_LITTLE_ENDIAN) ? (endian_little_func) : \
+	(MASTER_ENDIANNESS == MASTER_BIG_ENDIAN) ? (endian_big_func) : \
+	(MASTER_ENDIANNESS == MASTER_NUXI_ENDIAN) ? (endian_nuxi_func) : (endian_pdp_func))
 
 #define MASTER_ITERATE_L2H_LE( value ) ((value) += 1)
 #define MASTER_ITERATE_H2L_LE( value ) ((value) -= 1)
@@ -1225,9 +1323,15 @@ MASTER_DEFINE_FUNCTION1(
 		#define MASTER_TOBE32( value ) MASTER_L2BE32(value)
 		#define MASTER_TOBE64( value ) MASTER_L2BE64(value)
 		
-		#define MASTER_TOPDP16( value ) MASTER_L2PDPE16(value)
-		#define MASTER_TOPDP32( value ) MASTER_L2PDPE32(value)
-		#define MASTER_TOPDP64( value ) MASTER_L2PDPE64(value)
+		#define MASTER_TONUXI( value ) MASTER_L2NUXI(value)
+		#define MASTER_TONUXI16( value ) MASTER_L2NUXI16(value)
+		#define MASTER_TONUXI32( value ) MASTER_L2NUXI32(value)
+		#define MASTER_TONUXI64( value ) MASTER_L2NUXI64(value)
+		
+		#define MASTER_TOPDPE( value ) MASTER_L2PDPE(value)
+		#define MASTER_TOPDPE16( value ) MASTER_L2PDPE16(value)
+		#define MASTER_TOPDPE32( value ) MASTER_L2PDPE32(value)
+		#define MASTER_TOPDPE64( value ) MASTER_L2PDPE64(value)
 		
 		#define MASTER_FROMLE( value ) (value)
 		#define MASTER_FROMLE16( value ) (value)
@@ -1239,15 +1343,20 @@ MASTER_DEFINE_FUNCTION1(
 		#define MASTER_FROMBE32( value ) MASTER_B2LE32(value)
 		#define MASTER_FROMBE64( value ) MASTER_B2LE64(value)
 		
-		#define MASTER_FROMPDP16( value ) MASTER_PDP2LE16(value)
-		#define MASTER_FROMPDP32( value ) MASTER_PDP2LE32(value)
-		#define MASTER_FROMPDP64( value ) MASTER_PDP2LE64(value)
+		#define MASTER_FROMNUXI( value ) MASTER_NUXI2LE(value)
+		#define MASTER_FROMNUXI16( value ) MASTER_NUXI2LE16(value)
+		#define MASTER_FROMNUXI32( value ) MASTER_NUXI2LE32(value)
+		#define MASTER_FROMNUXI64( value ) MASTER_NUXI2LE64(value)
+		
+		#define MASTER_FROMPDPE( value ) MASTER_PDP2LE(value)
+		#define MASTER_FROMPDPE16( value ) MASTER_PDP2LE16(value)
+		#define MASTER_FROMPDPE32( value ) MASTER_PDP2LE32(value)
+		#define MASTER_FROMPDPE64( value ) MASTER_PDP2LE64(value)
 		
 		#define MASTER_ITERATE_L2H( value ) MASTER_ITERATE_L2H_LE(value)
 		#define MASTER_ITERATE_H2L( value ) MASTER_ITERATE_H2L_LE(value)
 		#define MASTER_GLIBE( min_value, max_value ) MASTER_LELOW( min_value, max_value )
 		#define MASTER_GHIBE( min_value, max_value ) MASTER_LEHIGH( min_value, max_value )
-		
 	#elif MASTER_ENDIANNESS == MASTER_BIG_ENDIAN
 		#define MASTER_TOLE( value ) MASTER_B2LE(value)
 		#define MASTER_TOLE16( value ) MASTER_B2LE16(value)
@@ -1259,9 +1368,15 @@ MASTER_DEFINE_FUNCTION1(
 		#define MASTER_TOBE32( value ) (value)
 		#define MASTER_TOBE64( value ) (value)
 		
-		#define MASTER_TOPDP16( value ) MASTER_B2PDPE16(value)
-		#define MASTER_TOPDP32( value ) MASTER_B2PDPE32(value)
-		#define MASTER_TOPDP64( value ) MASTER_B2PDPE64(value)
+		#define MASTER_TONUXI( value ) MASTER_B2NUXI(value)
+		#define MASTER_TONUXI16( value ) MASTER_B2NUXI16(value)
+		#define MASTER_TONUXI32( value ) MASTER_B2NUXI32(value)
+		#define MASTER_TONUXI64( value ) MASTER_B2NUXI64(value)
+		
+		#define MASTER_TOPDPE( value ) MASTER_B2PDPE(value)
+		#define MASTER_TOPDPE16( value ) MASTER_B2PDPE16(value)
+		#define MASTER_TOPDPE32( value ) MASTER_B2PDPE32(value)
+		#define MASTER_TOPDPE64( value ) MASTER_B2PDPE64(value)
 		
 		#define MASTER_FROMLE( value ) MASTER_L2BE(value)
 		#define MASTER_FROMLE16( value ) MASTER_L2BE16(value)
@@ -1273,56 +1388,158 @@ MASTER_DEFINE_FUNCTION1(
 		#define MASTER_FROMBE32( value ) (value)
 		#define MASTER_FROMBE64( value ) (value)
 		
-		#define MASTER_FROMPDP16( value ) MASTER_PDP2BE16(value)
-		#define MASTER_FROMPDP32( value ) MASTER_PDP2BE32(value)
-		#define MASTER_FROMPDP64( value ) MASTER_PDP2BE64(value)
+		#define MASTER_FROMNUXI( value ) MASTER_NUXI2BE(value)
+		#define MASTER_FROMNUXI16( value ) MASTER_NUXI2BE16(value)
+		#define MASTER_FROMNUXI32( value ) MASTER_NUXI2BE32(value)
+		#define MASTER_FROMNUXI64( value ) MASTER_NUXI2BE64(value)
+		
+		#define MASTER_FROMPDPE( value ) MASTER_PDP2BE(value)
+		#define MASTER_FROMPDPE16( value ) MASTER_PDP2BE16(value)
+		#define MASTER_FROMPDPE32( value ) MASTER_PDP2BE32(value)
+		#define MASTER_FROMPDPE64( value ) MASTER_PDP2BE64(value)
 		
 		#define MASTER_ITERATE_L2H( value ) MASTER_ITERATE_L2H_BE(value)
 		#define MASTER_ITERATE_H2L( value ) MASTER_ITERATE_H2L_BE(value)
 		#define MASTER_GLIBE( min_value, max_value ) MASTER_BELOW( min_value, max_value )
 		#define MASTER_GHIBE( min_value, max_value ) MASTER_BEHIGH( min_value, max_value )
+	#elif MASTER_ENDIANNESS == MASTER_NUXI_ENDIAN
+		#define MASTER_TOLE( value ) MASTER_NUXI2LE(value)
+		#define MASTER_TOLE16( value ) MASTER_NUXI2LE16(value)
+		#define MASTER_TOLE32( value ) MASTER_NUXI2LE32(value)
+		#define MASTER_TOLE64( value ) MASTER_NUXI2LE64(value)
 		
-	#elif MASTER_ENDIANNESS == MASTER_PDP_ENDIAN
-		/* #! PDP have maximum 32 bits. But in 64 bit endian will be 78563412 !# */
-		#define MASTER_TOLE( value ) ( \
-			(sizeof(value) == 1) ? (value) : (sizeof(value) == 2) ? (MASTER_TOLE16(value)) : (sizeof(value) == 4) ? (MASTER_TOLE32(value)) : (MASTER_TOLE64(value)))
-		#define MASTER_TOLE16( value ) MASTER_PDP2LE16(value)
-		#define MASTER_TOLE32( value ) MASTER_PDP2LE32(value)
-		#define MASTER_TOLE64( value ) MASTER_PDP2LE64(value)
+		#define MASTER_TOBE( value ) MASTER_NUXI2BE(value)
+		#define MASTER_TOBE16( value ) MASTER_NUXI2BE16(value)
+		#define MASTER_TOBE32( value ) MASTER_NUXI2BE32(value)
+		#define MASTER_TOBE64( value ) MASTER_NUXI2BE64(value)
 		
-		#define MASTER_TOBE( value ) ( \
-			(sizeof(value) == 1) ? (value) : (sizeof(value) == 2) ? (MASTER_TOBE16(value)) : (sizeof(value) == 4) ? (MASTER_TOBE32(value)) : (MASTER_TOBE64(value)))
-		#define MASTER_TOBE16( value ) MASTER_PDP2BE16(value)
-		#define MASTER_TOBE32( value ) MASTER_PDP2BE32(value)
-		#define MASTER_TOBE64( value ) MASTER_PDP2BE64(value)
+		#define MASTER_TONUXI( value ) (value)
+		#define MASTER_TONUXI16( value ) (value)
+		#define MASTER_TONUXI32( value ) (value)
+		#define MASTER_TONUXI64( value ) (value)
 		
-		#define MASTER_TOPDP16( value ) (value)
-		#define MASTER_TOPDP32( value ) (value)
-		#define MASTER_TOPDP64( value ) (value)
+		#define MASTER_TOPDPE( value ) MASTER_NUXI2PDPE(value)
+		#define MASTER_TOPDPE16( value ) MASTER_NUXI2PDPE16(value)
+		#define MASTER_TOPDPE32( value ) MASTER_NUXI2PDPE32(value)
+		#define MASTER_TOPDPE64( value ) MASTER_NUXI2PDPE64(value)
 		
-		//#define MASTER_FROMLE( value )
+		#define MASTER_FROMLE( value ) MASTER_L2PDPE(value)
 		#define MASTER_FROMLE16( value ) MASTER_L2PDPE16(value)
 		#define MASTER_FROMLE32( value ) MASTER_L2PDPE32(value)
 		#define MASTER_FROMLE64( value ) MASTER_L2PDPE64(value)
 		
-		//#define MASTER_FROMBE( value )
-		#define MASTER_FROMBE16( value ) MASTER_B2PDPE16(value)
-		#define MASTER_FROMBE32( value ) MASTER_B2PDPE32(value)
-		#define MASTER_FROMBE64( value ) MASTER_B2PDPE64(value)
+		#define MASTER_FROMBE( value ) MASTER_B2NUXI(value)
+		#define MASTER_FROMBE16( value ) MASTER_B2NUXI16(value)
+		#define MASTER_FROMBE32( value ) MASTER_B2NUXI32(value)
+		#define MASTER_FROMBE64( value ) MASTER_B2NUXI64(value)
 		
-		#define MASTER_FROMPDP16( value ) (value)
-		#define MASTER_FROMPDP32( value ) (value)
-		#define MASTER_FROMPDP64( value ) (value)
+		#define MASTER_FROMNUXI( value ) (value)
+		#define MASTER_FROMNUXI16( value ) (value)
+		#define MASTER_FROMNUXI32( value ) (value)
+		#define MASTER_FROMNUXI64( value ) (value)
+		
+		#define MASTER_FROMPDPE( value ) MASTER_PDP2NUXI(value)
+		#define MASTER_FROMPDPE16( value ) MASTER_PDP2NUXI16(value)
+		#define MASTER_FROMPDPE32( value ) MASTER_PDP2NUXI32(value)
+		#define MASTER_FROMPDPE64( value ) MASTER_PDP2NUXI64(value)
 		
 		#define MASTER_ITERATE_L2H( value ) MASTER_ITERATE_L2H_PDPE(value)
 		#define MASTER_ITERATE_H2L( value ) MASTER_ITERATE_H2L_PDPE(value)
 		#define MASTER_GLIBE( min_value, max_value ) MASTER_PDPELOW( min_value, max_value )
 		#define MASTER_GHIBE( min_value, max_value ) MASTER_PDPEHIGH( min_value, max_value )
+	#elif MASTER_ENDIANNESS == MASTER_PDP_ENDIAN
+		/* #! PDP have maximum 32 bits. But in 64 bit endian will be 78563412 !# */
+		#define MASTER_TOLE( value ) MASTER_PDP2LE(value)
+		#define MASTER_TOLE16( value ) MASTER_PDP2LE16(value)
+		#define MASTER_TOLE32( value ) MASTER_PDP2LE32(value)
+		#define MASTER_TOLE64( value ) MASTER_PDP2LE64(value)
 		
+		#define MASTER_TOBE( value ) MASTER_PDP2BE(value)
+		#define MASTER_TOBE16( value ) MASTER_PDP2BE16(value)
+		#define MASTER_TOBE32( value ) MASTER_PDP2BE32(value)
+		#define MASTER_TOBE64( value ) MASTER_PDP2BE64(value)
+		
+		#define MASTER_TONUXI( value ) MASTER_PDP2NUXI(value)
+		#define MASTER_TONUXI16( value ) MASTER_PDP2NUXI16(value)
+		#define MASTER_TONUXI32( value ) MASTER_PDP2NUXI32(value)
+		#define MASTER_TONUXI64( value ) MASTER_PDP2NUXI64(value)
+		
+		#define MASTER_TOPDPE( value ) (value)
+		#define MASTER_TOPDPE16( value ) (value)
+		#define MASTER_TOPDPE32( value ) (value)
+		#define MASTER_TOPDPE64( value ) (value)
+		
+		#define MASTER_FROMLE( value ) MASTER_L2PDPE(value)
+		#define MASTER_FROMLE16( value ) MASTER_L2PDPE16(value)
+		#define MASTER_FROMLE32( value ) MASTER_L2PDPE32(value)
+		#define MASTER_FROMLE64( value ) MASTER_L2PDPE64(value)
+		
+		#define MASTER_FROMBE( value ) MASTER_B2PDPE(value)
+		#define MASTER_FROMBE16( value ) MASTER_B2PDPE16(value)
+		#define MASTER_FROMBE32( value ) MASTER_B2PDPE32(value)
+		#define MASTER_FROMBE64( value ) MASTER_B2PDPE64(value)
+		
+		#define MASTER_FROMNUXI( value ) MASTER_NUXI2PDPE(value)
+		#define MASTER_FROMNUXI16( value ) MASTER_NUXI2PDPE16(value)
+		#define MASTER_FROMNUXI32( value ) MASTER_NUXI2PDPE32(value)
+		#define MASTER_FROMNUXI64( value ) MASTER_NUXI2PDPE64(value)
+		
+		#define MASTER_FROMPDPE( value ) (value)
+		#define MASTER_FROMPDPE16( value ) (value)
+		#define MASTER_FROMPDPE32( value ) (value)
+		#define MASTER_FROMPDPE64( value ) (value)
+		
+		#define MASTER_ITERATE_L2H( value ) MASTER_ITERATE_L2H_PDPE(value)
+		#define MASTER_ITERATE_H2L( value ) MASTER_ITERATE_H2L_PDPE(value)
+		#define MASTER_GLIBE( min_value, max_value ) MASTER_PDPELOW( min_value, max_value )
+		#define MASTER_GHIBE( min_value, max_value ) MASTER_PDPEHIGH( min_value, max_value )
 	#endif /* MASTER_UNKNOWN_ENDIANNESS */
 #else /* #! MASTER_UNKNOWN_ENDIAN - runtime check !# */
 /* #! TODO !# */
+	#define MASTER_TOLE( value ) MASTER_FUNC_ENDIAN(MASTER_L2LE(value), MASTER_B2LE(value), MASTER_NUXI2LE(value), MASTER_PDP2LE(value))
+	#define MASTER_TOLE16( value ) MASTER_FUNC_ENDIAN(MASTER_L2LE16(value), MASTER_B2LE16(value), MASTER_NUXI2LE16(value), MASTER_PDP2LE16(value))
+	#define MASTER_TOLE32( value ) MASTER_FUNC_ENDIAN(MASTER_L2LE32(value), MASTER_B2LE32(value), MASTER_NUXI2LE32(value), MASTER_PDP2LE32(value))
+	#define MASTER_TOLE64( value ) MASTER_FUNC_ENDIAN(MASTER_L2LE64(value), MASTER_B2LE64(value), MASTER_NUXI2LE64(value), MASTER_PDP2LE64(value))
 	
+	#define MASTER_TOBE( value ) MASTER_FUNC_ENDIAN(MASTER_L2BE(value), MASTER_B2BE(value), MASTER_NUXI2BE(value), MASTER_PDP2BE(value))
+	#define MASTER_TOBE16( value ) MASTER_FUNC_ENDIAN(MASTER_L2BE16(value), MASTER_B2BE16(value), MASTER_NUXI2BE16(value), MASTER_PDP2BE16(value))
+	#define MASTER_TOBE32( value ) MASTER_FUNC_ENDIAN(MASTER_L2BE32(value), MASTER_B2BE32(value), MASTER_NUXI2BE32(value), MASTER_PDP2BE32(value))
+	#define MASTER_TOBE64( value ) MASTER_FUNC_ENDIAN(MASTER_L2BE64(value), MASTER_B2BE64(value), MASTER_NUXI2BE64(value), MASTER_PDP2BE64(value))
+	
+	#define MASTER_TONUXI( value ) MASTER_FUNC_ENDIAN(MASTER_L2NUXI(value), MASTER_B2NUXI(value), MASTER_NUXI2NUXI(value), MASTER_PDP2NUXI(value))
+	#define MASTER_TONUXI16( value ) MASTER_FUNC_ENDIAN(MASTER_L2NUXI16(value), MASTER_B2NUXI16(value), MASTER_NUXI2NUXI16(value), MASTER_PDP2NUXI16(value))
+	#define MASTER_TONUXI32( value ) MASTER_FUNC_ENDIAN(MASTER_L2NUXI32(value), MASTER_B2NUXI32(value), MASTER_NUXI2NUXI32(value), MASTER_PDP2NUXI32(value))
+	#define MASTER_TONUXI64( value ) MASTER_FUNC_ENDIAN(MASTER_L2NUXI64(value), MASTER_B2NUXI64(value), MASTER_NUXI2NUXI64(value), MASTER_PDP2NUXI64(value))
+	
+	#define MASTER_TOPDPE( value ) MASTER_FUNC_ENDIAN(MASTER_L2PDPE(value), MASTER_B2PDPE(value), MASTER_NUXI2PDPE(value), MASTER_PDP2PDPE(value))
+	#define MASTER_TOPDPE16( value ) MASTER_FUNC_ENDIAN(MASTER_L2PDPE16(value), MASTER_B2PDPE16(value), MASTER_NUXI2PDPE16(value), MASTER_PDP2PDPE16(value))
+	#define MASTER_TOPDPE32( value ) MASTER_FUNC_ENDIAN(MASTER_L2PDPE32(value), MASTER_B2PDPE32(value), MASTER_NUXI2PDPE32(value), MASTER_PDP2PDPE32(value))
+	#define MASTER_TOPDPE64( value ) MASTER_FUNC_ENDIAN(MASTER_L2PDPE64(value), MASTER_B2PDPE64(value), MASTER_NUXI2PDPE64(value), MASTER_PDP2PDPE64(value))
+	
+	#define MASTER_FROMLE( value ) MASTER_FUNC_ENDIAN(MASTER_L2LE(value), MASTER_L2BE(value), MASTER_L2NUXI(value), MASTER_L2PDPE(value))
+	#define MASTER_FROMLE16( value ) MASTER_FUNC_ENDIAN(MASTER_L2LE16(value), MASTER_L2BE16(value), MASTER_L2NUXI16(value), MASTER_L2PDPE16(value))
+	#define MASTER_FROMLE32( value ) MASTER_FUNC_ENDIAN(MASTER_L2LE32(value), MASTER_L2BE32(value), MASTER_L2NUXI32(value), MASTER_L2PDPE32(value))
+	#define MASTER_FROMLE64( value ) MASTER_FUNC_ENDIAN(MASTER_L2LE64(value), MASTER_L2BE64(value), MASTER_L2NUXI64(value), MASTER_L2PDPE64(value))
+	
+	#define MASTER_FROMBE( value ) MASTER_FUNC_ENDIAN(MASTER_B2LE(value), MASTER_B2BE(value), MASTER_B2NUXI(value), MASTER_B2PDPE(value))
+	#define MASTER_FROMBE16( value ) MASTER_FUNC_ENDIAN(MASTER_B2LE16(value), MASTER_B2BE16(value), MASTER_B2NUXI16(value), MASTER_B2PDPE16(value))
+	#define MASTER_FROMBE32( value ) MASTER_FUNC_ENDIAN(MASTER_B2LE32(value), MASTER_B2BE32(value), MASTER_B2NUXI32(value), MASTER_B2PDPE32(value))
+	#define MASTER_FROMBE64( value ) MASTER_FUNC_ENDIAN(MASTER_B2LE64(value), MASTER_B2BE64(value), MASTER_B2NUXI64(value), MASTER_B2PDPE64(value))
+	
+	#define MASTER_FROMNUXI( value ) MASTER_FUNC_ENDIAN(MASTER_NUXI2LE(value), MASTER_NUXI2BE(value), MASTER_NUXI2NUXI(value), MASTER_NUXI2PDPE(value))
+	#define MASTER_FROMNUXI16( value ) MASTER_FUNC_ENDIAN(MASTER_NUXI2LE16(value), MASTER_NUXI2BE16(value), MASTER_NUXI2NUXI16(value), MASTER_NUXI2PDPE16(value))
+	#define MASTER_FROMNUXI32( value ) MASTER_FUNC_ENDIAN(MASTER_NUXI2LE32(value), MASTER_NUXI2BE32(value), MASTER_NUXI2NUXI32(value), MASTER_NUXI2PDPE32(value))
+	#define MASTER_FROMNUXI64( value ) MASTER_FUNC_ENDIAN(MASTER_NUXI2LE64(value), MASTER_NUXI2BE64(value), MASTER_NUXI2NUXI64(value), MASTER_NUXI2PDPE64(value))
+	
+	#define MASTER_FROMPDPE( value ) MASTER_FUNC_ENDIAN(MASTER_PDP2LE(value), MASTER_PDP2BE(value), MASTER_PDP2NUXI(value), MASTER_PDP2PDPE(value))
+	#define MASTER_FROMPDPE16( value ) MASTER_FUNC_ENDIAN(MASTER_PDP2LE16(value), MASTER_PDP2BE16(value), MASTER_PDP2NUXI16(value), MASTER_PDP2PDPE16(value))
+	#define MASTER_FROMPDPE32( value ) MASTER_FUNC_ENDIAN(MASTER_PDP2LE32(value), MASTER_PDP2BE32(value), MASTER_PDP2NUXI32(value), MASTER_PDP2PDPE32(value))
+	#define MASTER_FROMPDPE64( value ) MASTER_FUNC_ENDIAN(MASTER_PDP2LE64(value), MASTER_PDP2BE64(value), MASTER_PDP2NUXI64(value), MASTER_PDP2PDPE64(value))
+	
+	#define MASTER_ITERATE_L2H( value ) 
+	#define MASTER_ITERATE_H2L( value ) 
+	#define MASTER_GLIBE( min_value, max_value ) 
+	#define MASTER_GHIBE( min_value, max_value ) 
 #endif /* ENDIANNESS */
 
 #define __MASTER_MACROS_DEFINE_ALL_TYPES( define_macros ) \
@@ -1353,13 +1570,13 @@ MASTER_DEFINE_FUNCTION2( \
 	MASTER_EMPTY_DESCRIPTION, \
 	/* ! */ MASTER_AddSaturate ## type /* ! */, \
 	type, \
-	( const type, a ), \
-	( const type, b ) \
+	( const type, value1 ), \
+	( const type, value2 ) \
 ) { \
-	const type c = a + b; \
-	if (a > 0 && b > 0 && c < 0) return MASTER_ ## type ## _MAX; \
-	if (a < 0 && b < 0 && c > 0) return MASTER_ ## type ## _MIN; \
-	return c; \
+	const type value3 = value1 + value2; \
+	if (value1 > 0 && value2 > 0 && value3 < 0) return MASTER_ ## type ## _MAX; \
+	if (value1 < 0 && value2 < 0 && value3 > 0) return MASTER_ ## type ## _MIN; \
+	return value3; \
 }
 
 #define __MASTER_MACROS_DEFINE_AddSaturateUIx( type ) \
@@ -1368,12 +1585,12 @@ MASTER_DEFINE_FUNCTION2( \
 	MASTER_EMPTY_DESCRIPTION, \
 	/* ! */ MASTER_AddSaturate ## type /* ! */, \
 	type, \
-	( const type, a ), \
-	( const type, b ) \
+	( const type, value1 ), \
+	( const type, value2 ) \
 ) { \
-	const type c = a + b; \
-	if (c < a) return MASTER_ ## type ## _MAX; \
-	return c; \
+	const type value3 = value1 + value2; \
+	if (value3 < value1) return MASTER_ ## type ## _MAX; \
+	return value3; \
 }
 
 #define __MASTER_MACROS_DEFINE_SubSaturateSIx( type ) \
@@ -1382,13 +1599,13 @@ MASTER_DEFINE_FUNCTION2( \
 	MASTER_EMPTY_DESCRIPTION, \
 	/* ! */ MASTER_SubSaturate ## type /* ! */, \
 	type, \
-	( const type, a ), \
-	( const type, b ) \
+	( const type, value1 ), \
+	( const type, value2 ) \
 ) { \
-	const type c = a - b; \
-	if (a >= 0 && b < 0 && c < 0) return MASTER_ ## type ## _MAX; \
-	if (a < 0 && b > 0 && c > 0) return MASTER_ ## type ## _MIN; \
-	return c; \
+	const type value3 = value1 - value2; \
+	if (value1 >= 0 && value2 < 0 && value3 < 0) return MASTER_ ## type ## _MAX; \
+	if (value1 < 0 && value2 > 0 && value3 > 0) return MASTER_ ## type ## _MIN; \
+	return value3; \
 }
 
 #define __MASTER_MACROS_DEFINE_SubSaturateUIx( type ) \
@@ -1397,12 +1614,12 @@ MASTER_DEFINE_FUNCTION2( \
 	MASTER_EMPTY_DESCRIPTION, \
 	/* ! */ MASTER_SubSaturate ## type /* ! */, \
 	type, \
-	( const type, a ), \
-	( const type, b ) \
+	( const type, value1 ), \
+	( const type, value2 ) \
 ) { \
-	const type c = a - b; \
-	if (c > a) return MASTER_ ## type ## _MIN; \
-	return c; \
+	const type value3 = value1 - value2; \
+	if (value3 > value1) return MASTER_ ## type ## _MIN; \
+	return value3; \
 }
 
 #define __MASTER_MACROS_DEFINE_MulSaturateSIx( type ) \
@@ -1411,11 +1628,11 @@ MASTER_DEFINE_FUNCTION2( \
 	MASTER_EMPTY_DESCRIPTION, \
 	/* ! */ MASTER_MulSaturate ## type /* ! */, \
 	type, \
-	( const type, a ), \
-	( const type, b ) \
+	( const type, value1 ), \
+	( const type, value2 ) \
 ) { \
-	const type c = a * b; \
-	return (b != 0 && c / b != a) ? ( ((a > 0) == (b > 0)) ? (MASTER_ ## type ## _MAX) : (MASTER_ ## type ## _MIN) ) : (c); \
+	const type value3 = value1 * value2; \
+	return (value2 != 0 && value3 / value2 != value1) ? ( ((value1 > 0) == (value2 > 0)) ? (MASTER_ ## type ## _MAX) : (MASTER_ ## type ## _MIN) ) : (value3); \
 }
 
 #define __MASTER_MACROS_DEFINE_MulSaturateUIx( type ) \
@@ -1424,12 +1641,12 @@ MASTER_DEFINE_FUNCTION2( \
 	MASTER_EMPTY_DESCRIPTION, \
 	/* ! */ MASTER_MulSaturate ## type /* ! */, \
 	type, \
-	( const type, a ), \
-	( const type, b ) \
+	( const type, value1 ), \
+	( const type, value2 ) \
 ) { \
-	const type c = a * b; \
-	if (b != 0 && c / b != a) return MASTER_ ## type ## _MAX; \
-	return c; \
+	const type value3 = value1 * value2; \
+	if (value2 != 0 && value3 / value2 != value1) return MASTER_ ## type ## _MAX; \
+	return value3; \
 }
 
 __MASTER_MACROS_DEFINE_AddSaturateSIx( SI1 )
