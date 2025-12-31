@@ -1,6 +1,6 @@
 
 /*
- * Copyright (c) 2025 Adel'gid Aragami
+ * Copyright (c) 2026 Adel'gid Aragami
  *
  * Licensed under the BSD 2-Clause License.
  * See the LICENSE file in the project root for more details.

@@ -1,18 +1,13 @@
 
 /*
- * Copyright (c) 2025 Adel'gid Aragami
+ * Copyright (c) 2026 Adel'gid Aragami
  *
  * Licensed under the BSD 2-Clause License.
  * See the LICENSE file in the project root for more details.
  */
 
 #ifndef __MASTER_CHECKSUM_INCLUDE_H__
-#define __MASTER_CHECKSUM_INCLUDE_H__ (MASTER_LIBRARY_TESTING + \
-									   MASTER_LIBRARY_INCREMENTHATE + \
-									   MASTER_LIBRARY_OCViN + \
-									   MASTER_LIBRARY_STDARGS + \
-									   MASTER_LIBRARY_GRAPHSHATE + \
-									   MASTER_LIBRARY_FREESTANDING)
+#define __MASTER_CHECKSUM_INCLUDE_H__
 
 #include <master_enum.h>
 

@@ -1,6 +1,6 @@
 
 /*
- * Copyright (c) 2025 Adel'gid Aragami
+ * Copyright (c) 2026 Adel'gid Aragami
  *
  * Licensed under the BSD 2-Clause License.
  * See the LICENSE file in the project root for more details.
@@ -100,6 +100,45 @@ MASTER_DEFINE_FUNCTION1(
 	phrase = (phrase >> 16) | (phrase << 16);
 	return phrase;
 }
+
+#ifdef MASTER_USE_OPTIMIZED_COUNTING_ALGORITHM
+	#define MASTER_BIT_BITCOUNT2( value ) (value), (value) + 1, (value) + 1, (value) + 2
+	#define MASTER_BIT_BITCOUNT4( value ) MASTER_BIT_BITCOUNT2(value), MASTER_BIT_BITCOUNT2((value) + 1), MASTER_BIT_BITCOUNT2((value) + 1), MASTER_BIT_BITCOUNT2((value) + 2)
+	#define MASTER_BIT_BITCOUNT6( value ) MASTER_BIT_BITCOUNT4(value), MASTER_BIT_BITCOUNT4((value) + 1), MASTER_BIT_BITCOUNT4((value) + 1), MASTER_BIT_BITCOUNT4((value) + 2)
+	const UI1 MASTER_Bit_BitsSetTable[256] = {
+		MASTER_BIT_BITCOUNT6(0), MASTER_BIT_BITCOUNT6(1), MASTER_BIT_BITCOUNT6(1), MASTER_BIT_BITCOUNT6(2)
+	};
+	MASTER_DEFINE_FUNCTION1(
+		MASTER_NO_FLAGS,
+		MASTER_EMPTY_DESCRIPTION,
+		/* ! */ MASTER_Bit_CountOnes4 /* ! */,
+		UI4,
+		( UI4, phrase )
+	) {
+		return MASTER_Bit_BitsSetTable[phrase & 0xFF] +
+			   MASTER_Bit_BitsSetTable[(phrase >> 8) & 0xFF] +
+			   MASTER_Bit_BitsSetTable[(phrase >> 16) & 0xFF] +
+			   MASTER_Bit_BitsSetTable[phrase >> 24];
+	}
+#else
+	MASTER_DEFINE_FUNCTION1(
+		MASTER_NO_FLAGS,
+		MASTER_EMPTY_DESCRIPTION,
+		/* ! */ MASTER_Bit_CountOnes4 /* ! */,
+		UI4,
+		( UI4, phrase )
+	) {
+		phrase = phrase - ((phrase >> 1) & 0x55555555);
+		phrase = (phrase & 0x33333333) + ((phrase >> 2) & 0x33333333);
+		return ((phrase + ((phrase >> 4) & 0x0F0F0F0F)) * 0x01010101) >> 24;
+		/* #!
+		UI1 result = 0;
+		for (; phrase > 0; phrase >>= 1)
+			result += phrase & 1;
+		return result;
+		!# */
+	}
+#endif /* #! MASTER_BITLIB_USE_OPTIMIZED_COUNTING_ALGORITHM !# */
 
 /* #! FSM !# */
 

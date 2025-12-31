@@ -1,6 +1,6 @@
 
 /*
- * Copyright (c) 2025 Adel'gid Aragami
+ * Copyright (c) 2026 Adel'gid Aragami
  *
  * Licensed under the BSD 2-Clause License.
  * See the LICENSE file in the project root for more details.
@@ -34,8 +34,6 @@ typedef struct {
 	UI8 state;
 } MASTER_Randomlib_xorshift64;
 
-#include <string.h>
-
 UI4
 MASTER_Randomlib_xorshift64_Next( MASTER_Randomlib_xorshift64 * const xs64c, UI8 * const out ) {
 	if (xs64c == nul) return 0;
@@ -54,14 +52,38 @@ MASTER_Randomlib_xorshift64_Next( MASTER_Randomlib_xorshift64 * const xs64c, UI8
 	xs64c->state[1] ^= (xs64c->state[1] << 17) | (xs64c->state[0] >> (32 - 17));
 	xs64c->state[0] ^= xs64c->state[0] << 17;
 	if (out != nul)
-		memcpy(out, xs64c->state, sizeof(UI8));
+		MASTER_MEMCPY((UI1 *)out, (UI1 *)xs64c->state, sizeof(UI8));
 	return xs64c->state[0];
 #else
-	#error "User type of UI8, nor the array, is not supporting on the current time."
+#	error "User type of UI8, nor the array, is not supporting on the current time."
 #endif /* #! MASTER_UI8_TYPE !# */
 }
 
 /* #! Jump 1.000, 1.000.000, 1.000.000.000, 1E+12, 1E+15, 1E+18 !# */
+
+typedef struct {
+	UI4 state[4];
+} MASTER_Randomlib_xorshift128;
+
+UI4
+MASTER_Randomlib_xorshift128_Next( MASTER_Randomlib_xorshift128 * const xs128c, UI4 * const out ) {
+	UI4 value1;
+	UI4 value2;
+	if (xs128c == nul) return 0;
+	value1 = xs128c->state[3];
+	value2 = xs128c->state[0];
+	xs128c->state[3] = xs128c->state[2];
+	xs128c->state[2] = xs128c->state[1];
+	xs128c->state[1] = value2;
+	value1 ^= value1 << 11;
+	value1 ^= value1 >> 8;
+	xs128c->state[0] = value1 ^ value2 ^ (value2 >> 19);
+	if (out != nul)
+		*out = xs128c->state[0];
+	return xs128c->state[0];
+}
+
+/* #! Jump 1.000, 1.000.000, 1.000.000.000, 1E+12, 1E+15, 1E+18, 1E+21, 1E+24, 1E+27, 1E+30, 1E+33, 1E+36 !# */
 
 #endif /* #! __MASTER_RANDOMLIB_INCLUDE_H__ !# */
 

@@ -1,6 +1,6 @@
 
 /*
- * Copyright (c) 2025 Adel'gid Aragami
+ * Copyright (c) 2026 Adel'gid Aragami
  *
  * Licensed under the BSD 2-Clause License.
  * See the LICENSE file in the project root for more details.
@@ -10,6 +10,9 @@
 #define __MASTER_CHARMAPLIB_INCLUDE_H__
 
 #include <master_enum.h>
+
+#define MASTER_ASCII_IS_OPEN_BRACKET( value ) ((value) == '(' || (value) == '[' || (value) == '{')
+#define MASTER_ASCII_IS_CLOSE_BRACKET( value ) ((value) == ')' || (value) == ']' || (value) == '}')
 
 typedef UI4 MASTER_Unicode;
 

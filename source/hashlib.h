@@ -1,6 +1,6 @@
 
 /*
- * Copyright (c) 2025 Adel'gid Aragami
+ * Copyright (c) 2026 Adel'gid Aragami
  *
  * Licensed under the BSD 2-Clause License.
  * See the LICENSE file in the project root for more details.
@@ -11,15 +11,168 @@
 
 #include <master_enum.h>
 
+#define MASTER_OPERATION_XOR3( value1, value2, value3 ) ((value1) ^ (value2) ^ (value3))
+#define MASTER_OPERATION_1XB2ON3E( value1, value2, value3 ) ((value1) ^ ((value2) | (~(value3))))
+#define MASTER_OPERATION_2XB1ON3E( value1, value2, value3 ) ((value2) ^ ((value1) | (~(value3))))
+#define MASTER_OPERATION_3XB1ON2E( value1, value2, value3 ) ((value3) ^ ((value1) | (~(value2))))
+
+#define MASTER_OPERATION_CHOICE_STANDARD( value1, value2, value3 ) (((value1) & (value2)) | ((~(value1)) & (value3)))
+#define MASTER_OPERATION_CHOICE_OPTIMIZED( value1, value2, value3 ) ((value3) ^ ((value1) & ((value2) ^ (value3))))
+#define MASTER_OPERATION_MAJORITAR_STANDARD( value1, value2, value3 ) (((value1) & (value2)) ^ ((value1) & (value3)) ^ ((value2) & (value3)))
+#define MASTER_OPERATION_MAJORITAR_OPTIMIZED( value1, value2, value3 ) ((((value1) | (value2)) & (value3)) | ((value1) & (value2)))
+
+#ifdef MASTER_HASHLIB_USE_STANDARD_MACROSES
+#	define MASTER_OPERATION_CHOICE MASTER_OPERATION_CHOICE_STANDARD
+#	define MASTER_OPERATION_MAJORITAR MASTER_OPERATION_MAJORITAR_STANDARD
+#else
+#	define MASTER_OPERATION_CHOICE MASTER_OPERATION_CHOICE_OPTIMIZED
+#	define MASTER_OPERATION_MAJORITAR MASTER_OPERATION_MAJORITAR_OPTIMIZED
+#endif /* #! MASTER_HASHLIB_OPTIMIZE_MACROSES !# */
+
 #ifdef MASTER_HASHLIB_EXTERN_ONLY
-	#define MASTER_HASHLIB_MD2_EXTERN_ONLY
-	#define MASTER_HASHLIB_MD4_EXTERN_ONLY
-	#define MASTER_HASHLIB_MD5_EXTERN_ONLY
-	#define MASTER_HASHLIB_SHA1_EXTERN_ONLY
-	#define MASTER_HASHLIB_RIPEMD128_EXTERN_ONLY
-	#define MASTER_HASHLIB_RIPEMD160_EXTERN_ONLY
-	#define MASTER_HASHLIB_RIPEMD256_EXTERN_ONLY
-	#define MASTER_HASHLIB_RIPEMD320_EXTERN_ONLY
+#	define MASTER_HASHLIB_MD2_COMPILE 0
+#	define MASTER_HASHLIB_MD4_COMPILE 0
+#	define MASTER_HASHLIB_MD5_COMPILE 0
+#	define MASTER_HASHLIB_SHA1_COMPILE 0
+#	define MASTER_HASHLIB_RIPEMD128_COMPILE 0
+#	define MASTER_HASHLIB_RIPEMD160_COMPILE 0
+#	define MASTER_HASHLIB_RIPEMD256_COMPILE 0
+#	define MASTER_HASHLIB_RIPEMD320_COMPILE 0
+#	define MASTER_HASHLIB_API_COMPILE 0
+#else
+#	define MASTER_HASHLIB_API_COMPILE 1
+#	if defined(MASTER_HASHLIB_MD2_USE) || \
+	   defined(MASTER_HASHLIB_MD4_USE) || \
+	   defined(MASTER_HASHLIB_MD5_USE) || \
+	   defined(MASTER_HASHLIB_SHA1_USE) || \
+	   defined(MASTER_HASHLIB_RIPEMD128_USE) || \
+	   defined(MASTER_HASHLIB_RIPEMD160_USE) || \
+	   defined(MASTER_HASHLIB_RIPEMD256_USE) || \
+	   defined(MASTER_HASHLIB_RIPEMD320_USE)
+#		define MASTER_HASHLIB_WHITELIST_MODE 1
+#	else
+#		define MASTER_HASHLIB_WHITELIST_MODE 0
+#	endif /* #! Whitelist Setting !# */
+#	ifdef MASTER_HASHLIB_MD2_EXTERN
+#		define MASTER_HASHLIB_MD2_COMPILE 0
+#		ifdef MASTER_HASHLIB_MD2_USE
+#			warning "MD2 is defined to USE, but also defined to EXTERN. MD2 will NOT be compiled"
+#		endif /* #! MD2 Conflict of Use & Extern !# */
+#	elif MASTER_HASHLIB_WHITELIST_MODE == 1
+#		ifdef MASTER_HASHLIB_MD2_USE
+#			define MASTER_HASHLIB_MD2_COMPILE 1
+#		else
+#			define MASTER_HASHLIB_MD2_COMPILE 0
+#		endif /* #! MD2 Use !# */
+#	else
+#		define MASTER_HASHLIB_MD2_COMPILE 1
+#	endif /* #! MD2 !# */
+	
+#	ifdef MASTER_HASHLIB_MD4_EXTERN
+#		define MASTER_HASHLIB_MD4_COMPILE 0
+#		ifdef MASTER_HASHLIB_MD4_USE
+#			warning "MD4 is defined to USE, but also defined to EXTERN. MD4 will NOT be compiled"
+#		endif /* #! MD4 Conflict of Use & Extern !# */
+#	elif MASTER_HASHLIB_WHITELIST_MODE == 1
+#		ifdef MASTER_HASHLIB_MD4_USE
+#			define MASTER_HASHLIB_MD4_COMPILE 1
+#		else
+#			define MASTER_HASHLIB_MD4_COMPILE 0
+#		endif /* #! MD4 Use !# */
+#	else
+#		define MASTER_HASHLIB_MD4_COMPILE 1
+#	endif /* #! MD4 !# */
+	
+#	ifdef MASTER_HASHLIB_MD5_EXTERN
+#		define MASTER_HASHLIB_MD5_COMPILE 0
+#		ifdef MASTER_HASHLIB_MD5_USE
+#			warning "MD5 is defined to USE, but also defined to EXTERN. MD5 will NOT be compiled"
+#		endif /* #! MD5 Conflict of Use & Extern !# */
+#	elif MASTER_HASHLIB_WHITELIST_MODE == 1
+#		ifdef MASTER_HASHLIB_MD5_USE
+#			define MASTER_HASHLIB_MD5_COMPILE 1
+#		else
+#			define MASTER_HASHLIB_MD5_COMPILE 0
+#		endif /* #! MD5 Use !# */
+#	else
+#		define MASTER_HASHLIB_MD5_COMPILE 1
+#	endif /* #! MD5 !# */
+	
+#	ifdef MASTER_HASHLIB_SHA1_EXTERN
+#		define MASTER_HASHLIB_SHA1_COMPILE 0
+#		ifdef MASTER_HASHLIB_SHA1_USE
+#			warning "SHA1 is defined to USE, but also defined to EXTERN. SHA1 will NOT be compiled"
+#		endif /* #! SHA1 Conflict of Use & Extern !# */
+#	elif MASTER_HASHLIB_WHITELIST_MODE == 1
+#		ifdef MASTER_HASHLIB_SHA1_USE
+#			define MASTER_HASHLIB_SHA1_COMPILE 1
+#		else
+#			define MASTER_HASHLIB_SHA1_COMPILE 0
+#		endif /* #! SHA1 Use !# */
+#	else
+#		define MASTER_HASHLIB_SHA1_COMPILE 1
+#	endif /* #! SHA1 !# */
+	
+#	ifdef MASTER_HASHLIB_RIPEMD128_EXTERN
+#		define MASTER_HASHLIB_RIPEMD128_COMPILE 0
+#		ifdef MASTER_HASHLIB_RIPEMD128_USE
+#			warning "RIPEMD128 is defined to USE, but also defined to EXTERN. RIPEMD128 will NOT be compiled"
+#		endif /* #! RIPEMD128 Conflict of Use & Extern !# */
+#	elif MASTER_HASHLIB_WHITELIST_MODE == 1
+#		ifdef MASTER_HASHLIB_RIPEMD128_USE
+#			define MASTER_HASHLIB_RIPEMD128_COMPILE 1
+#		else
+#			define MASTER_HASHLIB_RIPEMD128_COMPILE 0
+#		endif /* #! RIPEMD128 Use !# */
+#	else
+#		define MASTER_HASHLIB_RIPEMD128_COMPILE 1
+#	endif /* #! RIPEMD128 !# */
+	
+#	ifdef MASTER_HASHLIB_RIPEMD160_EXTERN
+#		define MASTER_HASHLIB_RIPEMD160_COMPILE 0
+#		ifdef MASTER_HASHLIB_RIPEMD160_USE
+#			warning "RIPEMD160 is defined to USE, but also defined to EXTERN. RIPEMD160 will NOT be compiled"
+#		endif /* #! RIPEMD160 Conflict of Use & Extern !# */
+#	elif MASTER_HASHLIB_WHITELIST_MODE == 1
+#		ifdef MASTER_HASHLIB_RIPEMD160_USE
+#			define MASTER_HASHLIB_RIPEMD160_COMPILE 1
+#		else
+#			define MASTER_HASHLIB_RIPEMD160_COMPILE 0
+#		endif /* #! RIPEMD160 Use !# */
+#	else
+#		define MASTER_HASHLIB_RIPEMD160_COMPILE 1
+#	endif /* #! RIPEMD160 !# */
+	
+#	ifdef MASTER_HASHLIB_RIPEMD256_EXTERN
+#		define MASTER_HASHLIB_RIPEMD256_COMPILE 0
+#		ifdef MASTER_HASHLIB_RIPEMD256_USE
+#			warning "RIPEMD256 is defined to USE, but also defined to EXTERN. RIPEMD256 will NOT be compiled"
+#		endif /* #! RIPEMD256 Conflict of Use & Extern !# */
+#	elif MASTER_HASHLIB_WHITELIST_MODE == 1
+#		ifdef MASTER_HASHLIB_RIPEMD256_USE
+#			define MASTER_HASHLIB_RIPEMD256_COMPILE 1
+#		else
+#			define MASTER_HASHLIB_RIPEMD256_COMPILE 0
+#		endif /* #! RIPEMD256 Use !# */
+#	else
+#		define MASTER_HASHLIB_RIPEMD256_COMPILE 1
+#	endif /* #! RIPEMD256 !# */
+	
+#	ifdef MASTER_HASHLIB_RIPEMD256_EXTERN
+#		define MASTER_HASHLIB_RIPEMD320_COMPILE 0
+#		ifdef MASTER_HASHLIB_RIPEMD320_USE
+#			warning "RIPEMD320 is defined to USE, but also defined to EXTERN. RIPEMD320 will NOT be compiled"
+#		endif /* #! RIPEMD320 Conflict of Use & Extern !# */
+#	elif MASTER_HASHLIB_WHITELIST_MODE == 1
+#		ifdef MASTER_HASHLIB_RIPEMD320_USE
+#			define MASTER_HASHLIB_RIPEMD320_COMPILE 1
+#		else
+#			define MASTER_HASHLIB_RIPEMD320_COMPILE 0
+#		endif /* #! RIPEMD320 Use !# */
+#	else
+#		define MASTER_HASHLIB_RIPEMD320_COMPILE 1
+#	endif /* #! RIPEMD320 !# */
+#	undef MASTER_HASHLIB_WHITELIST_MODE
 #endif /* #! MASTER_HASHLIB_EXTERN_ONLY !# */
 
 #define MASTER_HASHLIB_MD2_ID 0
@@ -79,7 +232,7 @@ MASTER_Hashlib_MD2_Calculate( const void * const bytes, const MASTER_maxint len,
 
 MASTER_PREFER_EXTERN const UI1 MASTER_Hashlib_MD2_Table1[256];
 
-#ifndef MASTER_HASHLIB_MD2_EXTERN_ONLY
+#if MASTER_HASHLIB_MD2_COMPILE == 1
 
 void
 MASTER_Hashlib_MD2_Init( MASTER_Hashlib_MD2_Context * const md2c ) {
@@ -163,8 +316,6 @@ MASTER_Hashlib_MD2_Calculate( const void * const bytes, const MASTER_maxint len,
 	MASTER_Hashlib_MD2_Finish(&md2c, out);
 }
 
-#endif /* #! MASTER_HASHLIB_MD2_EXTERN_ONLY !# */
-
 const UI1 MASTER_Hashlib_MD2_Table1[256] = {
 	41, 46, 67, 201, 162, 216, 124, 1, 61, 54, 84, 161, 236, 240, 6, 19,
 	98, 167, 5, 243, 192, 199, 115, 140, 152, 147, 43, 217, 188, 76, 130, 202,
@@ -183,6 +334,8 @@ const UI1 MASTER_Hashlib_MD2_Table1[256] = {
 	242, 239, 183, 14, 102, 88, 208, 228, 166, 119, 114, 248, 235, 117, 75, 10,
 	49, 68, 80, 180, 143, 237, 31, 26, 219, 153, 141, 51, 159, 17, 131, 20
 };
+
+#endif /* #! MD2 !# */
 
 /* #! MD4 !# */
 
@@ -206,14 +359,11 @@ MASTER_Hashlib_MD4_Finish( MASTER_Hashlib_MD4_Context * const md4c, UI1 out[MAST
 MASTER_PREFER_EXTERN void
 MASTER_Hashlib_MD4_Calculate( const void * const bytes, const MASTER_maxint len, UI1 out[MASTER_HASHLIB_MD4_DIGEST_SIZE] );
 
-#ifndef MASTER_HASHLIB_MD4_EXTERN_ONLY
+#if MASTER_HASHLIB_MD4_COMPILE == 1
 
-#define MASTER_HASHLIB_MD4_FUNC1( alpha, beta, gamma ) (((alpha) & (beta)) | (~(alpha) & (gamma)))
-#define MASTER_HASHLIB_MD4_FUNC2( alpha, beta, gamma ) (((alpha) & (beta)) | ((alpha) & (gamma)) | ((beta) & (gamma)))
-#define MASTER_HASHLIB_MD4_FUNC3( alpha, beta, gamma ) ((alpha) ^ (beta) ^ (gamma))
-#define MASTER_HASHLIB_MD4_FUNC4( alpha, beta, gamma, zeta, epsilon, teta ) (alpha) = MASTER_RLL32((alpha) + (epsilon) + MASTER_HASHLIB_MD4_FUNC1(beta, gamma, zeta), teta)
-#define MASTER_HASHLIB_MD4_FUNC5( alpha, beta, gamma, zeta, epsilon, teta ) (alpha) = MASTER_RLL32((alpha) + (epsilon) + 0x5A827999 + MASTER_HASHLIB_MD4_FUNC2(beta, gamma, zeta), teta)
-#define MASTER_HASHLIB_MD4_FUNC6( alpha, beta, gamma, zeta, epsilon, teta ) (alpha) = MASTER_RLL32((alpha) + (epsilon) + 0x6ED9EBA1 + MASTER_HASHLIB_MD4_FUNC3(beta, gamma, zeta), teta)
+#define MASTER_HASHLIB_MD4_FUNC1( alpha, beta, gamma, zeta, epsilon, teta ) (alpha) = MASTER_RLL32((alpha) + (epsilon) + MASTER_OPERATION_CHOICE(beta, gamma, zeta), teta)
+#define MASTER_HASHLIB_MD4_FUNC2( alpha, beta, gamma, zeta, epsilon, teta ) (alpha) = MASTER_RLL32((alpha) + (epsilon) + 0x5A827999 + MASTER_OPERATION_MAJORITAR(beta, gamma, zeta), teta)
+#define MASTER_HASHLIB_MD4_FUNC3( alpha, beta, gamma, zeta, epsilon, teta ) (alpha) = MASTER_RLL32((alpha) + (epsilon) + 0x6ED9EBA1 + MASTER_OPERATION_XOR3(beta, gamma, zeta), teta)
 
 void
 MASTER_Hashlib_MD4_Init( MASTER_Hashlib_MD4_Context * const md4c ) {
@@ -246,22 +396,22 @@ MASTER_Hashlib_MD4_Process( MASTER_Hashlib_MD4_Context * const md4c ) {
 	for (; index < 16; index += 1) 
 		chunk[index] = (md4c->buffer[3 | (index << 2)] << 24) | (md4c->buffer[2 | (index << 2)] << 16) | (md4c->buffer[1 | (index << 2)] << 8) | md4c->buffer[index << 2];
 	for (index = 0; index < 4; index += 1) {
-		MASTER_HASHLIB_MD4_FUNC4( wordA, wordB, wordC, wordD, chunk[index << 2], 3);
-		MASTER_HASHLIB_MD4_FUNC4( wordD, wordA, wordB, wordC, chunk[(index << 2) | 1], 7);
-		MASTER_HASHLIB_MD4_FUNC4( wordC, wordD, wordA, wordB, chunk[(index << 2) | 2], 11);
-		MASTER_HASHLIB_MD4_FUNC4( wordB, wordC, wordD, wordA, chunk[(index << 2) | 3], 19);
+		MASTER_HASHLIB_MD4_FUNC1( wordA, wordB, wordC, wordD, chunk[index << 2], 3);
+		MASTER_HASHLIB_MD4_FUNC1( wordD, wordA, wordB, wordC, chunk[(index << 2) | 1], 7);
+		MASTER_HASHLIB_MD4_FUNC1( wordC, wordD, wordA, wordB, chunk[(index << 2) | 2], 11);
+		MASTER_HASHLIB_MD4_FUNC1( wordB, wordC, wordD, wordA, chunk[(index << 2) | 3], 19);
 	}
 	for (index = 0; index < 4; index += 1) {
-		MASTER_HASHLIB_MD4_FUNC5( wordA, wordB, wordC, wordD, chunk[index], 3);
-		MASTER_HASHLIB_MD4_FUNC5( wordD, wordA, wordB, wordC, chunk[index | 4], 5);
-		MASTER_HASHLIB_MD4_FUNC5( wordC, wordD, wordA, wordB, chunk[index | 8], 9);
-		MASTER_HASHLIB_MD4_FUNC5( wordB, wordC, wordD, wordA, chunk[index | 12], 13);
+		MASTER_HASHLIB_MD4_FUNC2( wordA, wordB, wordC, wordD, chunk[index], 3);
+		MASTER_HASHLIB_MD4_FUNC2( wordD, wordA, wordB, wordC, chunk[index | 4], 5);
+		MASTER_HASHLIB_MD4_FUNC2( wordC, wordD, wordA, wordB, chunk[index | 8], 9);
+		MASTER_HASHLIB_MD4_FUNC2( wordB, wordC, wordD, wordA, chunk[index | 12], 13);
 	}
 	for (index = 0; index < 4; index += 1) {
-		MASTER_HASHLIB_MD4_FUNC6( wordA, wordB, wordC, wordD, chunk[((index & 1) << 1) | ((index & 2) >> 1)], 3);
-		MASTER_HASHLIB_MD4_FUNC6( wordD, wordA, wordB, wordC, chunk[(((index & 1) << 1) | ((index & 2) >> 1)) | 8], 9);
-		MASTER_HASHLIB_MD4_FUNC6( wordC, wordD, wordA, wordB, chunk[(((index & 1) << 1) | ((index & 2) >> 1)) | 4], 11);
-		MASTER_HASHLIB_MD4_FUNC6( wordB, wordC, wordD, wordA, chunk[(((index & 1) << 1) | ((index & 2) >> 1)) | 12], 15);
+		MASTER_HASHLIB_MD4_FUNC3( wordA, wordB, wordC, wordD, chunk[((index & 1) << 1) | ((index & 2) >> 1)], 3);
+		MASTER_HASHLIB_MD4_FUNC3( wordD, wordA, wordB, wordC, chunk[(((index & 1) << 1) | ((index & 2) >> 1)) | 8], 9);
+		MASTER_HASHLIB_MD4_FUNC3( wordC, wordD, wordA, wordB, chunk[(((index & 1) << 1) | ((index & 2) >> 1)) | 4], 11);
+		MASTER_HASHLIB_MD4_FUNC3( wordB, wordC, wordD, wordA, chunk[(((index & 1) << 1) | ((index & 2) >> 1)) | 12], 15);
 	}
 	md4c->state[0] += wordA;
 	md4c->state[1] += wordB;
@@ -329,7 +479,7 @@ MASTER_Hashlib_MD4_Calculate( const void * const bytes, const MASTER_maxint len,
 	MASTER_Hashlib_MD4_Finish(&md4c, out);
 }
 
-#endif /* #! MASTER_HASHLIB_MD4_EXTERN_ONLY !# */
+#endif /* #! MD4 !# */
 
 /* #! MD5 !# */
 
@@ -355,28 +505,24 @@ MASTER_Hashlib_MD5_Calculate( const void * const bytes, const MASTER_maxint len,
 
 MASTER_PREFER_EXTERN const UI4 MASTER_Hashlib_MD5_Table1[64];
 
-#define MASTER_HASHLIB_MD5_FUNC1( alpha, beta, gamma ) (((alpha) & (beta)) | (~(alpha) & (gamma)))
-#define MASTER_HASHLIB_MD5_FUNC2( alpha, beta, gamma ) (((alpha) & (gamma)) | ((beta) & ~(gamma)))
-#define MASTER_HASHLIB_MD5_FUNC3( alpha, beta, gamma ) ((alpha) ^ (beta) ^ (gamma))
-#define MASTER_HASHLIB_MD5_FUNC4( alpha, beta, gamma ) ((beta) ^ ((alpha) | ~(gamma)))
-#define MASTER_HASHLIB_MD5_FUNC5( a, b, c, d, x, s, ac ) \
-	(a) += MASTER_HASHLIB_MD5_FUNC1(b, c, d) + (x) + (UI4)(ac); \
-	(a) = MASTER_RLL32(a, s); \
-	(a) += (b)
-#define MASTER_HASHLIB_MD5_FUNC6( a, b, c, d, x, s, ac ) \
-	(a) += MASTER_HASHLIB_MD5_FUNC2(b, c, d) + (x) + (UI4)(ac); \
-	(a) = MASTER_RLL32(a, s); \
-	(a) += (b)
-#define MASTER_HASHLIB_MD5_FUNC7( a, b, c, d, x, s, ac ) \
-	(a) += MASTER_HASHLIB_MD5_FUNC3(b, c, d) + (x) + (UI4)(ac); \
-	(a) = MASTER_RLL32(a, s); \
-	(a) += (b)
-#define MASTER_HASHLIB_MD5_FUNC8( a, b, c, d, x, s, ac ) \
-	(a) += MASTER_HASHLIB_MD5_FUNC4(b, c, d) + (x) + (UI4)(ac); \
-	(a) = MASTER_RLL32(a, s); \
-	(a) += (b)
+#if MASTER_HASHLIB_MD5_COMPILE == 1
 
-#ifndef MASTER_HASHLIB_MD5_EXTERN_ONLY
+#define MASTER_HASHLIB_MD5_FUNC1( a, b, c, d, x, s, ac ) \
+	(a) += MASTER_OPERATION_CHOICE(b, c, d) + (x) + (UI4)(ac); \
+	(a) = MASTER_RLL32(a, s); \
+	(a) += (b)
+#define MASTER_HASHLIB_MD5_FUNC2( a, b, c, d, x, s, ac ) \
+	(a) += MASTER_OPERATION_CHOICE(d, b, c) + (x) + (UI4)(ac); \
+	(a) = MASTER_RLL32(a, s); \
+	(a) += (b)
+#define MASTER_HASHLIB_MD5_FUNC3( a, b, c, d, x, s, ac ) \
+	(a) += MASTER_OPERATION_XOR3(b, c, d) + (x) + (UI4)(ac); \
+	(a) = MASTER_RLL32(a, s); \
+	(a) += (b)
+#define MASTER_HASHLIB_MD5_FUNC4( a, b, c, d, x, s, ac ) \
+	(a) += MASTER_OPERATION_2XB1ON3E(b, c, d) + (x) + (UI4)(ac); \
+	(a) = MASTER_RLL32(a, s); \
+	(a) += (b)
 
 void
 MASTER_Hashlib_MD5_Init( MASTER_Hashlib_MD5_Context * const md5c ) {
@@ -409,28 +555,28 @@ MASTER_Hashlib_MD5_Process( MASTER_Hashlib_MD5_Context * const md5c ) {
 	for (; index < 16; index += 1) 
 		chunk[index] = (md5c->buffer[3 | (index << 2)] << 24) | (md5c->buffer[2 | (index << 2)] << 16) | (md5c->buffer[1 | (index << 2)] << 8) | md5c->buffer[index << 2];
 	for (index = 0; index < 4; index += 1) {
-		MASTER_HASHLIB_MD5_FUNC5( wordA, wordB, wordC, wordD, chunk[index << 2], 7, MASTER_Hashlib_MD5_Table1[index << 2]);
-		MASTER_HASHLIB_MD5_FUNC5( wordD, wordA, wordB, wordC, chunk[(index << 2) | 1], 12, MASTER_Hashlib_MD5_Table1[(index << 2) | 1]);
-		MASTER_HASHLIB_MD5_FUNC5( wordC, wordD, wordA, wordB, chunk[(index << 2) | 2], 17, MASTER_Hashlib_MD5_Table1[(index << 2) | 2]);
-		MASTER_HASHLIB_MD5_FUNC5( wordB, wordC, wordD, wordA, chunk[(index << 2) | 3], 22, MASTER_Hashlib_MD5_Table1[(index << 2) | 3]);
+		MASTER_HASHLIB_MD5_FUNC1( wordA, wordB, wordC, wordD, chunk[index << 2], 7, MASTER_Hashlib_MD5_Table1[index << 2]);
+		MASTER_HASHLIB_MD5_FUNC1( wordD, wordA, wordB, wordC, chunk[(index << 2) | 1], 12, MASTER_Hashlib_MD5_Table1[(index << 2) | 1]);
+		MASTER_HASHLIB_MD5_FUNC1( wordC, wordD, wordA, wordB, chunk[(index << 2) | 2], 17, MASTER_Hashlib_MD5_Table1[(index << 2) | 2]);
+		MASTER_HASHLIB_MD5_FUNC1( wordB, wordC, wordD, wordA, chunk[(index << 2) | 3], 22, MASTER_Hashlib_MD5_Table1[(index << 2) | 3]);
 	}
 	for (index = 0; index < 4; index += 1) {
-		MASTER_HASHLIB_MD5_FUNC6( wordA, wordB, wordC, wordD, chunk[1 | (index << 2)], 5, MASTER_Hashlib_MD5_Table1[(index << 2) | 16]);
-		MASTER_HASHLIB_MD5_FUNC6( wordD, wordA, wordB, wordC, chunk[(6 + (index << 2)) & 0xF], 9, MASTER_Hashlib_MD5_Table1[(index << 2) | 17]);
-		MASTER_HASHLIB_MD5_FUNC6( wordC, wordD, wordA, wordB, chunk[(11 + (index << 2)) & 0xF], 14, MASTER_Hashlib_MD5_Table1[(index << 2) | 18]);
-		MASTER_HASHLIB_MD5_FUNC6( wordB, wordC, wordD, wordA, chunk[index << 2], 20, MASTER_Hashlib_MD5_Table1[(index << 2) | 19]);
+		MASTER_HASHLIB_MD5_FUNC2( wordA, wordB, wordC, wordD, chunk[1 | (index << 2)], 5, MASTER_Hashlib_MD5_Table1[(index << 2) | 16]);
+		MASTER_HASHLIB_MD5_FUNC2( wordD, wordA, wordB, wordC, chunk[(6 + (index << 2)) & 0xF], 9, MASTER_Hashlib_MD5_Table1[(index << 2) | 17]);
+		MASTER_HASHLIB_MD5_FUNC2( wordC, wordD, wordA, wordB, chunk[(11 + (index << 2)) & 0xF], 14, MASTER_Hashlib_MD5_Table1[(index << 2) | 18]);
+		MASTER_HASHLIB_MD5_FUNC2( wordB, wordC, wordD, wordA, chunk[index << 2], 20, MASTER_Hashlib_MD5_Table1[(index << 2) | 19]);
 	}
 	for (index = 0; index < 4; index += 1) {
-		MASTER_HASHLIB_MD5_FUNC7( wordA, wordB, wordC, wordD, chunk[(5 + index * 12) & 0xF], 4, MASTER_Hashlib_MD5_Table1[(index << 2) | 32]);
-		MASTER_HASHLIB_MD5_FUNC7( wordD, wordA, wordB, wordC, chunk[(8 + index * 12) & 0xF], 11, MASTER_Hashlib_MD5_Table1[(index << 2) | 33]);
-		MASTER_HASHLIB_MD5_FUNC7( wordC, wordD, wordA, wordB, chunk[(11 + index * 12) & 0xF], 16, MASTER_Hashlib_MD5_Table1[(index << 2) | 34]);
-		MASTER_HASHLIB_MD5_FUNC7( wordB, wordC, wordD, wordA, chunk[(14 + index * 12) & 0xF], 23, MASTER_Hashlib_MD5_Table1[(index << 2) | 35]);
+		MASTER_HASHLIB_MD5_FUNC3( wordA, wordB, wordC, wordD, chunk[(5 + index * 12) & 0xF], 4, MASTER_Hashlib_MD5_Table1[(index << 2) | 32]);
+		MASTER_HASHLIB_MD5_FUNC3( wordD, wordA, wordB, wordC, chunk[(8 + index * 12) & 0xF], 11, MASTER_Hashlib_MD5_Table1[(index << 2) | 33]);
+		MASTER_HASHLIB_MD5_FUNC3( wordC, wordD, wordA, wordB, chunk[(11 + index * 12) & 0xF], 16, MASTER_Hashlib_MD5_Table1[(index << 2) | 34]);
+		MASTER_HASHLIB_MD5_FUNC3( wordB, wordC, wordD, wordA, chunk[(14 + index * 12) & 0xF], 23, MASTER_Hashlib_MD5_Table1[(index << 2) | 35]);
 	}
 	for (index = 0; index < 4; index += 1) {
-		MASTER_HASHLIB_MD5_FUNC8( wordA, wordB, wordC, wordD, chunk[(index * 12) & 0xF], 6, MASTER_Hashlib_MD5_Table1[(index << 2) | 48]);
-		MASTER_HASHLIB_MD5_FUNC8( wordD, wordA, wordB, wordC, chunk[(7 + index * 12) & 0xF], 10, MASTER_Hashlib_MD5_Table1[(index << 2) | 49]);
-		MASTER_HASHLIB_MD5_FUNC8( wordC, wordD, wordA, wordB, chunk[(14 + index * 12) & 0xF], 15, MASTER_Hashlib_MD5_Table1[(index << 2) | 50]);
-		MASTER_HASHLIB_MD5_FUNC8( wordB, wordC, wordD, wordA, chunk[(5 + index * 12) & 0xF], 21, MASTER_Hashlib_MD5_Table1[(index << 2) | 51]);
+		MASTER_HASHLIB_MD5_FUNC4( wordA, wordB, wordC, wordD, chunk[(index * 12) & 0xF], 6, MASTER_Hashlib_MD5_Table1[(index << 2) | 48]);
+		MASTER_HASHLIB_MD5_FUNC4( wordD, wordA, wordB, wordC, chunk[(7 + index * 12) & 0xF], 10, MASTER_Hashlib_MD5_Table1[(index << 2) | 49]);
+		MASTER_HASHLIB_MD5_FUNC4( wordC, wordD, wordA, wordB, chunk[(14 + index * 12) & 0xF], 15, MASTER_Hashlib_MD5_Table1[(index << 2) | 50]);
+		MASTER_HASHLIB_MD5_FUNC4( wordB, wordC, wordD, wordA, chunk[(5 + index * 12) & 0xF], 21, MASTER_Hashlib_MD5_Table1[(index << 2) | 51]);
 	}
 	md5c->state[0] += wordA;
 	md5c->state[1] += wordB;
@@ -498,8 +644,6 @@ MASTER_Hashlib_MD5_Calculate( const void * const bytes, const MASTER_maxint len,
 	MASTER_Hashlib_MD5_Finish(&md5c, out);
 }
 
-#endif /* #! MASTER_HASHLIB_MD5_EXTERN_ONLY !# */
-
 const UI4 MASTER_Hashlib_MD5_Table1[64] = {
 	0xD76AA478, 0xE8C7B756, 0x242070DB, 0xC1BDCEEE, 0xF57C0FAF, 0x4787C62A, 0xA8304613, 0xFD469501,
 	0x698098D8, 0x8B44F7AF, 0xFFFF5BB1, 0x895CD7BE, 0x6B901122, 0xFD987193, 0xA679438E, 0x49B40821,
@@ -510,6 +654,8 @@ const UI4 MASTER_Hashlib_MD5_Table1[64] = {
 	0xF4292244, 0x432AFF97, 0xAB9423A7, 0xFC93A039, 0x655B59C3, 0x8F0CCC92, 0xFFEFF47D, 0x85845DD1,
 	0x6FA87E4F, 0xFE2CE6E0, 0xA3014314, 0x4E0811A1, 0xF7537E82, 0xBD3AF235, 0x2AD7D2BB, 0xEB86D391
 };
+
+#endif /* #! MD5 !# */
 
 /* #! SHA-1 !# */
 
@@ -535,7 +681,7 @@ MASTER_Hashlib_SHA1_Calculate( const void * const bytes, const MASTER_maxint len
 
 MASTER_PREFER_EXTERN const UI4 MASTER_Hashlib_SHA1_Table1[4];
 
-#ifndef MASTER_HASHLIB_SHA1_EXTERN_ONLY
+#if MASTER_HASHLIB_SHA1_COMPILE == 1
 
 void
 MASTER_Hashlib_SHA1_Init( MASTER_Hashlib_SHA1_Context * const sha1c ) {
@@ -672,11 +818,11 @@ MASTER_Hashlib_SHA1_Calculate( const void * const bytes, const MASTER_maxint len
 	MASTER_Hashlib_SHA1_Finish(&sha1c, out);
 }
 
-#endif /* #! MASTER_HASHLIB_SHA1_EXTERN_ONLY !# */
-
 const UI4 MASTER_Hashlib_SHA1_Table1[4] = {
 	0x5A827999, 0x6ED9EBA1, 0x8F1BBCDC, 0xCA62C1D6
 };
+
+#endif /* #! SHA1 !# */
 
 /* #! RIPEMD-128 !# */
 
@@ -701,45 +847,42 @@ MASTER_PREFER_EXTERN void
 MASTER_Hashlib_RIPEMD128_Calculate( const void * const bytes, const MASTER_maxint len, UI1 out[MASTER_HASHLIB_RIPEMD128_DIGEST_SIZE] );
 
 MASTER_PREFER_EXTERN const UI4 MASTER_Hashlib_RIPEMD128_Table1[8];
+MASTER_PREFER_EXTERN const UI1 MASTER_Hashlib_RIPEMD128_Table2[128];
+MASTER_PREFER_EXTERN const UI1 MASTER_Hashlib_RIPEMD128_Table3[128];
 
-#define MASTER_HASHLIB_RIPEMD128_FUNC1_0( value1, value2, value3 ) ((value1) ^ (value2) ^ (value3))
-#define MASTER_HASHLIB_RIPEMD128_FUNC2_0( value1, value2, value3 ) (((value1) & (value2)) | ((~(value1)) & (value3)))
-#define MASTER_HASHLIB_RIPEMD128_FUNC3_0( value1, value2, value3 ) (((value1) | (~(value2))) ^ (value3))
-#define MASTER_HASHLIB_RIPEMD128_FUNC4_0( value1, value2, value3 ) (((value1) & (value3)) | ((value2) & (~(value3))))
+#if MASTER_HASHLIB_RIPEMD128_COMPILE == 1
 
 #define MASTER_HASHLIB_RIPEMD128_FUNC1_1( word1, word2, word3, word4, plate, shift ) do { \
-		(word1) = MASTER_RLL32((word1) + MASTER_HASHLIB_RIPEMD128_FUNC1_0(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD128_Table1[0], shift); \
+		(word1) = MASTER_RLL32((word1) + MASTER_OPERATION_XOR3(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD128_Table1[0], shift); \
 	} while (0)
 
 #define MASTER_HASHLIB_RIPEMD128_FUNC2_1( word1, word2, word3, word4, plate, shift ) do { \
-		(word1) = MASTER_RLL32((word1) + MASTER_HASHLIB_RIPEMD128_FUNC2_0(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD128_Table1[1], shift); \
+		(word1) = MASTER_RLL32((word1) + MASTER_OPERATION_CHOICE(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD128_Table1[1], shift); \
 	} while (0)
 
 #define MASTER_HASHLIB_RIPEMD128_FUNC3_1( word1, word2, word3, word4, plate, shift ) do { \
-		(word1) = MASTER_RLL32((word1) + MASTER_HASHLIB_RIPEMD128_FUNC3_0(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD128_Table1[2], shift); \
+		(word1) = MASTER_RLL32((word1) + MASTER_OPERATION_3XB1ON2E(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD128_Table1[2], shift); \
 	} while (0)
 
 #define MASTER_HASHLIB_RIPEMD128_FUNC4_1( word1, word2, word3, word4, plate, shift ) do { \
-		(word1) = MASTER_RLL32((word1) + MASTER_HASHLIB_RIPEMD128_FUNC4_0(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD128_Table1[3], shift); \
+		(word1) = MASTER_RLL32((word1) + MASTER_OPERATION_CHOICE(word4, word2, word3) + (plate) + MASTER_Hashlib_RIPEMD128_Table1[3], shift); \
 	} while (0)
 
 #define MASTER_HASHLIB_RIPEMD128_FUNC1_2( word1, word2, word3, word4, plate, shift ) do { \
-		(word1) = MASTER_RLL32((word1) + MASTER_HASHLIB_RIPEMD128_FUNC4_0(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD128_Table1[4], shift); \
+		(word1) = MASTER_RLL32((word1) + MASTER_OPERATION_CHOICE(word4, word2, word3) + (plate) + MASTER_Hashlib_RIPEMD128_Table1[4], shift); \
 	} while (0)
 
 #define MASTER_HASHLIB_RIPEMD128_FUNC2_2( word1, word2, word3, word4, plate, shift ) do { \
-		(word1) = MASTER_RLL32((word1) + MASTER_HASHLIB_RIPEMD128_FUNC3_0(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD128_Table1[5], shift); \
+		(word1) = MASTER_RLL32((word1) + MASTER_OPERATION_3XB1ON2E(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD128_Table1[5], shift); \
 	} while (0)
 
 #define MASTER_HASHLIB_RIPEMD128_FUNC3_2( word1, word2, word3, word4, plate, shift ) do { \
-		(word1) = MASTER_RLL32((word1) + MASTER_HASHLIB_RIPEMD128_FUNC2_0(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD128_Table1[6], shift); \
+		(word1) = MASTER_RLL32((word1) + MASTER_OPERATION_CHOICE(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD128_Table1[6], shift); \
 	} while (0)
 
 #define MASTER_HASHLIB_RIPEMD128_FUNC4_2( word1, word2, word3, word4, plate, shift ) do { \
-		(word1) = MASTER_RLL32((word1) + MASTER_HASHLIB_RIPEMD128_FUNC1_0(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD128_Table1[7], shift); \
+		(word1) = MASTER_RLL32((word1) + MASTER_OPERATION_XOR3(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD128_Table1[7], shift); \
 	} while (0)
-
-#ifndef MASTER_HASHLIB_RIPEMD128_EXTERN_ONLY
 
 void
 MASTER_Hashlib_RIPEMD128_Init( MASTER_Hashlib_RIPEMD128_Context * const ripemd128c ) {
@@ -774,7 +917,7 @@ MASTER_Hashlib_RIPEMD128_Process( MASTER_Hashlib_RIPEMD128_Context * const ripem
 	UI4 wordD2 = wordD1;
 	UI1 index = 0;
 	for (; index < 16; index += 1)
-		chunk[index] = (ripemd128c->buffer[3 | (index << 2)] << 24) | (ripemd128c->buffer[2 | (index << 2)] << 16) | (ripemd128c->buffer[1 | (index << 2)] << 8) | ripemd128c->buffer[index << 2];	
+		chunk[index] = (ripemd128c->buffer[3 | (index << 2)] << 24) | (ripemd128c->buffer[2 | (index << 2)] << 16) | (ripemd128c->buffer[1 | (index << 2)] << 8) | ripemd128c->buffer[index << 2];
 	MASTER_HASHLIB_RIPEMD128_FUNC1_1(wordA1, wordB1, wordC1, wordD1, chunk[0], 11);
 	MASTER_HASHLIB_RIPEMD128_FUNC1_1(wordD1, wordA1, wordB1, wordC1, chunk[1], 14);
 	MASTER_HASHLIB_RIPEMD128_FUNC1_1(wordC1, wordD1, wordA1, wordB1, chunk[2], 15);
@@ -910,7 +1053,6 @@ MASTER_Hashlib_RIPEMD128_Process( MASTER_Hashlib_RIPEMD128_Context * const ripem
 	MASTER_HASHLIB_RIPEMD128_FUNC4_2(wordD2, wordA2, wordB2, wordC2, chunk[7], 5);
 	MASTER_HASHLIB_RIPEMD128_FUNC4_2(wordC2, wordD2, wordA2, wordB2, chunk[10], 15);
 	MASTER_HASHLIB_RIPEMD128_FUNC4_2(wordB2, wordC2, wordD2, wordA2, chunk[14], 8);
-
 	wordD2 += wordC1 + ripemd128c->state[1];
 	ripemd128c->state[1] = ripemd128c->state[2] + wordD1 + wordA2;
 	ripemd128c->state[2] = ripemd128c->state[3] + wordA1 + wordB2;
@@ -978,12 +1120,12 @@ MASTER_Hashlib_RIPEMD128_Calculate( const void * const bytes, const MASTER_maxin
 	MASTER_Hashlib_RIPEMD128_Finish(&ripemd128c, out);
 }
 
-#endif /* #! MASTER_HASHLIB_RIPEMD128_EXTERN_ONLY !# */
-
 const UI4 MASTER_Hashlib_RIPEMD128_Table1[8] = {
 	0x00000000, 0x5A827999, 0x6ED9EBA1, 0x8F1BBCDC,
 	0x50A28BE6, 0x5C4DD124, 0x6D703EF3, 0x00000000
 };
+
+#endif /* #! RIPEMD128 !# */
 
 /* #! RIPEMD-160 !# */
 
@@ -1009,63 +1151,57 @@ MASTER_Hashlib_RIPEMD160_Calculate( const void * const bytes, const MASTER_maxin
 
 MASTER_PREFER_EXTERN const UI4 MASTER_Hashlib_RIPEMD160_Table1[10];
 
-#define MASTER_HASHLIB_RIPEMD160_FUNC1_0( value1, value2, value3 ) ((value1) ^ (value2) ^ (value3))
-#define MASTER_HASHLIB_RIPEMD160_FUNC2_0( value1, value2, value3 ) (((value1) & (value2)) | ((~(value1)) & (value3)))
-#define MASTER_HASHLIB_RIPEMD160_FUNC3_0( value1, value2, value3 ) (((value1) | (~(value2))) ^ (value3))
-#define MASTER_HASHLIB_RIPEMD160_FUNC4_0( value1, value2, value3 ) (((value1) & (value3)) | ((value2) & (~(value3))))
-#define MASTER_HASHLIB_RIPEMD160_FUNC5_0( value1, value2, value3 ) ((value1) ^ ((value2) | (~(value3))))
+#if MASTER_HASHLIB_RIPEMD160_COMPILE == 1
 
 #define MASTER_HASHLIB_RIPEMD160_FUNC1_1( word1, word2, word3, word4, word5, plate, shift ) do { \
-		(word1) = MASTER_RLL32((word1) + MASTER_HASHLIB_RIPEMD160_FUNC1_0(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD160_Table1[0], shift) + (word5); \
+		(word1) = MASTER_RLL32((word1) + MASTER_OPERATION_XOR3(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD160_Table1[0], shift) + (word5); \
 		(word3) = MASTER_RLL32(word3, 10); \
 	} while (0)
 
 #define MASTER_HASHLIB_RIPEMD160_FUNC2_1( word1, word2, word3, word4, word5, plate, shift ) do { \
-		(word1) = MASTER_RLL32((word1) + MASTER_HASHLIB_RIPEMD160_FUNC2_0(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD160_Table1[1], shift) + (word5); \
+		(word1) = MASTER_RLL32((word1) + MASTER_OPERATION_CHOICE(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD160_Table1[1], shift) + (word5); \
 		(word3) = MASTER_RLL32(word3, 10); \
 	} while (0)
 
 #define MASTER_HASHLIB_RIPEMD160_FUNC3_1( word1, word2, word3, word4, word5, plate, shift ) do { \
-		(word1) = MASTER_RLL32((word1) + MASTER_HASHLIB_RIPEMD160_FUNC3_0(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD160_Table1[2], shift) + (word5); \
+		(word1) = MASTER_RLL32((word1) + MASTER_OPERATION_3XB1ON2E(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD160_Table1[2], shift) + (word5); \
 		(word3) = MASTER_RLL32(word3, 10); \
 	} while (0)
 
 #define MASTER_HASHLIB_RIPEMD160_FUNC4_1( word1, word2, word3, word4, word5, plate, shift ) do { \
-		(word1) = MASTER_RLL32((word1) + MASTER_HASHLIB_RIPEMD160_FUNC4_0(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD160_Table1[3], shift) + (word5); \
+		(word1) = MASTER_RLL32((word1) + MASTER_OPERATION_CHOICE(word4, word2, word3) + (plate) + MASTER_Hashlib_RIPEMD160_Table1[3], shift) + (word5); \
 		(word3) = MASTER_RLL32(word3, 10); \
 	} while (0)
 
 #define MASTER_HASHLIB_RIPEMD160_FUNC5_1( word1, word2, word3, word4, word5, plate, shift ) do { \
-		(word1) = MASTER_RLL32((word1) + MASTER_HASHLIB_RIPEMD160_FUNC5_0(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD160_Table1[4], shift) + (word5); \
+		(word1) = MASTER_RLL32((word1) + MASTER_OPERATION_1XB2ON3E(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD160_Table1[4], shift) + (word5); \
 		(word3) = MASTER_RLL32(word3, 10); \
 	} while (0)
 
 #define MASTER_HASHLIB_RIPEMD160_FUNC1_2( word1, word2, word3, word4, word5, plate, shift ) do { \
-		(word1) = MASTER_RLL32((word1) + MASTER_HASHLIB_RIPEMD160_FUNC5_0(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD160_Table1[5], shift) + (word5); \
+		(word1) = MASTER_RLL32((word1) + MASTER_OPERATION_1XB2ON3E(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD160_Table1[5], shift) + (word5); \
 		(word3) = MASTER_RLL32(word3, 10); \
 	} while (0)
 
 #define MASTER_HASHLIB_RIPEMD160_FUNC2_2( word1, word2, word3, word4, word5, plate, shift ) do { \
-		(word1) = MASTER_RLL32((word1) + MASTER_HASHLIB_RIPEMD160_FUNC4_0(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD160_Table1[6], shift) + (word5); \
+		(word1) = MASTER_RLL32((word1) + MASTER_OPERATION_CHOICE(word4, word2, word3) + (plate) + MASTER_Hashlib_RIPEMD160_Table1[6], shift) + (word5); \
 		(word3) = MASTER_RLL32(word3, 10); \
 	} while (0)
 
 #define MASTER_HASHLIB_RIPEMD160_FUNC3_2( word1, word2, word3, word4, word5, plate, shift ) do { \
-		(word1) = MASTER_RLL32((word1) + MASTER_HASHLIB_RIPEMD160_FUNC3_0(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD160_Table1[7], shift) + (word5); \
+		(word1) = MASTER_RLL32((word1) + MASTER_OPERATION_3XB1ON2E(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD160_Table1[7], shift) + (word5); \
 		(word3) = MASTER_RLL32(word3, 10); \
 	} while (0)
 
 #define MASTER_HASHLIB_RIPEMD160_FUNC4_2( word1, word2, word3, word4, word5, plate, shift ) do { \
-		(word1) = MASTER_RLL32((word1) + MASTER_HASHLIB_RIPEMD160_FUNC2_0(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD160_Table1[8], shift) + (word5); \
+		(word1) = MASTER_RLL32((word1) + MASTER_OPERATION_CHOICE(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD160_Table1[8], shift) + (word5); \
 		(word3) = MASTER_RLL32(word3, 10); \
 	} while (0)
 
 #define MASTER_HASHLIB_RIPEMD160_FUNC5_2( word1, word2, word3, word4, word5, plate, shift ) do { \
-		(word1) = MASTER_RLL32((word1) + MASTER_HASHLIB_RIPEMD160_FUNC1_0(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD160_Table1[9], shift) + (word5); \
+		(word1) = MASTER_RLL32((word1) + MASTER_OPERATION_XOR3(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD160_Table1[9], shift) + (word5); \
 		(word3) = MASTER_RLL32(word3, 10); \
 	} while (0)
-
-#ifndef MASTER_HASHLIB_RIPEMD160_EXTERN_ONLY
 
 void
 MASTER_Hashlib_RIPEMD160_Init( MASTER_Hashlib_RIPEMD160_Context * const ripemd160c ) {
@@ -1343,12 +1479,12 @@ MASTER_Hashlib_RIPEMD160_Calculate( const void * const bytes, const MASTER_maxin
 	MASTER_Hashlib_RIPEMD160_Finish(&ripemd160c, out);
 }
 
-#endif /* #! MASTER_HASHLIB_RIPEMD160_EXTERN_ONLY !# */
-
 const UI4 MASTER_Hashlib_RIPEMD160_Table1[10] = {
 	0x00000000, 0x5A827999, 0x6ED9EBA1, 0x8F1BBCDC, 0xA953FD4E,
 	0x50A28BE6, 0x5C4DD124, 0x6D703EF3, 0x7A6D76E9, 0x00000000
 };
+
+#endif /* #! RIPEMD160 !# */
 
 /* #! RIPEMD-256 !# */
 
@@ -1372,7 +1508,7 @@ MASTER_Hashlib_RIPEMD256_Finish( MASTER_Hashlib_RIPEMD256_Context * const ripemd
 MASTER_PREFER_EXTERN void
 MASTER_Hashlib_RIPEMD256_Calculate( const void * const bytes, const MASTER_maxint len, UI1 out[MASTER_HASHLIB_RIPEMD256_DIGEST_SIZE] );
 
-#ifndef MASTER_HASHLIB_RIPEMD256_EXTERN_ONLY
+#if MASTER_HASHLIB_RIPEMD256_COMPILE == 1
 
 void
 MASTER_Hashlib_RIPEMD256_Init( MASTER_Hashlib_RIPEMD256_Context * const ripemd256c ) {
@@ -1400,6 +1536,8 @@ MASTER_Hashlib_RIPEMD256_Create( void ) {
 
 MASTER_PREFER_STATIC void
 MASTER_Hashlib_RIPEMD256_Process( MASTER_Hashlib_RIPEMD256_Context * const ripemd256c ) {
+	MASTER_UNUSED( ripemd256c );
+	/* #!
 	UI4 chunk[16];
 	UI4 wordA1 = ripemd256c->state[0];
 	UI4 wordB1 = ripemd256c->state[1];
@@ -1412,7 +1550,7 @@ MASTER_Hashlib_RIPEMD256_Process( MASTER_Hashlib_RIPEMD256_Context * const ripem
 	UI1 index = 0;
 	for (; index < 16; index += 1)
 		chunk[index] = (ripemd256c->buffer[3 | (index << 2)] << 24) | (ripemd256c->buffer[2 | (index << 2)] << 16) | (ripemd256c->buffer[1 | (index << 2)] << 8) | ripemd256c->buffer[index << 2];
-	
+	!# */
 }
 
 void
@@ -1479,7 +1617,7 @@ MASTER_Hashlib_RIPEMD256_Calculate( const void * const bytes, const MASTER_maxin
 	MASTER_Hashlib_RIPEMD256_Finish(&ripemd256c, out);
 }
 
-#endif /* #! MASTER_HASHLIB_RIPEMD256_EXTERN_ONLY !# */
+#endif /* #! RIPEMD256 !# */
 
 /* #! RIPEMD320 !# */
 
@@ -1503,7 +1641,7 @@ MASTER_Hashlib_RIPEMD320_Finish( MASTER_Hashlib_RIPEMD320_Context * const ripemd
 MASTER_PREFER_EXTERN void
 MASTER_Hashlib_RIPEMD320_Calculate( const void * const bytes, const MASTER_maxint len, UI1 out[MASTER_HASHLIB_RIPEMD320_DIGEST_SIZE] );
 
-#ifndef MASTER_HASHLIB_RIPEMD320_EXTERN_ONLY
+#if MASTER_HASHLIB_RIPEMD320_COMPILE == 1
 
 void
 MASTER_Hashlib_RIPEMD320_Init( MASTER_Hashlib_RIPEMD320_Context * const ripemd320c ) {
@@ -1533,6 +1671,8 @@ MASTER_Hashlib_RIPEMD320_Create( void ) {
 
 MASTER_PREFER_STATIC void
 MASTER_Hashlib_RIPEMD320_Process( MASTER_Hashlib_RIPEMD320_Context * const ripemd320c ) {
+	MASTER_UNUSED( ripemd320c );
+	/* #!
 	UI4 chunk[16];
 	UI4 wordA1 = ripemd320c->state[0];
 	UI4 wordB1 = ripemd320c->state[1];
@@ -1547,7 +1687,7 @@ MASTER_Hashlib_RIPEMD320_Process( MASTER_Hashlib_RIPEMD320_Context * const ripem
 	UI1 index = 0;
 	for (; index < 16; index += 1)
 		chunk[index] = (ripemd320c->buffer[3 | (index << 2)] << 24) | (ripemd320c->buffer[2 | (index << 2)] << 16) | (ripemd320c->buffer[1 | (index << 2)] << 8) | ripemd320c->buffer[index << 2];
-	
+	!# */
 }
 
 void
@@ -1616,7 +1756,7 @@ MASTER_Hashlib_RIPEMD320_Calculate( const void * const bytes, const MASTER_maxin
 	MASTER_Hashlib_RIPEMD320_Finish(&ripemd320c, out);
 }
 
-#endif /* #! MASTER_HASHLIB_RIPEMD320_EXTERN_ONLY !# */
+#endif /* #! RIPEMD320 !# */
 
 /*
 // <HASHNAME>
@@ -1641,7 +1781,7 @@ MASTER_Hashlib_<HASHBIG>_Calculate( const void * const bytes, const MASTER_maxin
 
 const UI4 MASTER_Hashlib_<HASHBIG>_Table1[4];
 
-#ifndef MASTER_HASHLIB_<HASHBIG>_EXTERN_ONLY
+#if MASTER_HASHLIB_<HASHBIG>_COMPILE == 1
 
 void
 MASTER_Hashlib_<HASHBIG>_Init( MASTER_Hashlib_<HASHBIG>_Context * const <hashlow>c ) {
@@ -1687,7 +1827,7 @@ MASTER_Hashlib_<HASHBIG>_Calculate( const void * const bytes, const MASTER_maxin
 	MASTER_Hashlib_<HASHBIG>_Finish(&<hashlow>c, out);
 }
 
-#endif // MASTER_HASHLIB_<HASHBIG>_EXTERN_ONLY
+#endif // <HASHBIG>
 */
 
 /* #! API !# */
@@ -1719,7 +1859,7 @@ MASTER_Hashlib_GetAlgorithmName( const UI1 id );
 MASTER_PREFER_EXTERN MASTER_maxint
 MASTER_Hashlib_GetAlgorithmOutputSize( const UI1 id );
 
-#ifndef MASTER_HASHLIB_API_EXTERN_ONLY
+#if MASTER_HASHLIB_API_COMPILE == 1
 
 MASTER_Hashlib_Context
 MASTER_Hashlib_Create( const UI1 id ) {
@@ -1818,9 +1958,11 @@ MASTER_Hashlib_GetAlgorithmOutputSize( const UI1 id ) {
 	}
 }
 
-#endif /* #! MASTER_HASHLIB_API_EXTERN_ONLY !# */
+#endif /* #! API !# */
 
 #endif /* #! __MASTER_HASHLIB_INCLUDE_H__ !# */
+
+/* #! be master~ !# */
 
 /*
 #include <stdio.h>

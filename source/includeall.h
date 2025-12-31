@@ -1,6 +1,6 @@
 
 /*
- * Copyright (c) 2025 Adel'gid Aragami
+ * Copyright (c) 2026 Adel'gid Aragami
  *
  * Licensed under the BSD 2-Clause License.
  * See the LICENSE file in the project root for more details.
@@ -12,6 +12,10 @@
 /* #! Metadata & Important !# */
 #include <master_enum.h>
 #include <architecture_detect.h>
+#include <compiler_detect.h>
+
+/* #! Types !# */
+#include <abstract.h>
 
 /* #! SIMD !# */
 #include <simd_detect.h>
@@ -20,15 +24,16 @@
 #include <distances.h>
 #include <bitlib.h>
 
+/* #! Encodings !# */
+#include <charmaplib.h>
+
 /* #! Some Functions !# */
 #include <randomlib.h>
+#include <algolib.h>
 
 /* #! Crypthography !# */
 #include <hashlib.h>
 #include <checksum.h>
-
-/* #! Encodings !# */
-#include <charmaplib.h>
 
 #endif /* #! __MASTER_INCLUDE_ALL_INCLUDE_H__ !# */
 
