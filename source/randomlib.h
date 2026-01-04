@@ -11,14 +11,82 @@
 
 #include <master_enum.h>
 
+#ifdef MASTER_RANDOMLIB_EXTERN_ONLY
+#	define MASTER_RANDOMLIB_XORSHIFT32_IMPLEMENT 0
+#	define MASTER_RANDOMLIB_XORSHIFT64_IMPLEMENT 0
+#	define MASTER_RANDOMLIB_XORSHIFT128_IMPLEMENT 0
+#else
+#	if defined(MASTER_RANDOMLIB_XORSHIFT32_USE) || \
+	   defined(MASTER_RANDOMLIB_XORSHIFT64_USE) || \
+	   defined(MASTER_RANDOMLIB_XORSHIFT128_USE)
+#		define MASTER_RANDOMLIB_WHITELIST_MODE 1
+#	else
+#		define MASTER_RANDOMLIB_WHITELIST_MODE 0
+#	endif /* #! Whitelist Setting !# */
+#	ifdef MASTER_RANDOMLIB_XORSHIFT32_EXTERN
+#		define MASTER_RANDOMLIB_XORSHIFT32_IMPLEMENT 0
+#		ifdef MASTER_RANDOMLIB_XORSHIFT32_USE
+#			warning "xorshift32 is defined to USE, but also defined to EXTERN. xorshift32 will NOT be compiled."
+#		endif /* #! xorshift32 Conflict of Use & Extern !# */
+#	elif MASTER_RANDOMLIB_WHITELIST_MODE == 1
+#		ifdef MASTER_RANDOMLIB_XORSHIFT32_USE
+#			define MASTER_RANDOMLIB_XORSHIFT32_IMPLEMENT 1
+#		else
+#			define MASTER_RANDOMLIB_XORSHIFT32_IMPLEMENT 0
+#		endif /* #! xorshift32 Use !# */
+#	else
+#		define MASTER_RANDOMLIB_XORSHIFT32_IMPLEMENT 1
+#	endif /* #! xorshift32 !# */
+#	ifdef MASTER_RANDOMLIB_XORSHIFT64_EXTERN
+#		define MASTER_RANDOMLIB_XORSHIFT64_IMPLEMENT 0
+#		ifdef MASTER_RANDOMLIB_XORSHIFT64_USE
+#			warning "xorshift64 is defined to USE, but also defined to EXTERN. xorshift64 will NOT be compiled."
+#		endif /* #! xorshift64 Conflict of Use & Extern !# */
+#	elif MASTER_RANDOMLIB_WHITELIST_MODE == 1
+#		ifdef MASTER_RANDOMLIB_XORSHIFT64_USE
+#			define MASTER_RANDOMLIB_XORSHIFT64_IMPLEMENT 1
+#		else
+#			define MASTER_RANDOMLIB_XORSHIFT64_IMPLEMENT 0
+#		endif /* #! xorshift64 Use !# */
+#	else
+#		define MASTER_RANDOMLIB_XORSHIFT64_IMPLEMENT 1
+#	endif /* #! xorshift64 !# */
+#	ifdef MASTER_RANDOMLIB_XORSHIFT128_EXTERN
+#		define MASTER_RANDOMLIB_XORSHIFT128_IMPLEMENT 0
+#		ifdef MASTER_RANDOMLIB_XORSHIFT128_USE
+#			warning "xorshift128 is defined to USE, but also defined to EXTERN. xorshift128 will NOT be compiled."
+#		endif /* #! xorshift128 Conflict of Use & Extern !# */
+#	elif MASTER_RANDOMLIB_WHITELIST_MODE == 1
+#		ifdef MASTER_RANDOMLIB_XORSHIFT128_USE
+#			define MASTER_RANDOMLIB_XORSHIFT128_IMPLEMENT 1
+#		else
+#			define MASTER_RANDOMLIB_XORSHIFT128_IMPLEMENT 0
+#		endif /* #! xorshift128 Use !# */
+#	else
+#		define MASTER_RANDOMLIB_XORSHIFT128_IMPLEMENT 1
+#	endif /* #! xorshift128 !# */
+#	undef MASTER_RANDOMLIB_WHITELIST_MODE
+#endif /* #! MASTER_RANDOMLIB_EXTERN_ONLY !# */
+
 /* #! Xorshift !# */
 
 typedef struct {
 	UI4 state;
 } MASTER_Randomlib_xorshift32;
 
-UI4
-MASTER_Randomlib_xorshift32_Next( MASTER_Randomlib_xorshift32 * const xs32c, UI4 * const out ) {
+MASTER_PREFER_EXTERN UI4
+MASTER_Randomlib_xorshift32_Next( MASTER_Randomlib_xorshift32 * const, UI4 * const );
+
+#if MASTER_RANDOMLIB_XORSHIFT32_IMPLEMENT == 1
+
+MASTER_DEFINE_FUNCTION2(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_Randomlib_xorshift32_Next /* ! */,
+	UI4,
+	( MASTER_Randomlib_xorshift32 * const, xs32c ),
+	( UI4 * const, out )
+) {
 	if (xs32c == nul) return 0;
 	xs32c->state ^= xs32c->state << 13;
 	xs32c->state ^= xs32c->state >> 17;
@@ -30,12 +98,25 @@ MASTER_Randomlib_xorshift32_Next( MASTER_Randomlib_xorshift32 * const xs32c, UI4
 
 /* #! Jump 1.000, 1.000.000, 1.000.000.000 !# */
 
+#endif /* #! xorshift32 !# */
+
 typedef struct {
 	UI8 state;
 } MASTER_Randomlib_xorshift64;
 
-UI4
-MASTER_Randomlib_xorshift64_Next( MASTER_Randomlib_xorshift64 * const xs64c, UI8 * const out ) {
+MASTER_PREFER_EXTERN UI4
+MASTER_Randomlib_xorshift64_Next( MASTER_Randomlib_xorshift64 * const, UI8 * const );
+
+#if MASTER_RANDOMLIB_XORSHIFT64_IMPLEMENT == 1
+
+MASTER_DEFINE_FUNCTION2(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_Randomlib_xorshift64_Next /* ! */,
+	UI4,
+	( MASTER_Randomlib_xorshift64 * const, xs64c ),
+	( UI8 * const, out )
+) {
 	if (xs64c == nul) return 0;
 #ifdef MASTER_UI8_TYPE
 	xs64c->state ^= xs64c->state << 13;
@@ -61,12 +142,25 @@ MASTER_Randomlib_xorshift64_Next( MASTER_Randomlib_xorshift64 * const xs64c, UI8
 
 /* #! Jump 1.000, 1.000.000, 1.000.000.000, 1E+12, 1E+15, 1E+18 !# */
 
+#endif /* #! xorshift64 !# */
+
 typedef struct {
 	UI4 state[4];
 } MASTER_Randomlib_xorshift128;
 
-UI4
-MASTER_Randomlib_xorshift128_Next( MASTER_Randomlib_xorshift128 * const xs128c, UI4 * const out ) {
+MASTER_PREFER_EXTERN UI4
+MASTER_Randomlib_xorshift128_Next( MASTER_Randomlib_xorshift128 * const, UI4 * const );
+
+#if MASTER_RANDOMLIB_XORSHIFT128_IMPLEMENT == 1
+
+MASTER_DEFINE_FUNCTION2(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_Randomlib_xorshift128_Next /* ! */,
+	UI4,
+	( MASTER_Randomlib_xorshift128 * const, xs128c ),
+	( UI4 * const, out )
+) {
 	UI4 value1;
 	UI4 value2;
 	if (xs128c == nul) return 0;
@@ -84,6 +178,12 @@ MASTER_Randomlib_xorshift128_Next( MASTER_Randomlib_xorshift128 * const xs128c, 
 }
 
 /* #! Jump 1.000, 1.000.000, 1.000.000.000, 1E+12, 1E+15, 1E+18, 1E+21, 1E+24, 1E+27, 1E+30, 1E+33, 1E+36 !# */
+
+#endif /* #! xorshift128 !# */
+
+#ifdef MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS
+	const UI4 __MASTER_RANDOMLIB_INCLUDE_H_LAST_LINE__ = MASTER_LINE + 6;
+#endif /* #! MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS !# */
 
 #endif /* #! __MASTER_RANDOMLIB_INCLUDE_H__ !# */
 

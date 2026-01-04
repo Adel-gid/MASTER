@@ -11,13 +11,69 @@
 
 #include <master_enum.h>
 
+#ifdef MASTER_DISTANCES_EXTERN_ONLY
+#	define MASTER_DISTANCES_HAMMING_IMPLEMENT 0
+#	define MASTER_DISTANCES_BITHAMMING_IMPLEMENT 0
+#	define MASTER_DISTANCES_LEVENSHTEIN_IMPLEMENT 0
+#else
+#	if defined(MASTER_DISTANCES_HAMMING_USE) || \
+	   defined(MASTER_DISTANCES_BITHAMMING_USE) || \
+	   defined(MASTER_DISTANCES_LEVENSHTEIN_USE)
+#		define MASTER_DISTANCES_WHITELIST_MODE 1
+#	else
+#		define MASTER_DISTANCES_WHITELIST_MODE 0
+#	endif /* #! Whitelist Setting !# */
+#	ifdef MASTER_DISTANCES_HAMMING_EXTERN
+#		define MASTER_DISTANCES_HAMMING_IMPLEMENT 0
+#		ifdef MASTER_DISTANCES_HAMMING_USE
+#			warning "Hamming is defined to USE, but also defined to EXTERN. Hamming will NOT be compiled."
+#		endif /* #! Hamming Conflict of Use & Extern !# */
+#	elif MASTER_DISTANCES_WHITELIST_MODE == 1
+#		ifdef MASTER_DISTANCES_HAMMING_USE
+#			define MASTER_DISTANCES_HAMMING_IMPLEMENT 1
+#		else
+#			define MASTER_DISTANCES_HAMMING_IMPLEMENT 0
+#		endif /* #! Hamming Use !# */
+#	else
+#		define MASTER_DISTANCES_HAMMING_IMPLEMENT 1
+#	endif /* #! Hamming !# */
+#	ifdef MASTER_DISTANCES_BITHAMMING_EXTERN
+#		define MASTER_DISTANCES_BITHAMMING_IMPLEMENT 0
+#		ifdef MASTER_DISTANCES_BITHAMMING_USE
+#			warning "BitHamming is defined to USE, but also defined to EXTERN. BitHamming will NOT be compiled."
+#		endif /* #! BitHamming Conflict of Use & Extern !# */
+#	elif MASTER_DISTANCES_WHITELIST_MODE == 1
+#		ifdef MASTER_DISTANCES_BITHAMMING_USE
+#			define MASTER_DISTANCES_BITHAMMING_IMPLEMENT 1
+#		else
+#			define MASTER_DISTANCES_BITHAMMING_IMPLEMENT 0
+#		endif /* #! BitHamming Use !# */
+#	else
+#		define MASTER_DISTANCES_BITHAMMING_IMPLEMENT 1
+#	endif /* #! BitHamming !# */
+#	ifdef MASTER_DISTANCES_LEVENSHTEIN_EXTERN
+#		define MASTER_DISTANCES_LEVENSHTEIN_IMPLEMENT 0
+#		ifdef MASTER_DISTANCES_LEVENSHTEIN_USE
+#			warning "Levenshtein is defined to USE, but also defined to EXTERN. Levenshtein will NOT be compiled."
+#		endif /* #! Levenshtein Conflict of Use & Extern !# */
+#	elif MASTER_DISTANCES_WHITELIST_MODE == 1
+#		ifdef MASTER_DISTANCES_LEVENSHTEIN_USE
+#			define MASTER_DISTANCES_LEVENSHTEIN_IMPLEMENT 1
+#		else
+#			define MASTER_DISTANCES_LEVENSHTEIN_IMPLEMENT 0
+#		endif /* #! Levenshtein Use !# */
+#	else
+#		define MASTER_DISTANCES_LEVENSHTEIN_IMPLEMENT 1
+#	endif /* #! Levenshtein !# */
+#	undef MASTER_DISTANCES_WHITELIST_MODE
+#endif /* #! MASTER_DISTANCES_EXTERN_ONLY !# */
+
+/* #! Hamming !# */
+
 MASTER_PREFER_EXTERN UI4 MASTER_Distance_HammingRaw( const UI1 * const, const UI4, const UI1 * const, const UI4 );
 MASTER_PREFER_EXTERN MASTER_PREFER_INLINE UI4 MASTER_Distance_Hamming( const char * const, const char * const );
-MASTER_PREFER_EXTERN UI4 MASTER_Distance_BitHammingRaw( const UI1 * const, const UI4, const UI1 * const, const UI4 );
-MASTER_PREFER_EXTERN MASTER_PREFER_INLINE UI4 MASTER_Distance_BitHamming( const char * const, const char * const );
-MASTER_PREFER_EXTERN MASTER_PREFER_STATIC UI4 MASTER_Distance_Levenshtein_( const UI1 * const, const UI4, const UI1 * const, const UI4 );
-MASTER_PREFER_EXTERN UI4 MASTER_Distance_LevenshteinRaw( const UI1 * const, const UI4, const UI1 * const, const UI4 );
-MASTER_PREFER_EXTERN MASTER_PREFER_INLINE UI4 MASTER_Distance_Levenshtein( const char * const, const char * const );
+
+#if MASTER_DISTANCES_HAMMING_IMPLEMENT == 1
 
 MASTER_DEFINE_FUNCTION4(
 	MASTER_NO_FLAGS,
@@ -44,14 +100,16 @@ MASTER_DEFINE_FUNCTION2(
 	MASTER_NO_FLAGS,
 	MASTER_EMPTY_DESCRIPTION,
 	/* ! */ MASTER_Distance_Hamming /* ! */,
-	MASTER_PREFER_INLINE UI4,
+	UI4,
 	( const char * const, string1 ),
 	( const char * const, string2 )
 ) {
 	return MASTER_Distance_HammingRaw((UI1 *)string1, MASTER_CPRLEN(string1), (UI1 *)string2, MASTER_CPRLEN(string2));
 }
 
-MASTER_PREFER_INLINE UI1
+#endif /* #! Hamming !# */
+
+MASTER_PREFER_STATIC MASTER_PREFER_INLINE UI1
 MASTER_CountOnes( UI4 number ) {
 	UI1 res = 0;
 	while (number > 0) {
@@ -60,6 +118,13 @@ MASTER_CountOnes( UI4 number ) {
 	}
 	return res;
 }
+
+/* #! Bit Hamming !# */
+
+MASTER_PREFER_EXTERN UI4 MASTER_Distance_BitHammingRaw( const UI1 * const, const UI4, const UI1 * const, const UI4 );
+MASTER_PREFER_EXTERN MASTER_PREFER_INLINE UI4 MASTER_Distance_BitHamming( const char * const, const char * const );
+
+#if MASTER_DISTANCES_BITHAMMING_IMPLEMENT == 1
 
 MASTER_DEFINE_FUNCTION4(
 	MASTER_NO_FLAGS,
@@ -85,18 +150,28 @@ MASTER_DEFINE_FUNCTION2(
 	MASTER_NO_FLAGS,
 	MASTER_EMPTY_DESCRIPTION,
 	/* ! */ MASTER_Distance_BitHamming /* ! */,
-	MASTER_PREFER_INLINE UI4,
+	UI4,
 	( const char * const, string1 ),
 	( const char * const, string2 )
 ) {
 	return MASTER_Distance_BitHammingRaw((UI1 *)string1, MASTER_CPRLEN(string1), (UI1 *)string2, MASTER_CPRLEN(string2));
 }
 
+#endif /* #! Bit Hamming !# */
+
+/* #! Levenshtein !# */
+
+MASTER_PREFER_EXTERN_STATIC UI4 MASTER_Distance_Levenshtein_( const UI1 * const, const UI4, const UI1 * const, const UI4 );
+MASTER_PREFER_EXTERN UI4 MASTER_Distance_LevenshteinRaw( const UI1 * const, const UI4, const UI1 * const, const UI4 );
+MASTER_PREFER_EXTERN MASTER_PREFER_INLINE UI4 MASTER_Distance_Levenshtein( const char * const, const char * const );
+
+#if MASTER_DISTANCES_LEVENSHTEIN_IMPLEMENT == 1
+
 MASTER_DEFINE_FUNCTION4(
 	MASTER_NO_FLAGS,
 	MASTER_EMPTY_DESCRIPTION,
 	/* ! */ MASTER_Distance_Levenshtein_ /* ! */,
-	MASTER_PREFER_STATIC UI4,
+	MASTER_PREFER_EXTERN_STATIC UI4,
 	( const UI1 * const, bytes1 ),
 	( const UI4, length1 ),
 	( const UI1 * const, bytes2 ),
@@ -158,12 +233,18 @@ MASTER_DEFINE_FUNCTION2(
 	MASTER_NO_FLAGS,
 	MASTER_EMPTY_DESCRIPTION,
 	/* ! */ MASTER_Distance_Levenshtein /* ! */,
-	MASTER_PREFER_INLINE UI4,
+	UI4,
 	( const char * const, string1 ),
 	( const char * const, string2 )
 ) {
 	return MASTER_Distance_LevenshteinRaw((UI1 *)string1, MASTER_CPRLEN(string1), (UI1 *)string2, MASTER_CPRLEN(string2));
 }
+
+#endif /* #! Levenshtein !# */
+
+#ifdef MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS
+	const UI4 __MASTER_DISTANCES_INCLUDE_H_LAST_LINE__ = MASTER_LINE + 6;
+#endif /* #! MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS !# */
 
 #endif /* #! __MASTER_DISTANCES_INCLUDE_H__ !# */
 

@@ -102,9 +102,9 @@ MASTER_DEFINE_FUNCTION1(
 }
 
 #ifdef MASTER_USE_OPTIMIZED_COUNTING_ALGORITHM
-	#define MASTER_BIT_BITCOUNT2( value ) (value), (value) + 1, (value) + 1, (value) + 2
-	#define MASTER_BIT_BITCOUNT4( value ) MASTER_BIT_BITCOUNT2(value), MASTER_BIT_BITCOUNT2((value) + 1), MASTER_BIT_BITCOUNT2((value) + 1), MASTER_BIT_BITCOUNT2((value) + 2)
-	#define MASTER_BIT_BITCOUNT6( value ) MASTER_BIT_BITCOUNT4(value), MASTER_BIT_BITCOUNT4((value) + 1), MASTER_BIT_BITCOUNT4((value) + 1), MASTER_BIT_BITCOUNT4((value) + 2)
+#	define MASTER_BIT_BITCOUNT2( value ) (value), (value) + 1, (value) + 1, (value) + 2
+#	define MASTER_BIT_BITCOUNT4( value ) MASTER_BIT_BITCOUNT2(value), MASTER_BIT_BITCOUNT2((value) + 1), MASTER_BIT_BITCOUNT2((value) + 1), MASTER_BIT_BITCOUNT2((value) + 2)
+#	define MASTER_BIT_BITCOUNT6( value ) MASTER_BIT_BITCOUNT4(value), MASTER_BIT_BITCOUNT4((value) + 1), MASTER_BIT_BITCOUNT4((value) + 1), MASTER_BIT_BITCOUNT4((value) + 2)
 	const UI1 MASTER_Bit_BitsSetTable[256] = {
 		MASTER_BIT_BITCOUNT6(0), MASTER_BIT_BITCOUNT6(1), MASTER_BIT_BITCOUNT6(1), MASTER_BIT_BITCOUNT6(2)
 	};
@@ -140,49 +140,9 @@ MASTER_DEFINE_FUNCTION1(
 	}
 #endif /* #! MASTER_BITLIB_USE_OPTIMIZED_COUNTING_ALGORITHM !# */
 
-/* #! FSM !# */
-
-typedef struct {
-	const UI1 *data;
-	UI4 available;
-	UI4 value;
-	UI1 value_bits;
-} MASTER_BitStream;
-
-UI1
-MASTER_BitStream_Grant( MASTER_BitStream * const stream, UI1 bits ) {
-	if (!stream || !stream->data || bits > 32) return 0;
-	while (stream->value_bits < bits && stream->available > 0) {
-		stream->value |= *(stream->data) << stream->value_bits;
-		stream->value_bits += 8;
-		stream->data += 1;
-		stream->available -= 1;
-	}
-	return stream->value_bits >= bits;
-}
-
-UI4
-MASTER_BitStream_Peek( MASTER_BitStream * const stream, UI1 bits ) {
-	if (!stream || !stream->data || bits > 32) return 0;
-	return (bits == 32) ? (stream->value) : (stream->value & ((1 << bits) - 1));
-}
-
-void
-MASTER_BitStream_Flush( MASTER_BitStream * const stream, UI1 bits ) {
-	if (!stream || !stream->data) return;
-	if (bits >= 32) stream->value = 0;
-	else stream->value >>= bits;
-	if ((SI1)(stream->value_bits -= bits) < 0)
-		stream->value_bits = 0;
-}
-
-void
-MASTER_BitStream_ByteAlign( MASTER_BitStream * const stream ) {
-	if (!stream || !stream->data)
-		return;
-	stream->value >>= stream->value_bits & 7;
-	stream->value_bits &= ~7;
-}
+#ifdef MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS
+	const UI4 __MASTER_BITLIB_INCLUDE_H_LAST_LINE__ = MASTER_LINE + 6;
+#endif /* #! MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS !# */
 
 #endif /* #! __MASTER_BITLIB_INCLUDE_H__ !# */
 

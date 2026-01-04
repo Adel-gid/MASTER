@@ -30,17 +30,17 @@
 #endif /* #! MASTER_HASHLIB_OPTIMIZE_MACROSES !# */
 
 #ifdef MASTER_HASHLIB_EXTERN_ONLY
-#	define MASTER_HASHLIB_MD2_COMPILE 0
-#	define MASTER_HASHLIB_MD4_COMPILE 0
-#	define MASTER_HASHLIB_MD5_COMPILE 0
-#	define MASTER_HASHLIB_SHA1_COMPILE 0
-#	define MASTER_HASHLIB_RIPEMD128_COMPILE 0
-#	define MASTER_HASHLIB_RIPEMD160_COMPILE 0
-#	define MASTER_HASHLIB_RIPEMD256_COMPILE 0
-#	define MASTER_HASHLIB_RIPEMD320_COMPILE 0
-#	define MASTER_HASHLIB_API_COMPILE 0
+#	define MASTER_HASHLIB_MD2_IMPLEMENT 0
+#	define MASTER_HASHLIB_MD4_IMPLEMENT 0
+#	define MASTER_HASHLIB_MD5_IMPLEMENT 0
+#	define MASTER_HASHLIB_SHA1_IMPLEMENT 0
+#	define MASTER_HASHLIB_RIPEMD128_IMPLEMENT 0
+#	define MASTER_HASHLIB_RIPEMD160_IMPLEMENT 0
+#	define MASTER_HASHLIB_RIPEMD256_IMPLEMENT 0
+#	define MASTER_HASHLIB_RIPEMD320_IMPLEMENT 0
+#	define MASTER_HASHLIB_API_IMPLEMENT 0
 #else
-#	define MASTER_HASHLIB_API_COMPILE 1
+#	define MASTER_HASHLIB_API_IMPLEMENT 1
 #	if defined(MASTER_HASHLIB_MD2_USE) || \
 	   defined(MASTER_HASHLIB_MD4_USE) || \
 	   defined(MASTER_HASHLIB_MD5_USE) || \
@@ -54,123 +54,116 @@
 #		define MASTER_HASHLIB_WHITELIST_MODE 0
 #	endif /* #! Whitelist Setting !# */
 #	ifdef MASTER_HASHLIB_MD2_EXTERN
-#		define MASTER_HASHLIB_MD2_COMPILE 0
+#		define MASTER_HASHLIB_MD2_IMPLEMENT 0
 #		ifdef MASTER_HASHLIB_MD2_USE
-#			warning "MD2 is defined to USE, but also defined to EXTERN. MD2 will NOT be compiled"
+#			warning "MD2 is defined to USE, but also defined to EXTERN. MD2 will NOT be compiled."
 #		endif /* #! MD2 Conflict of Use & Extern !# */
 #	elif MASTER_HASHLIB_WHITELIST_MODE == 1
 #		ifdef MASTER_HASHLIB_MD2_USE
-#			define MASTER_HASHLIB_MD2_COMPILE 1
+#			define MASTER_HASHLIB_MD2_IMPLEMENT 1
 #		else
-#			define MASTER_HASHLIB_MD2_COMPILE 0
+#			define MASTER_HASHLIB_MD2_IMPLEMENT 0
 #		endif /* #! MD2 Use !# */
 #	else
-#		define MASTER_HASHLIB_MD2_COMPILE 1
+#		define MASTER_HASHLIB_MD2_IMPLEMENT 1
 #	endif /* #! MD2 !# */
-	
 #	ifdef MASTER_HASHLIB_MD4_EXTERN
-#		define MASTER_HASHLIB_MD4_COMPILE 0
+#		define MASTER_HASHLIB_MD4_IMPLEMENT 0
 #		ifdef MASTER_HASHLIB_MD4_USE
-#			warning "MD4 is defined to USE, but also defined to EXTERN. MD4 will NOT be compiled"
+#			warning "MD4 is defined to USE, but also defined to EXTERN. MD4 will NOT be compiled."
 #		endif /* #! MD4 Conflict of Use & Extern !# */
 #	elif MASTER_HASHLIB_WHITELIST_MODE == 1
 #		ifdef MASTER_HASHLIB_MD4_USE
-#			define MASTER_HASHLIB_MD4_COMPILE 1
+#			define MASTER_HASHLIB_MD4_IMPLEMENT 1
 #		else
-#			define MASTER_HASHLIB_MD4_COMPILE 0
+#			define MASTER_HASHLIB_MD4_IMPLEMENT 0
 #		endif /* #! MD4 Use !# */
 #	else
-#		define MASTER_HASHLIB_MD4_COMPILE 1
+#		define MASTER_HASHLIB_MD4_IMPLEMENT 1
 #	endif /* #! MD4 !# */
-	
 #	ifdef MASTER_HASHLIB_MD5_EXTERN
-#		define MASTER_HASHLIB_MD5_COMPILE 0
+#		define MASTER_HASHLIB_MD5_IMPLEMENT 0
 #		ifdef MASTER_HASHLIB_MD5_USE
-#			warning "MD5 is defined to USE, but also defined to EXTERN. MD5 will NOT be compiled"
+#			warning "MD5 is defined to USE, but also defined to EXTERN. MD5 will NOT be compiled."
 #		endif /* #! MD5 Conflict of Use & Extern !# */
 #	elif MASTER_HASHLIB_WHITELIST_MODE == 1
 #		ifdef MASTER_HASHLIB_MD5_USE
-#			define MASTER_HASHLIB_MD5_COMPILE 1
+#			define MASTER_HASHLIB_MD5_IMPLEMENT 1
 #		else
-#			define MASTER_HASHLIB_MD5_COMPILE 0
+#			define MASTER_HASHLIB_MD5_IMPLEMENT 0
 #		endif /* #! MD5 Use !# */
 #	else
-#		define MASTER_HASHLIB_MD5_COMPILE 1
+#		define MASTER_HASHLIB_MD5_IMPLEMENT 1
 #	endif /* #! MD5 !# */
-	
 #	ifdef MASTER_HASHLIB_SHA1_EXTERN
-#		define MASTER_HASHLIB_SHA1_COMPILE 0
+#		define MASTER_HASHLIB_SHA1_IMPLEMENT 0
 #		ifdef MASTER_HASHLIB_SHA1_USE
-#			warning "SHA1 is defined to USE, but also defined to EXTERN. SHA1 will NOT be compiled"
-#		endif /* #! SHA1 Conflict of Use & Extern !# */
+#			warning "SHA-1 is defined to USE, but also defined to EXTERN. SHA-1 will NOT be compiled."
+#		endif /* #! SHA-1 Conflict of Use & Extern !# */
 #	elif MASTER_HASHLIB_WHITELIST_MODE == 1
 #		ifdef MASTER_HASHLIB_SHA1_USE
-#			define MASTER_HASHLIB_SHA1_COMPILE 1
+#			define MASTER_HASHLIB_SHA1_IMPLEMENT 1
 #		else
-#			define MASTER_HASHLIB_SHA1_COMPILE 0
-#		endif /* #! SHA1 Use !# */
+#			define MASTER_HASHLIB_SHA1_IMPLEMENT 0
+#		endif /* #! SHA-1 Use !# */
 #	else
-#		define MASTER_HASHLIB_SHA1_COMPILE 1
-#	endif /* #! SHA1 !# */
-	
+#		define MASTER_HASHLIB_SHA1_IMPLEMENT 1
+#	endif /* #! SHA-1 !# */
 #	ifdef MASTER_HASHLIB_RIPEMD128_EXTERN
-#		define MASTER_HASHLIB_RIPEMD128_COMPILE 0
+#		define MASTER_HASHLIB_RIPEMD128_IMPLEMENT 0
 #		ifdef MASTER_HASHLIB_RIPEMD128_USE
-#			warning "RIPEMD128 is defined to USE, but also defined to EXTERN. RIPEMD128 will NOT be compiled"
+#			warning "RIPEMD128 is defined to USE, but also defined to EXTERN. RIPEMD128 will NOT be compiled."
 #		endif /* #! RIPEMD128 Conflict of Use & Extern !# */
 #	elif MASTER_HASHLIB_WHITELIST_MODE == 1
 #		ifdef MASTER_HASHLIB_RIPEMD128_USE
-#			define MASTER_HASHLIB_RIPEMD128_COMPILE 1
+#			define MASTER_HASHLIB_RIPEMD128_IMPLEMENT 1
 #		else
-#			define MASTER_HASHLIB_RIPEMD128_COMPILE 0
+#			define MASTER_HASHLIB_RIPEMD128_IMPLEMENT 0
 #		endif /* #! RIPEMD128 Use !# */
 #	else
-#		define MASTER_HASHLIB_RIPEMD128_COMPILE 1
+#		define MASTER_HASHLIB_RIPEMD128_IMPLEMENT 1
 #	endif /* #! RIPEMD128 !# */
-	
 #	ifdef MASTER_HASHLIB_RIPEMD160_EXTERN
-#		define MASTER_HASHLIB_RIPEMD160_COMPILE 0
+#		define MASTER_HASHLIB_RIPEMD160_IMPLEMENT 0
 #		ifdef MASTER_HASHLIB_RIPEMD160_USE
-#			warning "RIPEMD160 is defined to USE, but also defined to EXTERN. RIPEMD160 will NOT be compiled"
+#			warning "RIPEMD160 is defined to USE, but also defined to EXTERN. RIPEMD160 will NOT be compiled."
 #		endif /* #! RIPEMD160 Conflict of Use & Extern !# */
 #	elif MASTER_HASHLIB_WHITELIST_MODE == 1
 #		ifdef MASTER_HASHLIB_RIPEMD160_USE
-#			define MASTER_HASHLIB_RIPEMD160_COMPILE 1
+#			define MASTER_HASHLIB_RIPEMD160_IMPLEMENT 1
 #		else
-#			define MASTER_HASHLIB_RIPEMD160_COMPILE 0
+#			define MASTER_HASHLIB_RIPEMD160_IMPLEMENT 0
 #		endif /* #! RIPEMD160 Use !# */
 #	else
-#		define MASTER_HASHLIB_RIPEMD160_COMPILE 1
+#		define MASTER_HASHLIB_RIPEMD160_IMPLEMENT 1
 #	endif /* #! RIPEMD160 !# */
-	
 #	ifdef MASTER_HASHLIB_RIPEMD256_EXTERN
-#		define MASTER_HASHLIB_RIPEMD256_COMPILE 0
+#		define MASTER_HASHLIB_RIPEMD256_IMPLEMENT 0
 #		ifdef MASTER_HASHLIB_RIPEMD256_USE
-#			warning "RIPEMD256 is defined to USE, but also defined to EXTERN. RIPEMD256 will NOT be compiled"
+#			warning "RIPEMD256 is defined to USE, but also defined to EXTERN. RIPEMD256 will NOT be compiled."
 #		endif /* #! RIPEMD256 Conflict of Use & Extern !# */
 #	elif MASTER_HASHLIB_WHITELIST_MODE == 1
 #		ifdef MASTER_HASHLIB_RIPEMD256_USE
-#			define MASTER_HASHLIB_RIPEMD256_COMPILE 1
+#			define MASTER_HASHLIB_RIPEMD256_IMPLEMENT 1
 #		else
-#			define MASTER_HASHLIB_RIPEMD256_COMPILE 0
+#			define MASTER_HASHLIB_RIPEMD256_IMPLEMENT 0
 #		endif /* #! RIPEMD256 Use !# */
 #	else
-#		define MASTER_HASHLIB_RIPEMD256_COMPILE 1
+#		define MASTER_HASHLIB_RIPEMD256_IMPLEMENT 1
 #	endif /* #! RIPEMD256 !# */
-	
-#	ifdef MASTER_HASHLIB_RIPEMD256_EXTERN
-#		define MASTER_HASHLIB_RIPEMD320_COMPILE 0
+#	ifdef MASTER_HASHLIB_RIPEMD320_EXTERN
+#		define MASTER_HASHLIB_RIPEMD320_IMPLEMENT 0
 #		ifdef MASTER_HASHLIB_RIPEMD320_USE
-#			warning "RIPEMD320 is defined to USE, but also defined to EXTERN. RIPEMD320 will NOT be compiled"
+#			warning "RIPEMD320 is defined to USE, but also defined to EXTERN. RIPEMD320 will NOT be compiled."
 #		endif /* #! RIPEMD320 Conflict of Use & Extern !# */
 #	elif MASTER_HASHLIB_WHITELIST_MODE == 1
 #		ifdef MASTER_HASHLIB_RIPEMD320_USE
-#			define MASTER_HASHLIB_RIPEMD320_COMPILE 1
+#			define MASTER_HASHLIB_RIPEMD320_IMPLEMENT 1
 #		else
-#			define MASTER_HASHLIB_RIPEMD320_COMPILE 0
+#			define MASTER_HASHLIB_RIPEMD320_IMPLEMENT 0
 #		endif /* #! RIPEMD320 Use !# */
 #	else
-#		define MASTER_HASHLIB_RIPEMD320_COMPILE 1
+#		define MASTER_HASHLIB_RIPEMD320_IMPLEMENT 1
 #	endif /* #! RIPEMD320 !# */
 #	undef MASTER_HASHLIB_WHITELIST_MODE
 #endif /* #! MASTER_HASHLIB_EXTERN_ONLY !# */
@@ -219,20 +212,20 @@ typedef struct {
 MASTER_PREFER_EXTERN MASTER_Hashlib_MD2_Context
 MASTER_Hashlib_MD2_Create( void );
 MASTER_PREFER_EXTERN void
-MASTER_Hashlib_MD2_Init( MASTER_Hashlib_MD2_Context * const md2c );
+MASTER_Hashlib_MD2_Init( MASTER_Hashlib_MD2_Context * const );
 #define MASTER_Hashlib_MD2_Flush MASTER_Hashlib_MD2_Init
-MASTER_PREFER_EXTERN MASTER_PREFER_STATIC void
-MASTER_Hashlib_MD2_Process( MASTER_Hashlib_MD2_Context * const md2c );
+MASTER_PREFER_EXTERN_STATIC void
+MASTER_Hashlib_MD2_Process( MASTER_Hashlib_MD2_Context * const );
 MASTER_PREFER_EXTERN void
-MASTER_Hashlib_MD2_Update( MASTER_Hashlib_MD2_Context * const md2c, const void * bytes, MASTER_maxint len );
+MASTER_Hashlib_MD2_Update( MASTER_Hashlib_MD2_Context * const, const void *, MASTER_maxint );
 MASTER_PREFER_EXTERN void
-MASTER_Hashlib_MD2_Finish( MASTER_Hashlib_MD2_Context * const md2c, UI1 out[MASTER_HASHLIB_MD2_DIGEST_SIZE] );
+MASTER_Hashlib_MD2_Finish( MASTER_Hashlib_MD2_Context * const, UI1[MASTER_HASHLIB_MD2_DIGEST_SIZE >> 3] );
 MASTER_PREFER_EXTERN void
-MASTER_Hashlib_MD2_Calculate( const void * const bytes, const MASTER_maxint len, UI1 out[MASTER_HASHLIB_MD2_DIGEST_SIZE] );
+MASTER_Hashlib_MD2_Calculate( const void * const, const MASTER_maxint, UI1[MASTER_HASHLIB_MD2_DIGEST_SIZE >> 3] );
 
 MASTER_PREFER_EXTERN const UI1 MASTER_Hashlib_MD2_Table1[256];
 
-#if MASTER_HASHLIB_MD2_COMPILE == 1
+#if MASTER_HASHLIB_MD2_IMPLEMENT == 1
 
 void
 MASTER_Hashlib_MD2_Init( MASTER_Hashlib_MD2_Context * const md2c ) {
@@ -253,7 +246,7 @@ MASTER_Hashlib_MD2_Create( void ) {
 	return md2c;
 }
 
-MASTER_PREFER_STATIC void
+MASTER_PREFER_EXTERN_STATIC void
 MASTER_Hashlib_MD2_Process( MASTER_Hashlib_MD2_Context * const md2c ) {
 	UI1 chunk[48];
 	UI1 timevar = 0;
@@ -293,7 +286,7 @@ MASTER_Hashlib_MD2_Update( MASTER_Hashlib_MD2_Context * const md2c, const void *
 }
 
 void
-MASTER_Hashlib_MD2_Finish( MASTER_Hashlib_MD2_Context * const md2c, UI1 out[MASTER_HASHLIB_MD2_DIGEST_SIZE] ) {
+MASTER_Hashlib_MD2_Finish( MASTER_Hashlib_MD2_Context * const md2c, UI1 out[MASTER_HASHLIB_MD2_DIGEST_SIZE >> 3] ) {
 	UI1 estlen;
 	UI1 index;
 	__MASTER_CHECK_NUL_RETURN( md2c, MASTER_NOTHING );
@@ -310,7 +303,7 @@ MASTER_Hashlib_MD2_Finish( MASTER_Hashlib_MD2_Context * const md2c, UI1 out[MAST
 }
 
 void
-MASTER_Hashlib_MD2_Calculate( const void * const bytes, const MASTER_maxint len, UI1 out[MASTER_HASHLIB_MD2_DIGEST_SIZE] ) {
+MASTER_Hashlib_MD2_Calculate( const void * const bytes, const MASTER_maxint len, UI1 out[MASTER_HASHLIB_MD2_DIGEST_SIZE >> 3] ) {
 	MASTER_Hashlib_MD2_Context md2c = MASTER_Hashlib_MD2_Create();
 	MASTER_Hashlib_MD2_Update(&md2c, bytes, len);
 	MASTER_Hashlib_MD2_Finish(&md2c, out);
@@ -348,22 +341,22 @@ typedef struct {
 MASTER_PREFER_EXTERN MASTER_Hashlib_MD4_Context
 MASTER_Hashlib_MD4_Create( void );
 MASTER_PREFER_EXTERN void
-MASTER_Hashlib_MD4_Init( MASTER_Hashlib_MD4_Context * const md4c );
+MASTER_Hashlib_MD4_Init( MASTER_Hashlib_MD4_Context * const );
 #define MASTER_Hashlib_MD4_Flush MASTER_Hashlib_MD4_Init
-MASTER_PREFER_EXTERN MASTER_PREFER_STATIC void
-MASTER_Hashlib_MD4_Process( MASTER_Hashlib_MD4_Context * const md4c );
+MASTER_PREFER_EXTERN_STATIC void
+MASTER_Hashlib_MD4_Process( MASTER_Hashlib_MD4_Context * const );
 MASTER_PREFER_EXTERN void
-MASTER_Hashlib_MD4_Update( MASTER_Hashlib_MD4_Context * const md4c, const void * bytes, MASTER_maxint len );
+MASTER_Hashlib_MD4_Update( MASTER_Hashlib_MD4_Context * const, const void *, MASTER_maxint );
 MASTER_PREFER_EXTERN void
-MASTER_Hashlib_MD4_Finish( MASTER_Hashlib_MD4_Context * const md4c, UI1 out[MASTER_HASHLIB_MD4_DIGEST_SIZE] );
+MASTER_Hashlib_MD4_Finish( MASTER_Hashlib_MD4_Context * const, UI1[MASTER_HASHLIB_MD4_DIGEST_SIZE >> 3] );
 MASTER_PREFER_EXTERN void
-MASTER_Hashlib_MD4_Calculate( const void * const bytes, const MASTER_maxint len, UI1 out[MASTER_HASHLIB_MD4_DIGEST_SIZE] );
+MASTER_Hashlib_MD4_Calculate( const void * const, const MASTER_maxint, UI1[MASTER_HASHLIB_MD4_DIGEST_SIZE >> 3] );
 
-#if MASTER_HASHLIB_MD4_COMPILE == 1
+#if MASTER_HASHLIB_MD4_IMPLEMENT == 1
 
-#define MASTER_HASHLIB_MD4_FUNC1( alpha, beta, gamma, zeta, epsilon, teta ) (alpha) = MASTER_RLL32((alpha) + (epsilon) + MASTER_OPERATION_CHOICE(beta, gamma, zeta), teta)
-#define MASTER_HASHLIB_MD4_FUNC2( alpha, beta, gamma, zeta, epsilon, teta ) (alpha) = MASTER_RLL32((alpha) + (epsilon) + 0x5A827999 + MASTER_OPERATION_MAJORITAR(beta, gamma, zeta), teta)
-#define MASTER_HASHLIB_MD4_FUNC3( alpha, beta, gamma, zeta, epsilon, teta ) (alpha) = MASTER_RLL32((alpha) + (epsilon) + 0x6ED9EBA1 + MASTER_OPERATION_XOR3(beta, gamma, zeta), teta)
+#define MASTER_HASHLIB_MD4_FUNC1( alpha, beta, gamma, zeta, epsilon, teta ) (alpha) = MASTER_RLL4((alpha) + (epsilon) + MASTER_OPERATION_CHOICE(beta, gamma, zeta), teta)
+#define MASTER_HASHLIB_MD4_FUNC2( alpha, beta, gamma, zeta, epsilon, teta ) (alpha) = MASTER_RLL4((alpha) + (epsilon) + 0x5A827999 + MASTER_OPERATION_MAJORITAR(beta, gamma, zeta), teta)
+#define MASTER_HASHLIB_MD4_FUNC3( alpha, beta, gamma, zeta, epsilon, teta ) (alpha) = MASTER_RLL4((alpha) + (epsilon) + 0x6ED9EBA1 + MASTER_OPERATION_XOR3(beta, gamma, zeta), teta)
 
 void
 MASTER_Hashlib_MD4_Init( MASTER_Hashlib_MD4_Context * const md4c ) {
@@ -385,7 +378,7 @@ MASTER_Hashlib_MD4_Create( void ) {
 	return md4c;
 }
 
-MASTER_PREFER_STATIC void
+MASTER_PREFER_EXTERN_STATIC void
 MASTER_Hashlib_MD4_Process( MASTER_Hashlib_MD4_Context * const md4c ) {
 	UI4 chunk[16];
 	UI4 wordA = md4c->state[0];
@@ -436,7 +429,7 @@ MASTER_Hashlib_MD4_Update( MASTER_Hashlib_MD4_Context * const md4c, const void *
 }
 
 void
-MASTER_Hashlib_MD4_Finish( MASTER_Hashlib_MD4_Context * const md4c, UI1 out[MASTER_HASHLIB_MD4_DIGEST_SIZE] ) {
+MASTER_Hashlib_MD4_Finish( MASTER_Hashlib_MD4_Context * const md4c, UI1 out[MASTER_HASHLIB_MD4_DIGEST_SIZE >> 3] ) {
 	UI1 index;
 	__MASTER_CHECK_NUL_RETURN( md4c, MASTER_NOTHING );
 	__MASTER_CHECK_NUL_RETURN( out, MASTER_NOTHING );
@@ -470,7 +463,7 @@ MASTER_Hashlib_MD4_Finish( MASTER_Hashlib_MD4_Context * const md4c, UI1 out[MAST
 }
 
 void
-MASTER_Hashlib_MD4_Calculate( const void * const bytes, const MASTER_maxint len, UI1 out[MASTER_HASHLIB_MD4_DIGEST_SIZE] ) {
+MASTER_Hashlib_MD4_Calculate( const void * const bytes, const MASTER_maxint len, UI1 out[MASTER_HASHLIB_MD4_DIGEST_SIZE >> 3] ) {
 	MASTER_Hashlib_MD4_Context md4c;
 	__MASTER_CHECK_NUL_RETURN( bytes, MASTER_NOTHING );
 	__MASTER_CHECK_NUL_RETURN( out, MASTER_NOTHING );
@@ -492,36 +485,36 @@ typedef struct {
 MASTER_PREFER_EXTERN MASTER_Hashlib_MD5_Context
 MASTER_Hashlib_MD5_Create( void );
 MASTER_PREFER_EXTERN void
-MASTER_Hashlib_MD5_Init( MASTER_Hashlib_MD5_Context * const md5c );
+MASTER_Hashlib_MD5_Init( MASTER_Hashlib_MD5_Context * const );
 #define MASTER_Hashlib_MD5_Flush MASTER_Hashlib_MD5_Init
-MASTER_PREFER_EXTERN MASTER_PREFER_STATIC void
-MASTER_Hashlib_MD5_Process( MASTER_Hashlib_MD5_Context * const md5c );
+MASTER_PREFER_EXTERN_STATIC void
+MASTER_Hashlib_MD5_Process( MASTER_Hashlib_MD5_Context * const );
 MASTER_PREFER_EXTERN void
-MASTER_Hashlib_MD5_Update( MASTER_Hashlib_MD5_Context * const md5c, const void * bytes, MASTER_maxint len );
+MASTER_Hashlib_MD5_Update( MASTER_Hashlib_MD5_Context * const, const void *, MASTER_maxint );
 MASTER_PREFER_EXTERN void
-MASTER_Hashlib_MD5_Finish( MASTER_Hashlib_MD5_Context * const md5c, UI1 out[MASTER_HASHLIB_MD5_DIGEST_SIZE] );
+MASTER_Hashlib_MD5_Finish( MASTER_Hashlib_MD5_Context * const, UI1[MASTER_HASHLIB_MD5_DIGEST_SIZE >> 3] );
 MASTER_PREFER_EXTERN void
-MASTER_Hashlib_MD5_Calculate( const void * const bytes, const MASTER_maxint len, UI1 out[MASTER_HASHLIB_MD5_DIGEST_SIZE] );
+MASTER_Hashlib_MD5_Calculate( const void * const, const MASTER_maxint, UI1[MASTER_HASHLIB_MD5_DIGEST_SIZE >> 3] );
 
 MASTER_PREFER_EXTERN const UI4 MASTER_Hashlib_MD5_Table1[64];
 
-#if MASTER_HASHLIB_MD5_COMPILE == 1
+#if MASTER_HASHLIB_MD5_IMPLEMENT == 1
 
 #define MASTER_HASHLIB_MD5_FUNC1( a, b, c, d, x, s, ac ) \
 	(a) += MASTER_OPERATION_CHOICE(b, c, d) + (x) + (UI4)(ac); \
-	(a) = MASTER_RLL32(a, s); \
+	(a) = MASTER_RLL4(a, s); \
 	(a) += (b)
 #define MASTER_HASHLIB_MD5_FUNC2( a, b, c, d, x, s, ac ) \
 	(a) += MASTER_OPERATION_CHOICE(d, b, c) + (x) + (UI4)(ac); \
-	(a) = MASTER_RLL32(a, s); \
+	(a) = MASTER_RLL4(a, s); \
 	(a) += (b)
 #define MASTER_HASHLIB_MD5_FUNC3( a, b, c, d, x, s, ac ) \
 	(a) += MASTER_OPERATION_XOR3(b, c, d) + (x) + (UI4)(ac); \
-	(a) = MASTER_RLL32(a, s); \
+	(a) = MASTER_RLL4(a, s); \
 	(a) += (b)
 #define MASTER_HASHLIB_MD5_FUNC4( a, b, c, d, x, s, ac ) \
 	(a) += MASTER_OPERATION_2XB1ON3E(b, c, d) + (x) + (UI4)(ac); \
-	(a) = MASTER_RLL32(a, s); \
+	(a) = MASTER_RLL4(a, s); \
 	(a) += (b)
 
 void
@@ -544,7 +537,7 @@ MASTER_Hashlib_MD5_Create( void ) {
 	return md5c;
 }
 
-MASTER_PREFER_STATIC void
+MASTER_PREFER_EXTERN_STATIC void
 MASTER_Hashlib_MD5_Process( MASTER_Hashlib_MD5_Context * const md5c ) {
 	UI4 chunk[16];
 	UI4 wordA = md5c->state[0];
@@ -601,7 +594,7 @@ MASTER_Hashlib_MD5_Update( MASTER_Hashlib_MD5_Context * const md5c, const void *
 }
 
 void
-MASTER_Hashlib_MD5_Finish( MASTER_Hashlib_MD5_Context * const md5c, UI1 out[MASTER_HASHLIB_MD5_DIGEST_SIZE] ) {
+MASTER_Hashlib_MD5_Finish( MASTER_Hashlib_MD5_Context * const md5c, UI1 out[MASTER_HASHLIB_MD5_DIGEST_SIZE >> 3] ) {
 	UI1 index;
 	__MASTER_CHECK_NUL_RETURN( md5c, MASTER_NOTHING );
 	__MASTER_CHECK_NUL_RETURN( out, MASTER_NOTHING );
@@ -635,7 +628,7 @@ MASTER_Hashlib_MD5_Finish( MASTER_Hashlib_MD5_Context * const md5c, UI1 out[MAST
 }
 
 void
-MASTER_Hashlib_MD5_Calculate( const void * const bytes, const MASTER_maxint len, UI1 out[MASTER_HASHLIB_MD5_DIGEST_SIZE] ) {
+MASTER_Hashlib_MD5_Calculate( const void * const bytes, const MASTER_maxint len, UI1 out[MASTER_HASHLIB_MD5_DIGEST_SIZE >> 3] ) {
 	MASTER_Hashlib_MD5_Context md5c;
 	__MASTER_CHECK_NUL_RETURN( bytes, MASTER_NOTHING );
 	__MASTER_CHECK_NUL_RETURN( out, MASTER_NOTHING );
@@ -668,20 +661,20 @@ typedef struct {
 MASTER_PREFER_EXTERN MASTER_Hashlib_SHA1_Context
 MASTER_Hashlib_SHA1_Create( void );
 MASTER_PREFER_EXTERN void
-MASTER_Hashlib_SHA1_Init( MASTER_Hashlib_SHA1_Context * const sha1c );
+MASTER_Hashlib_SHA1_Init( MASTER_Hashlib_SHA1_Context * const );
 #define MASTER_Hashlib_SHA1_Flush MASTER_Hashlib_SHA1_Init
-MASTER_PREFER_EXTERN MASTER_PREFER_STATIC void
-MASTER_Hashlib_SHA1_Process( MASTER_Hashlib_SHA1_Context * const sha1c );
+MASTER_PREFER_EXTERN_STATIC void
+MASTER_Hashlib_SHA1_Process( MASTER_Hashlib_SHA1_Context * const );
 MASTER_PREFER_EXTERN void
-MASTER_Hashlib_SHA1_Update( MASTER_Hashlib_SHA1_Context * const sha1c, const void * bytes, MASTER_maxint len );
+MASTER_Hashlib_SHA1_Update( MASTER_Hashlib_SHA1_Context * const, const void *, MASTER_maxint );
 MASTER_PREFER_EXTERN void
-MASTER_Hashlib_SHA1_Finish( MASTER_Hashlib_SHA1_Context * const sha1c, UI1 out[MASTER_HASHLIB_SHA1_DIGEST_SIZE] );
+MASTER_Hashlib_SHA1_Finish( MASTER_Hashlib_SHA1_Context * const, UI1[MASTER_HASHLIB_SHA1_DIGEST_SIZE >> 3] );
 MASTER_PREFER_EXTERN void
-MASTER_Hashlib_SHA1_Calculate( const void * const bytes, const MASTER_maxint len, UI1 out[MASTER_HASHLIB_SHA1_DIGEST_SIZE] );
+MASTER_Hashlib_SHA1_Calculate( const void * const, const MASTER_maxint, UI1[MASTER_HASHLIB_SHA1_DIGEST_SIZE >> 3] );
 
 MASTER_PREFER_EXTERN const UI4 MASTER_Hashlib_SHA1_Table1[4];
 
-#if MASTER_HASHLIB_SHA1_COMPILE == 1
+#if MASTER_HASHLIB_SHA1_IMPLEMENT == 1
 
 void
 MASTER_Hashlib_SHA1_Init( MASTER_Hashlib_SHA1_Context * const sha1c ) {
@@ -704,7 +697,7 @@ MASTER_Hashlib_SHA1_Create( void ) {
 	return sha1c;
 }
 
-MASTER_PREFER_STATIC void
+MASTER_PREFER_EXTERN_STATIC void
 MASTER_Hashlib_SHA1_Process( MASTER_Hashlib_SHA1_Context * const sha1c ) {
 	UI4 chunk[80];
 	UI4 wordA = sha1c->state[0];
@@ -717,36 +710,36 @@ MASTER_Hashlib_SHA1_Process( MASTER_Hashlib_SHA1_Context * const sha1c ) {
 	for (; index < 16; index += 1) 
 		chunk[index] = (sha1c->buffer[index << 2] << 24) | (sha1c->buffer[1 | (index << 2)] << 16) | (sha1c->buffer[2 | (index << 2)] << 8) | sha1c->buffer[3 | (index << 2)];
 	for (; index < 80; index += 1)
-		chunk[index] = MASTER_RLL32(chunk[index - 3] ^ chunk[index - 8] ^ chunk[index - 14] ^ chunk[index - 16], 1);
+		chunk[index] = MASTER_RLL4(chunk[index - 3] ^ chunk[index - 8] ^ chunk[index - 14] ^ chunk[index - 16], 1);
 	for (index = 0; index < 20; index += 1) {
-		timevar = MASTER_RLL32(wordA, 5) + ((wordB & wordC) | ((~wordB) & wordD)) + wordE + chunk[index] + MASTER_Hashlib_SHA1_Table1[0];
+		timevar = MASTER_RLL4(wordA, 5) + ((wordB & wordC) | ((~wordB) & wordD)) + wordE + chunk[index] + MASTER_Hashlib_SHA1_Table1[0];
 		wordE = wordD;
 		wordD = wordC;
-		wordC = MASTER_RLL32(wordB, 30);
+		wordC = MASTER_RLL4(wordB, 30);
 		wordB = wordA;
 		wordA = timevar;
 	}
 	for (; index < 40; index += 1) {
-		timevar = MASTER_RLL32(wordA, 5) + (wordB ^ wordC ^ wordD) + wordE + chunk[index] + MASTER_Hashlib_SHA1_Table1[1];
+		timevar = MASTER_RLL4(wordA, 5) + (wordB ^ wordC ^ wordD) + wordE + chunk[index] + MASTER_Hashlib_SHA1_Table1[1];
 		wordE = wordD;
 		wordD = wordC;
-		wordC = MASTER_RLL32(wordB, 30);
+		wordC = MASTER_RLL4(wordB, 30);
 		wordB = wordA;
 		wordA = timevar;
 	}
 	for (; index < 60; index += 1) {
-		timevar = MASTER_RLL32(wordA, 5) + ((wordB & wordC) | (wordB & wordD) | (wordC & wordD)) + wordE + chunk[index] + MASTER_Hashlib_SHA1_Table1[2];
+		timevar = MASTER_RLL4(wordA, 5) + ((wordB & wordC) | (wordB & wordD) | (wordC & wordD)) + wordE + chunk[index] + MASTER_Hashlib_SHA1_Table1[2];
 		wordE = wordD;
 		wordD = wordC;
-		wordC = MASTER_RLL32(wordB, 30);
+		wordC = MASTER_RLL4(wordB, 30);
 		wordB = wordA;
 		wordA = timevar;
 	}
 	for (; index < 80; index += 1) {
-		timevar = MASTER_RLL32(wordA, 5) + (wordB ^ wordC ^ wordD) + wordE + chunk[index] + MASTER_Hashlib_SHA1_Table1[3];
+		timevar = MASTER_RLL4(wordA, 5) + (wordB ^ wordC ^ wordD) + wordE + chunk[index] + MASTER_Hashlib_SHA1_Table1[3];
 		wordE = wordD;
 		wordD = wordC;
-		wordC = MASTER_RLL32(wordB, 30);
+		wordC = MASTER_RLL4(wordB, 30);
 		wordB = wordA;
 		wordA = timevar;
 	}
@@ -774,7 +767,7 @@ MASTER_Hashlib_SHA1_Update( MASTER_Hashlib_SHA1_Context * const sha1c, const voi
 }
 
 void
-MASTER_Hashlib_SHA1_Finish( MASTER_Hashlib_SHA1_Context * const sha1c, UI1 out[MASTER_HASHLIB_SHA1_DIGEST_SIZE] ) {
+MASTER_Hashlib_SHA1_Finish( MASTER_Hashlib_SHA1_Context * const sha1c, UI1 out[MASTER_HASHLIB_SHA1_DIGEST_SIZE >> 3] ) {
 	UI1 index;
 	__MASTER_CHECK_NUL_RETURN( sha1c, MASTER_NOTHING );
 	__MASTER_CHECK_NUL_RETURN( out, MASTER_NOTHING );
@@ -809,7 +802,7 @@ MASTER_Hashlib_SHA1_Finish( MASTER_Hashlib_SHA1_Context * const sha1c, UI1 out[M
 }
 
 void
-MASTER_Hashlib_SHA1_Calculate( const void * const bytes, const MASTER_maxint len, UI1 out[MASTER_HASHLIB_SHA1_DIGEST_SIZE] ) {
+MASTER_Hashlib_SHA1_Calculate( const void * const bytes, const MASTER_maxint len, UI1 out[MASTER_HASHLIB_SHA1_DIGEST_SIZE >> 3] ) {
 	MASTER_Hashlib_SHA1_Context sha1c;
 	__MASTER_CHECK_NUL_RETURN( bytes, MASTER_NOTHING );
 	__MASTER_CHECK_NUL_RETURN( out, MASTER_NOTHING );
@@ -835,53 +828,53 @@ typedef struct {
 MASTER_PREFER_EXTERN MASTER_Hashlib_RIPEMD128_Context
 MASTER_Hashlib_RIPEMD128_Create( void );
 MASTER_PREFER_EXTERN void
-MASTER_Hashlib_RIPEMD128_Init( MASTER_Hashlib_RIPEMD128_Context * const ripemd128c );
+MASTER_Hashlib_RIPEMD128_Init( MASTER_Hashlib_RIPEMD128_Context * const );
 #define MASTER_Hashlib_RIPEMD128_Flush MASTER_Hashlib_RIPEMD128_Init
-MASTER_PREFER_EXTERN MASTER_PREFER_STATIC void
-MASTER_Hashlib_RIPEMD128_Process( MASTER_Hashlib_RIPEMD128_Context * const ripemd128c );
+MASTER_PREFER_EXTERN_STATIC void
+MASTER_Hashlib_RIPEMD128_Process( MASTER_Hashlib_RIPEMD128_Context * const );
 MASTER_PREFER_EXTERN void
-MASTER_Hashlib_RIPEMD128_Update( MASTER_Hashlib_RIPEMD128_Context * const ripemd128c, const void * bytes, MASTER_maxint len );
+MASTER_Hashlib_RIPEMD128_Update( MASTER_Hashlib_RIPEMD128_Context * const, const void *, MASTER_maxint );
 MASTER_PREFER_EXTERN void
-MASTER_Hashlib_RIPEMD128_Finish( MASTER_Hashlib_RIPEMD128_Context * const ripemd128c, UI1 out[MASTER_HASHLIB_RIPEMD128_DIGEST_SIZE] );
+MASTER_Hashlib_RIPEMD128_Finish( MASTER_Hashlib_RIPEMD128_Context * const, UI1[MASTER_HASHLIB_RIPEMD128_DIGEST_SIZE >> 3] );
 MASTER_PREFER_EXTERN void
-MASTER_Hashlib_RIPEMD128_Calculate( const void * const bytes, const MASTER_maxint len, UI1 out[MASTER_HASHLIB_RIPEMD128_DIGEST_SIZE] );
+MASTER_Hashlib_RIPEMD128_Calculate( const void * const, const MASTER_maxint, UI1[MASTER_HASHLIB_RIPEMD128_DIGEST_SIZE >> 3] );
 
 MASTER_PREFER_EXTERN const UI4 MASTER_Hashlib_RIPEMD128_Table1[8];
 MASTER_PREFER_EXTERN const UI1 MASTER_Hashlib_RIPEMD128_Table2[128];
 MASTER_PREFER_EXTERN const UI1 MASTER_Hashlib_RIPEMD128_Table3[128];
 
-#if MASTER_HASHLIB_RIPEMD128_COMPILE == 1
+#if MASTER_HASHLIB_RIPEMD128_IMPLEMENT == 1
 
 #define MASTER_HASHLIB_RIPEMD128_FUNC1_1( word1, word2, word3, word4, plate, shift ) do { \
-		(word1) = MASTER_RLL32((word1) + MASTER_OPERATION_XOR3(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD128_Table1[0], shift); \
+		(word1) = MASTER_RLL4((word1) + MASTER_OPERATION_XOR3(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD128_Table1[0], shift); \
 	} while (0)
 
 #define MASTER_HASHLIB_RIPEMD128_FUNC2_1( word1, word2, word3, word4, plate, shift ) do { \
-		(word1) = MASTER_RLL32((word1) + MASTER_OPERATION_CHOICE(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD128_Table1[1], shift); \
+		(word1) = MASTER_RLL4((word1) + MASTER_OPERATION_CHOICE(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD128_Table1[1], shift); \
 	} while (0)
 
 #define MASTER_HASHLIB_RIPEMD128_FUNC3_1( word1, word2, word3, word4, plate, shift ) do { \
-		(word1) = MASTER_RLL32((word1) + MASTER_OPERATION_3XB1ON2E(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD128_Table1[2], shift); \
+		(word1) = MASTER_RLL4((word1) + MASTER_OPERATION_3XB1ON2E(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD128_Table1[2], shift); \
 	} while (0)
 
 #define MASTER_HASHLIB_RIPEMD128_FUNC4_1( word1, word2, word3, word4, plate, shift ) do { \
-		(word1) = MASTER_RLL32((word1) + MASTER_OPERATION_CHOICE(word4, word2, word3) + (plate) + MASTER_Hashlib_RIPEMD128_Table1[3], shift); \
+		(word1) = MASTER_RLL4((word1) + MASTER_OPERATION_CHOICE(word4, word2, word3) + (plate) + MASTER_Hashlib_RIPEMD128_Table1[3], shift); \
 	} while (0)
 
 #define MASTER_HASHLIB_RIPEMD128_FUNC1_2( word1, word2, word3, word4, plate, shift ) do { \
-		(word1) = MASTER_RLL32((word1) + MASTER_OPERATION_CHOICE(word4, word2, word3) + (plate) + MASTER_Hashlib_RIPEMD128_Table1[4], shift); \
+		(word1) = MASTER_RLL4((word1) + MASTER_OPERATION_CHOICE(word4, word2, word3) + (plate) + MASTER_Hashlib_RIPEMD128_Table1[4], shift); \
 	} while (0)
 
 #define MASTER_HASHLIB_RIPEMD128_FUNC2_2( word1, word2, word3, word4, plate, shift ) do { \
-		(word1) = MASTER_RLL32((word1) + MASTER_OPERATION_3XB1ON2E(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD128_Table1[5], shift); \
+		(word1) = MASTER_RLL4((word1) + MASTER_OPERATION_3XB1ON2E(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD128_Table1[5], shift); \
 	} while (0)
 
 #define MASTER_HASHLIB_RIPEMD128_FUNC3_2( word1, word2, word3, word4, plate, shift ) do { \
-		(word1) = MASTER_RLL32((word1) + MASTER_OPERATION_CHOICE(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD128_Table1[6], shift); \
+		(word1) = MASTER_RLL4((word1) + MASTER_OPERATION_CHOICE(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD128_Table1[6], shift); \
 	} while (0)
 
 #define MASTER_HASHLIB_RIPEMD128_FUNC4_2( word1, word2, word3, word4, plate, shift ) do { \
-		(word1) = MASTER_RLL32((word1) + MASTER_OPERATION_XOR3(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD128_Table1[7], shift); \
+		(word1) = MASTER_RLL4((word1) + MASTER_OPERATION_XOR3(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD128_Table1[7], shift); \
 	} while (0)
 
 void
@@ -904,7 +897,7 @@ MASTER_Hashlib_RIPEMD128_Create( void ) {
 	return ripemd128c;
 }
 
-MASTER_PREFER_STATIC void
+MASTER_PREFER_EXTERN_STATIC void
 MASTER_Hashlib_RIPEMD128_Process( MASTER_Hashlib_RIPEMD128_Context * const ripemd128c ) {
 	UI4 chunk[16];
 	UI4 wordA1 = ripemd128c->state[0];
@@ -1077,7 +1070,7 @@ MASTER_Hashlib_RIPEMD128_Update( MASTER_Hashlib_RIPEMD128_Context * const ripemd
 }
 
 void
-MASTER_Hashlib_RIPEMD128_Finish( MASTER_Hashlib_RIPEMD128_Context * const ripemd128c, UI1 out[MASTER_HASHLIB_RIPEMD128_DIGEST_SIZE] ) {
+MASTER_Hashlib_RIPEMD128_Finish( MASTER_Hashlib_RIPEMD128_Context * const ripemd128c, UI1 out[MASTER_HASHLIB_RIPEMD128_DIGEST_SIZE >> 3] ) {
 	UI1 index;
 	__MASTER_CHECK_NUL_RETURN( ripemd128c, MASTER_NOTHING );
 	__MASTER_CHECK_NUL_RETURN( out, MASTER_NOTHING );
@@ -1111,7 +1104,7 @@ MASTER_Hashlib_RIPEMD128_Finish( MASTER_Hashlib_RIPEMD128_Context * const ripemd
 }
 
 void
-MASTER_Hashlib_RIPEMD128_Calculate( const void * const bytes, const MASTER_maxint len, UI1 out[MASTER_HASHLIB_RIPEMD128_DIGEST_SIZE] ) {
+MASTER_Hashlib_RIPEMD128_Calculate( const void * const bytes, const MASTER_maxint len, UI1 out[MASTER_HASHLIB_RIPEMD128_DIGEST_SIZE >> 3] ) {
 	MASTER_Hashlib_RIPEMD128_Context ripemd128c;
 	__MASTER_CHECK_NUL_RETURN( bytes, MASTER_NOTHING );
 	__MASTER_CHECK_NUL_RETURN( out, MASTER_NOTHING );
@@ -1138,69 +1131,69 @@ typedef struct {
 MASTER_PREFER_EXTERN MASTER_Hashlib_RIPEMD160_Context
 MASTER_Hashlib_RIPEMD160_Create( void );
 MASTER_PREFER_EXTERN void
-MASTER_Hashlib_RIPEMD160_Init( MASTER_Hashlib_RIPEMD160_Context * const ripemd160c );
+MASTER_Hashlib_RIPEMD160_Init( MASTER_Hashlib_RIPEMD160_Context * const );
 #define MASTER_Hashlib_RIPEMD160_Flush MASTER_Hashlib_RIPEMD160_Init
-MASTER_PREFER_EXTERN MASTER_PREFER_STATIC void
-MASTER_Hashlib_RIPEMD160_Process( MASTER_Hashlib_RIPEMD160_Context * const ripemd160c );
+MASTER_PREFER_EXTERN_STATIC void
+MASTER_Hashlib_RIPEMD160_Process( MASTER_Hashlib_RIPEMD160_Context * const );
 MASTER_PREFER_EXTERN void
-MASTER_Hashlib_RIPEMD160_Update( MASTER_Hashlib_RIPEMD160_Context * const ripemd160c, const void * bytes, MASTER_maxint len );
+MASTER_Hashlib_RIPEMD160_Update( MASTER_Hashlib_RIPEMD160_Context * const, const void *, MASTER_maxint );
 MASTER_PREFER_EXTERN void
-MASTER_Hashlib_RIPEMD160_Finish( MASTER_Hashlib_RIPEMD160_Context * const ripemd160c, UI1 out[MASTER_HASHLIB_RIPEMD160_DIGEST_SIZE] );
+MASTER_Hashlib_RIPEMD160_Finish( MASTER_Hashlib_RIPEMD160_Context * const, UI1[MASTER_HASHLIB_RIPEMD160_DIGEST_SIZE >> 3] );
 MASTER_PREFER_EXTERN void
-MASTER_Hashlib_RIPEMD160_Calculate( const void * const bytes, const MASTER_maxint len, UI1 out[MASTER_HASHLIB_RIPEMD160_DIGEST_SIZE] );
+MASTER_Hashlib_RIPEMD160_Calculate( const void * const, const MASTER_maxint, UI1[MASTER_HASHLIB_RIPEMD160_DIGEST_SIZE >> 3] );
 
 MASTER_PREFER_EXTERN const UI4 MASTER_Hashlib_RIPEMD160_Table1[10];
 
-#if MASTER_HASHLIB_RIPEMD160_COMPILE == 1
+#if MASTER_HASHLIB_RIPEMD160_IMPLEMENT == 1
 
 #define MASTER_HASHLIB_RIPEMD160_FUNC1_1( word1, word2, word3, word4, word5, plate, shift ) do { \
-		(word1) = MASTER_RLL32((word1) + MASTER_OPERATION_XOR3(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD160_Table1[0], shift) + (word5); \
-		(word3) = MASTER_RLL32(word3, 10); \
+		(word1) = MASTER_RLL4((word1) + MASTER_OPERATION_XOR3(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD160_Table1[0], shift) + (word5); \
+		(word3) = MASTER_RLL4(word3, 10); \
 	} while (0)
 
 #define MASTER_HASHLIB_RIPEMD160_FUNC2_1( word1, word2, word3, word4, word5, plate, shift ) do { \
-		(word1) = MASTER_RLL32((word1) + MASTER_OPERATION_CHOICE(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD160_Table1[1], shift) + (word5); \
-		(word3) = MASTER_RLL32(word3, 10); \
+		(word1) = MASTER_RLL4((word1) + MASTER_OPERATION_CHOICE(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD160_Table1[1], shift) + (word5); \
+		(word3) = MASTER_RLL4(word3, 10); \
 	} while (0)
 
 #define MASTER_HASHLIB_RIPEMD160_FUNC3_1( word1, word2, word3, word4, word5, plate, shift ) do { \
-		(word1) = MASTER_RLL32((word1) + MASTER_OPERATION_3XB1ON2E(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD160_Table1[2], shift) + (word5); \
-		(word3) = MASTER_RLL32(word3, 10); \
+		(word1) = MASTER_RLL4((word1) + MASTER_OPERATION_3XB1ON2E(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD160_Table1[2], shift) + (word5); \
+		(word3) = MASTER_RLL4(word3, 10); \
 	} while (0)
 
 #define MASTER_HASHLIB_RIPEMD160_FUNC4_1( word1, word2, word3, word4, word5, plate, shift ) do { \
-		(word1) = MASTER_RLL32((word1) + MASTER_OPERATION_CHOICE(word4, word2, word3) + (plate) + MASTER_Hashlib_RIPEMD160_Table1[3], shift) + (word5); \
-		(word3) = MASTER_RLL32(word3, 10); \
+		(word1) = MASTER_RLL4((word1) + MASTER_OPERATION_CHOICE(word4, word2, word3) + (plate) + MASTER_Hashlib_RIPEMD160_Table1[3], shift) + (word5); \
+		(word3) = MASTER_RLL4(word3, 10); \
 	} while (0)
 
 #define MASTER_HASHLIB_RIPEMD160_FUNC5_1( word1, word2, word3, word4, word5, plate, shift ) do { \
-		(word1) = MASTER_RLL32((word1) + MASTER_OPERATION_1XB2ON3E(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD160_Table1[4], shift) + (word5); \
-		(word3) = MASTER_RLL32(word3, 10); \
+		(word1) = MASTER_RLL4((word1) + MASTER_OPERATION_1XB2ON3E(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD160_Table1[4], shift) + (word5); \
+		(word3) = MASTER_RLL4(word3, 10); \
 	} while (0)
 
 #define MASTER_HASHLIB_RIPEMD160_FUNC1_2( word1, word2, word3, word4, word5, plate, shift ) do { \
-		(word1) = MASTER_RLL32((word1) + MASTER_OPERATION_1XB2ON3E(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD160_Table1[5], shift) + (word5); \
-		(word3) = MASTER_RLL32(word3, 10); \
+		(word1) = MASTER_RLL4((word1) + MASTER_OPERATION_1XB2ON3E(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD160_Table1[5], shift) + (word5); \
+		(word3) = MASTER_RLL4(word3, 10); \
 	} while (0)
 
 #define MASTER_HASHLIB_RIPEMD160_FUNC2_2( word1, word2, word3, word4, word5, plate, shift ) do { \
-		(word1) = MASTER_RLL32((word1) + MASTER_OPERATION_CHOICE(word4, word2, word3) + (plate) + MASTER_Hashlib_RIPEMD160_Table1[6], shift) + (word5); \
-		(word3) = MASTER_RLL32(word3, 10); \
+		(word1) = MASTER_RLL4((word1) + MASTER_OPERATION_CHOICE(word4, word2, word3) + (plate) + MASTER_Hashlib_RIPEMD160_Table1[6], shift) + (word5); \
+		(word3) = MASTER_RLL4(word3, 10); \
 	} while (0)
 
 #define MASTER_HASHLIB_RIPEMD160_FUNC3_2( word1, word2, word3, word4, word5, plate, shift ) do { \
-		(word1) = MASTER_RLL32((word1) + MASTER_OPERATION_3XB1ON2E(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD160_Table1[7], shift) + (word5); \
-		(word3) = MASTER_RLL32(word3, 10); \
+		(word1) = MASTER_RLL4((word1) + MASTER_OPERATION_3XB1ON2E(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD160_Table1[7], shift) + (word5); \
+		(word3) = MASTER_RLL4(word3, 10); \
 	} while (0)
 
 #define MASTER_HASHLIB_RIPEMD160_FUNC4_2( word1, word2, word3, word4, word5, plate, shift ) do { \
-		(word1) = MASTER_RLL32((word1) + MASTER_OPERATION_CHOICE(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD160_Table1[8], shift) + (word5); \
-		(word3) = MASTER_RLL32(word3, 10); \
+		(word1) = MASTER_RLL4((word1) + MASTER_OPERATION_CHOICE(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD160_Table1[8], shift) + (word5); \
+		(word3) = MASTER_RLL4(word3, 10); \
 	} while (0)
 
 #define MASTER_HASHLIB_RIPEMD160_FUNC5_2( word1, word2, word3, word4, word5, plate, shift ) do { \
-		(word1) = MASTER_RLL32((word1) + MASTER_OPERATION_XOR3(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD160_Table1[9], shift) + (word5); \
-		(word3) = MASTER_RLL32(word3, 10); \
+		(word1) = MASTER_RLL4((word1) + MASTER_OPERATION_XOR3(word2, word3, word4) + (plate) + MASTER_Hashlib_RIPEMD160_Table1[9], shift) + (word5); \
+		(word3) = MASTER_RLL4(word3, 10); \
 	} while (0)
 
 void
@@ -1224,7 +1217,7 @@ MASTER_Hashlib_RIPEMD160_Create( void ) {
 	return ripemd160c;
 }
 
-MASTER_PREFER_STATIC void
+MASTER_PREFER_EXTERN_STATIC void
 MASTER_Hashlib_RIPEMD160_Process( MASTER_Hashlib_RIPEMD160_Context * const ripemd160c ) {
 	UI4 chunk[16];
 	UI4 wordA1 = ripemd160c->state[0];
@@ -1435,7 +1428,7 @@ MASTER_Hashlib_RIPEMD160_Update( MASTER_Hashlib_RIPEMD160_Context * const ripemd
 }
 
 void
-MASTER_Hashlib_RIPEMD160_Finish( MASTER_Hashlib_RIPEMD160_Context * const ripemd160c, UI1 out[MASTER_HASHLIB_RIPEMD160_DIGEST_SIZE] ) {
+MASTER_Hashlib_RIPEMD160_Finish( MASTER_Hashlib_RIPEMD160_Context * const ripemd160c, UI1 out[MASTER_HASHLIB_RIPEMD160_DIGEST_SIZE >> 3] ) {
 	UI1 index;
 	__MASTER_CHECK_NUL_RETURN( ripemd160c, MASTER_NOTHING );
 	__MASTER_CHECK_NUL_RETURN( out, MASTER_NOTHING );
@@ -1470,7 +1463,7 @@ MASTER_Hashlib_RIPEMD160_Finish( MASTER_Hashlib_RIPEMD160_Context * const ripemd
 }
 
 void
-MASTER_Hashlib_RIPEMD160_Calculate( const void * const bytes, const MASTER_maxint len, UI1 out[MASTER_HASHLIB_RIPEMD160_DIGEST_SIZE] ) {
+MASTER_Hashlib_RIPEMD160_Calculate( const void * const bytes, const MASTER_maxint len, UI1 out[MASTER_HASHLIB_RIPEMD160_DIGEST_SIZE >> 3] ) {
 	MASTER_Hashlib_RIPEMD160_Context ripemd160c;
 	__MASTER_CHECK_NUL_RETURN( bytes, MASTER_NOTHING );
 	__MASTER_CHECK_NUL_RETURN( out, MASTER_NOTHING );
@@ -1497,18 +1490,50 @@ typedef struct {
 MASTER_PREFER_EXTERN MASTER_Hashlib_RIPEMD256_Context
 MASTER_Hashlib_RIPEMD256_Create( void );
 MASTER_PREFER_EXTERN void
-MASTER_Hashlib_RIPEMD256_Init( MASTER_Hashlib_RIPEMD256_Context * const ripemd256c );
+MASTER_Hashlib_RIPEMD256_Init( MASTER_Hashlib_RIPEMD256_Context * const );
 #define MASTER_Hashlib_RIPEMD256_Flush MASTER_Hashlib_RIPEMD256_Init
-MASTER_PREFER_EXTERN MASTER_PREFER_STATIC void
-MASTER_Hashlib_RIPEMD256_Process( MASTER_Hashlib_RIPEMD256_Context * const ripemd256c );
+MASTER_PREFER_EXTERN_STATIC void
+MASTER_Hashlib_RIPEMD256_Process( MASTER_Hashlib_RIPEMD256_Context * const );
 MASTER_PREFER_EXTERN void
-MASTER_Hashlib_RIPEMD256_Update( MASTER_Hashlib_RIPEMD256_Context * const ripemd256c, const void * bytes, MASTER_maxint len );
+MASTER_Hashlib_RIPEMD256_Update( MASTER_Hashlib_RIPEMD256_Context * const, const void *, MASTER_maxint );
 MASTER_PREFER_EXTERN void
-MASTER_Hashlib_RIPEMD256_Finish( MASTER_Hashlib_RIPEMD256_Context * const ripemd256c, UI1 out[MASTER_HASHLIB_RIPEMD256_DIGEST_SIZE] );
+MASTER_Hashlib_RIPEMD256_Finish( MASTER_Hashlib_RIPEMD256_Context * const, UI1[MASTER_HASHLIB_RIPEMD256_DIGEST_SIZE >> 3] );
 MASTER_PREFER_EXTERN void
-MASTER_Hashlib_RIPEMD256_Calculate( const void * const bytes, const MASTER_maxint len, UI1 out[MASTER_HASHLIB_RIPEMD256_DIGEST_SIZE] );
+MASTER_Hashlib_RIPEMD256_Calculate( const void * const, const MASTER_maxint, UI1[MASTER_HASHLIB_RIPEMD256_DIGEST_SIZE >> 3] );
 
-#if MASTER_HASHLIB_RIPEMD256_COMPILE == 1
+#if MASTER_HASHLIB_RIPEMD256_IMPLEMENT == 1
+
+#define MASTER_HASHLIB_RIPEMD256_FUNC1_1( word1, word2, word3, word4, plate, constant, shift ) do { \
+		(word1) = MASTER_RLL4((word1) + MASTER_OPERATION_XOR3(word2, word3, word4) + (plate) + (constant), shift); \
+	} while (0)
+
+#define MASTER_HASHLIB_RIPEMD256_FUNC2_1( word1, word2, word3, word4, plate, constant, shift ) do { \
+		(word1) = MASTER_RLL4((word1) + MASTER_OPERATION_CHOICE(word2, word3, word4) + (plate) + (constant), shift); \
+	} while (0)
+
+#define MASTER_HASHLIB_RIPEMD256_FUNC3_1( word1, word2, word3, word4, plate, constant, shift ) do { \
+		(word1) = MASTER_RLL4((word1) + MASTER_OPERATION_3XB1ON2E(word2, word3, word4) + (plate) + (constant), shift); \
+	} while (0)
+
+#define MASTER_HASHLIB_RIPEMD256_FUNC4_1( word1, word2, word3, word4, plate, constant, shift ) do { \
+		(word1) = MASTER_RLL4((word1) + MASTER_OPERATION_CHOICE(word4, word2, word3) + (plate) + (constant), shift); \
+	} while (0)
+
+#define MASTER_HASHLIB_RIPEMD256_FUNC1_2( word1, word2, word3, word4, plate, constant, shift ) do { \
+		(word1) = MASTER_RLL4((word1) + MASTER_OPERATION_CHOICE(word4, word2, word3) + (plate) + (constant), shift); \
+	} while (0)
+
+#define MASTER_HASHLIB_RIPEMD256_FUNC2_2( word1, word2, word3, word4, plate, constant, shift ) do { \
+		(word1) = MASTER_RLL4((word1) + MASTER_OPERATION_3XB1ON2E(word2, word3, word4) + (plate) + (constant), shift); \
+	} while (0)
+
+#define MASTER_HASHLIB_RIPEMD256_FUNC3_2( word1, word2, word3, word4, plate, constant, shift ) do { \
+		(word1) = MASTER_RLL4((word1) + MASTER_OPERATION_CHOICE(word2, word3, word4) + (plate) + (constant), shift); \
+	} while (0)
+
+#define MASTER_HASHLIB_RIPEMD256_FUNC4_2( word1, word2, word3, word4, plate, constant, shift ) do { \
+		(word1) = MASTER_RLL4((word1) + MASTER_OPERATION_XOR3(word2, word3, word4) + (plate) + (constant), shift); \
+	} while (0)
 
 void
 MASTER_Hashlib_RIPEMD256_Init( MASTER_Hashlib_RIPEMD256_Context * const ripemd256c ) {
@@ -1534,10 +1559,8 @@ MASTER_Hashlib_RIPEMD256_Create( void ) {
 	return ripemd256c;
 }
 
-MASTER_PREFER_STATIC void
+MASTER_PREFER_EXTERN_STATIC void
 MASTER_Hashlib_RIPEMD256_Process( MASTER_Hashlib_RIPEMD256_Context * const ripemd256c ) {
-	MASTER_UNUSED( ripemd256c );
-	/* #!
 	UI4 chunk[16];
 	UI4 wordA1 = ripemd256c->state[0];
 	UI4 wordB1 = ripemd256c->state[1];
@@ -1550,7 +1573,150 @@ MASTER_Hashlib_RIPEMD256_Process( MASTER_Hashlib_RIPEMD256_Context * const ripem
 	UI1 index = 0;
 	for (; index < 16; index += 1)
 		chunk[index] = (ripemd256c->buffer[3 | (index << 2)] << 24) | (ripemd256c->buffer[2 | (index << 2)] << 16) | (ripemd256c->buffer[1 | (index << 2)] << 8) | ripemd256c->buffer[index << 2];
-	!# */
+	MASTER_HASHLIB_RIPEMD256_FUNC1_1(wordA1, wordB1, wordC1, wordD1, chunk[0], 0x00000000, 11);
+	MASTER_HASHLIB_RIPEMD256_FUNC1_1(wordD1, wordA1, wordB1, wordC1, chunk[1], 0x00000000, 14);
+	MASTER_HASHLIB_RIPEMD256_FUNC1_1(wordC1, wordD1, wordA1, wordB1, chunk[2], 0x00000000, 15);
+	MASTER_HASHLIB_RIPEMD256_FUNC1_1(wordB1, wordC1, wordD1, wordA1, chunk[3], 0x00000000, 12);
+	MASTER_HASHLIB_RIPEMD256_FUNC1_1(wordA1, wordB1, wordC1, wordD1, chunk[4], 0x00000000, 5);
+	MASTER_HASHLIB_RIPEMD256_FUNC1_1(wordD1, wordA1, wordB1, wordC1, chunk[5], 0x00000000, 8);
+	MASTER_HASHLIB_RIPEMD256_FUNC1_1(wordC1, wordD1, wordA1, wordB1, chunk[6], 0x00000000, 7);
+	MASTER_HASHLIB_RIPEMD256_FUNC1_1(wordB1, wordC1, wordD1, wordA1, chunk[7], 0x00000000, 9);
+	MASTER_HASHLIB_RIPEMD256_FUNC1_1(wordA1, wordB1, wordC1, wordD1, chunk[8], 0x00000000, 11);
+	MASTER_HASHLIB_RIPEMD256_FUNC1_1(wordD1, wordA1, wordB1, wordC1, chunk[9], 0x00000000, 13);
+	MASTER_HASHLIB_RIPEMD256_FUNC1_1(wordC1, wordD1, wordA1, wordB1, chunk[10], 0x00000000, 14);
+	MASTER_HASHLIB_RIPEMD256_FUNC1_1(wordB1, wordC1, wordD1, wordA1, chunk[11], 0x00000000, 15);
+	MASTER_HASHLIB_RIPEMD256_FUNC1_1(wordA1, wordB1, wordC1, wordD1, chunk[12], 0x00000000, 6);
+	MASTER_HASHLIB_RIPEMD256_FUNC1_1(wordD1, wordA1, wordB1, wordC1, chunk[13], 0x00000000, 7);
+	MASTER_HASHLIB_RIPEMD256_FUNC1_1(wordC1, wordD1, wordA1, wordB1, chunk[14], 0x00000000, 9);
+	MASTER_HASHLIB_RIPEMD256_FUNC1_1(wordB1, wordC1, wordD1, wordA1, chunk[15], 0x00000000, 8);
+
+	MASTER_HASHLIB_RIPEMD256_FUNC1_2(wordA2, wordB2, wordC2, wordD2, chunk[5], 0x50A28BE6, 8); 
+	MASTER_HASHLIB_RIPEMD256_FUNC1_2(wordD2, wordA2, wordB2, wordC2, chunk[14], 0x50A28BE6, 9);
+	MASTER_HASHLIB_RIPEMD256_FUNC1_2(wordC2, wordD2, wordA2, wordB2, chunk[7], 0x50A28BE6, 9);
+	MASTER_HASHLIB_RIPEMD256_FUNC1_2(wordB2, wordC2, wordD2, wordA2, chunk[0], 0x50A28BE6, 11);
+	MASTER_HASHLIB_RIPEMD256_FUNC1_2(wordA2, wordB2, wordC2, wordD2, chunk[9], 0x50A28BE6, 13);
+	MASTER_HASHLIB_RIPEMD256_FUNC1_2(wordD2, wordA2, wordB2, wordC2, chunk[2], 0x50A28BE6, 15);
+	MASTER_HASHLIB_RIPEMD256_FUNC1_2(wordC2, wordD2, wordA2, wordB2, chunk[11], 0x50A28BE6, 15);
+	MASTER_HASHLIB_RIPEMD256_FUNC1_2(wordB2, wordC2, wordD2, wordA2, chunk[4], 0x50A28BE6, 5);
+	MASTER_HASHLIB_RIPEMD256_FUNC1_2(wordA2, wordB2, wordC2, wordD2, chunk[13], 0x50A28BE6, 7);
+	MASTER_HASHLIB_RIPEMD256_FUNC1_2(wordD2, wordA2, wordB2, wordC2, chunk[6], 0x50A28BE6, 7);
+	MASTER_HASHLIB_RIPEMD256_FUNC1_2(wordC2, wordD2, wordA2, wordB2, chunk[15], 0x50A28BE6, 8);
+	MASTER_HASHLIB_RIPEMD256_FUNC1_2(wordB2, wordC2, wordD2, wordA2, chunk[8], 0x50A28BE6, 11);
+	MASTER_HASHLIB_RIPEMD256_FUNC1_2(wordA2, wordB2, wordC2, wordD2, chunk[1], 0x50A28BE6, 14);
+	MASTER_HASHLIB_RIPEMD256_FUNC1_2(wordD2, wordA2, wordB2, wordC2, chunk[10], 0x50A28BE6, 14);
+	MASTER_HASHLIB_RIPEMD256_FUNC1_2(wordC2, wordD2, wordA2, wordB2, chunk[3], 0x50A28BE6, 12);
+	MASTER_HASHLIB_RIPEMD256_FUNC1_2(wordB2, wordC2, wordD2, wordA2, chunk[12], 0x50A28BE6, 6);
+	
+	MASTER_HASHLIB_RIPEMD256_FUNC2_1(wordA2, wordB1, wordC1, wordD1, chunk[7], 0x5A827999, 7);
+	MASTER_HASHLIB_RIPEMD256_FUNC2_1(wordD1, wordA2, wordB1, wordC1, chunk[4], 0x5A827999, 6);
+	MASTER_HASHLIB_RIPEMD256_FUNC2_1(wordC1, wordD1, wordA2, wordB1, chunk[13], 0x5A827999, 8);
+	MASTER_HASHLIB_RIPEMD256_FUNC2_1(wordB1, wordC1, wordD1, wordA2, chunk[1], 0x5A827999, 13);
+	MASTER_HASHLIB_RIPEMD256_FUNC2_1(wordA2, wordB1, wordC1, wordD1, chunk[10], 0x5A827999, 11);
+	MASTER_HASHLIB_RIPEMD256_FUNC2_1(wordD1, wordA2, wordB1, wordC1, chunk[6], 0x5A827999, 9);
+	MASTER_HASHLIB_RIPEMD256_FUNC2_1(wordC1, wordD1, wordA2, wordB1, chunk[15], 0x5A827999, 7);
+	MASTER_HASHLIB_RIPEMD256_FUNC2_1(wordB1, wordC1, wordD1, wordA2, chunk[3], 0x5A827999, 15);
+	MASTER_HASHLIB_RIPEMD256_FUNC2_1(wordA2, wordB1, wordC1, wordD1, chunk[12], 0x5A827999, 7);
+	MASTER_HASHLIB_RIPEMD256_FUNC2_1(wordD1, wordA2, wordB1, wordC1, chunk[0], 0x5A827999, 12);
+	MASTER_HASHLIB_RIPEMD256_FUNC2_1(wordC1, wordD1, wordA2, wordB1, chunk[9], 0x5A827999, 15);
+	MASTER_HASHLIB_RIPEMD256_FUNC2_1(wordB1, wordC1, wordD1, wordA2, chunk[5], 0x5A827999, 9);
+	MASTER_HASHLIB_RIPEMD256_FUNC2_1(wordA2, wordB1, wordC1, wordD1, chunk[2], 0x5A827999, 11);
+	MASTER_HASHLIB_RIPEMD256_FUNC2_1(wordD1, wordA2, wordB1, wordC1, chunk[14], 0x5A827999, 7);
+	MASTER_HASHLIB_RIPEMD256_FUNC2_1(wordC1, wordD1, wordA2, wordB1, chunk[11], 0x5A827999, 13);
+	MASTER_HASHLIB_RIPEMD256_FUNC2_1(wordB1, wordC1, wordD1, wordA2, chunk[8], 0x5A827999, 12);
+
+	MASTER_HASHLIB_RIPEMD256_FUNC2_2(wordA1, wordB2, wordC2, wordD2, chunk[6], 0x5C4DD124, 9);
+	MASTER_HASHLIB_RIPEMD256_FUNC2_2(wordD2, wordA1, wordB2, wordC2, chunk[11], 0x5C4DD124, 13);
+	MASTER_HASHLIB_RIPEMD256_FUNC2_2(wordC2, wordD2, wordA1, wordB2, chunk[3], 0x5C4DD124, 15);
+	MASTER_HASHLIB_RIPEMD256_FUNC2_2(wordB2, wordC2, wordD2, wordA1, chunk[7], 0x5C4DD124, 7);
+	MASTER_HASHLIB_RIPEMD256_FUNC2_2(wordA1, wordB2, wordC2, wordD2, chunk[0], 0x5C4DD124, 12);
+	MASTER_HASHLIB_RIPEMD256_FUNC2_2(wordD2, wordA1, wordB2, wordC2, chunk[13], 0x5C4DD124, 8);
+	MASTER_HASHLIB_RIPEMD256_FUNC2_2(wordC2, wordD2, wordA1, wordB2, chunk[5], 0x5C4DD124, 9);
+	MASTER_HASHLIB_RIPEMD256_FUNC2_2(wordB2, wordC2, wordD2, wordA1, chunk[10], 0x5C4DD124, 11);
+	MASTER_HASHLIB_RIPEMD256_FUNC2_2(wordA1, wordB2, wordC2, wordD2, chunk[14], 0x5C4DD124, 7);
+	MASTER_HASHLIB_RIPEMD256_FUNC2_2(wordD2, wordA1, wordB2, wordC2, chunk[15], 0x5C4DD124, 7);
+	MASTER_HASHLIB_RIPEMD256_FUNC2_2(wordC2, wordD2, wordA1, wordB2, chunk[8], 0x5C4DD124, 12);
+	MASTER_HASHLIB_RIPEMD256_FUNC2_2(wordB2, wordC2, wordD2, wordA1, chunk[12], 0x5C4DD124, 7);
+	MASTER_HASHLIB_RIPEMD256_FUNC2_2(wordA1, wordB2, wordC2, wordD2, chunk[4], 0x5C4DD124, 6);
+	MASTER_HASHLIB_RIPEMD256_FUNC2_2(wordD2, wordA1, wordB2, wordC2, chunk[9], 0x5C4DD124, 15);
+	MASTER_HASHLIB_RIPEMD256_FUNC2_2(wordC2, wordD2, wordA1, wordB2, chunk[1], 0x5C4DD124, 13);
+	MASTER_HASHLIB_RIPEMD256_FUNC2_2(wordB2, wordC2, wordD2, wordA1, chunk[2], 0x5C4DD124, 11);
+
+	MASTER_HASHLIB_RIPEMD256_FUNC3_1(wordA2, wordB2, wordC1, wordD1, chunk[3], 0x6ED9EBA1, 11);
+	MASTER_HASHLIB_RIPEMD256_FUNC3_1(wordD1, wordA2, wordB2, wordC1, chunk[10], 0x6ED9EBA1, 13);
+	MASTER_HASHLIB_RIPEMD256_FUNC3_1(wordC1, wordD1, wordA2, wordB2, chunk[14], 0x6ED9EBA1, 6);
+	MASTER_HASHLIB_RIPEMD256_FUNC3_1(wordB2, wordC1, wordD1, wordA2, chunk[4], 0x6ED9EBA1, 7);
+	MASTER_HASHLIB_RIPEMD256_FUNC3_1(wordA2, wordB2, wordC1, wordD1, chunk[9], 0x6ED9EBA1, 14);
+	MASTER_HASHLIB_RIPEMD256_FUNC3_1(wordD1, wordA2, wordB2, wordC1, chunk[15], 0x6ED9EBA1, 9);
+	MASTER_HASHLIB_RIPEMD256_FUNC3_1(wordC1, wordD1, wordA2, wordB2, chunk[8], 0x6ED9EBA1, 13);
+	MASTER_HASHLIB_RIPEMD256_FUNC3_1(wordB2, wordC1, wordD1, wordA2, chunk[1], 0x6ED9EBA1, 15);
+	MASTER_HASHLIB_RIPEMD256_FUNC3_1(wordA2, wordB2, wordC1, wordD1, chunk[2], 0x6ED9EBA1, 14);
+	MASTER_HASHLIB_RIPEMD256_FUNC3_1(wordD1, wordA2, wordB2, wordC1, chunk[7], 0x6ED9EBA1, 8);
+	MASTER_HASHLIB_RIPEMD256_FUNC3_1(wordC1, wordD1, wordA2, wordB2, chunk[0], 0x6ED9EBA1, 13);
+	MASTER_HASHLIB_RIPEMD256_FUNC3_1(wordB2, wordC1, wordD1, wordA2, chunk[6], 0x6ED9EBA1, 6);
+	MASTER_HASHLIB_RIPEMD256_FUNC3_1(wordA2, wordB2, wordC1, wordD1, chunk[13], 0x6ED9EBA1, 5);
+	MASTER_HASHLIB_RIPEMD256_FUNC3_1(wordD1, wordA2, wordB2, wordC1, chunk[11], 0x6ED9EBA1, 12);
+	MASTER_HASHLIB_RIPEMD256_FUNC3_1(wordC1, wordD1, wordA2, wordB2, chunk[5], 0x6ED9EBA1, 7);
+	MASTER_HASHLIB_RIPEMD256_FUNC3_1(wordB2, wordC1, wordD1, wordA2, chunk[12], 0x6ED9EBA1, 5);
+	
+	MASTER_HASHLIB_RIPEMD256_FUNC3_2(wordA1, wordB1, wordC2, wordD2, chunk[15], 0x6D703EF3, 9);
+	MASTER_HASHLIB_RIPEMD256_FUNC3_2(wordD2, wordA1, wordB1, wordC2, chunk[5], 0x6D703EF3, 7);
+	MASTER_HASHLIB_RIPEMD256_FUNC3_2(wordC2, wordD2, wordA1, wordB1, chunk[1], 0x6D703EF3, 15);
+	MASTER_HASHLIB_RIPEMD256_FUNC3_2(wordB1, wordC2, wordD2, wordA1, chunk[3], 0x6D703EF3, 11);
+	MASTER_HASHLIB_RIPEMD256_FUNC3_2(wordA1, wordB1, wordC2, wordD2, chunk[7], 0x6D703EF3, 8);
+	MASTER_HASHLIB_RIPEMD256_FUNC3_2(wordD2, wordA1, wordB1, wordC2, chunk[14], 0x6D703EF3, 6);
+	MASTER_HASHLIB_RIPEMD256_FUNC3_2(wordC2, wordD2, wordA1, wordB1, chunk[6], 0x6D703EF3, 6);
+	MASTER_HASHLIB_RIPEMD256_FUNC3_2(wordB1, wordC2, wordD2, wordA1, chunk[9], 0x6D703EF3, 14);
+	MASTER_HASHLIB_RIPEMD256_FUNC3_2(wordA1, wordB1, wordC2, wordD2, chunk[11], 0x6D703EF3, 12);
+	MASTER_HASHLIB_RIPEMD256_FUNC3_2(wordD2, wordA1, wordB1, wordC2, chunk[8], 0x6D703EF3, 13);
+	MASTER_HASHLIB_RIPEMD256_FUNC3_2(wordC2, wordD2, wordA1, wordB1, chunk[12], 0x6D703EF3, 5);
+	MASTER_HASHLIB_RIPEMD256_FUNC3_2(wordB1, wordC2, wordD2, wordA1, chunk[2], 0x6D703EF3, 14);
+	MASTER_HASHLIB_RIPEMD256_FUNC3_2(wordA1, wordB1, wordC2, wordD2, chunk[10], 0x6D703EF3, 13);
+	MASTER_HASHLIB_RIPEMD256_FUNC3_2(wordD2, wordA1, wordB1, wordC2, chunk[0], 0x6D703EF3, 13);
+	MASTER_HASHLIB_RIPEMD256_FUNC3_2(wordC2, wordD2, wordA1, wordB1, chunk[4], 0x6D703EF3, 7);
+	MASTER_HASHLIB_RIPEMD256_FUNC3_2(wordB1, wordC2, wordD2, wordA1, chunk[13], 0x6D703EF3, 5);
+
+	MASTER_HASHLIB_RIPEMD256_FUNC4_1(wordA2, wordB2, wordC2, wordD1, chunk[1], 0x8F1BBCDC, 11);
+	MASTER_HASHLIB_RIPEMD256_FUNC4_1(wordD1, wordA2, wordB2, wordC2, chunk[9], 0x8F1BBCDC, 12);
+	MASTER_HASHLIB_RIPEMD256_FUNC4_1(wordC2, wordD1, wordA2, wordB2, chunk[11], 0x8F1BBCDC, 14);
+	MASTER_HASHLIB_RIPEMD256_FUNC4_1(wordB2, wordC2, wordD1, wordA2, chunk[10], 0x8F1BBCDC, 15);
+	MASTER_HASHLIB_RIPEMD256_FUNC4_1(wordA2, wordB2, wordC2, wordD1, chunk[0], 0x8F1BBCDC, 14);
+	MASTER_HASHLIB_RIPEMD256_FUNC4_1(wordD1, wordA2, wordB2, wordC2, chunk[8], 0x8F1BBCDC, 15);
+	MASTER_HASHLIB_RIPEMD256_FUNC4_1(wordC2, wordD1, wordA2, wordB2, chunk[12], 0x8F1BBCDC, 9);
+	MASTER_HASHLIB_RIPEMD256_FUNC4_1(wordB2, wordC2, wordD1, wordA2, chunk[4], 0x8F1BBCDC, 8);
+	MASTER_HASHLIB_RIPEMD256_FUNC4_1(wordA2, wordB2, wordC2, wordD1, chunk[13], 0x8F1BBCDC, 9);
+	MASTER_HASHLIB_RIPEMD256_FUNC4_1(wordD1, wordA2, wordB2, wordC2, chunk[3], 0x8F1BBCDC, 14);
+	MASTER_HASHLIB_RIPEMD256_FUNC4_1(wordC2, wordD1, wordA2, wordB2, chunk[7], 0x8F1BBCDC, 5);
+	MASTER_HASHLIB_RIPEMD256_FUNC4_1(wordB2, wordC2, wordD1, wordA2, chunk[15], 0x8F1BBCDC, 6);
+	MASTER_HASHLIB_RIPEMD256_FUNC4_1(wordA2, wordB2, wordC2, wordD1, chunk[14], 0x8F1BBCDC, 8);
+	MASTER_HASHLIB_RIPEMD256_FUNC4_1(wordD1, wordA2, wordB2, wordC2, chunk[5], 0x8F1BBCDC, 6);
+	MASTER_HASHLIB_RIPEMD256_FUNC4_1(wordC2, wordD1, wordA2, wordB2, chunk[6], 0x8F1BBCDC, 5);
+	MASTER_HASHLIB_RIPEMD256_FUNC4_1(wordB2, wordC2, wordD1, wordA2, chunk[2], 0x8F1BBCDC, 12);
+
+	MASTER_HASHLIB_RIPEMD256_FUNC4_2(wordA1, wordB1, wordC1, wordD2, chunk[8], 0x00000000, 15);
+	MASTER_HASHLIB_RIPEMD256_FUNC4_2(wordD2, wordA1, wordB1, wordC1, chunk[6], 0x00000000, 5);
+	MASTER_HASHLIB_RIPEMD256_FUNC4_2(wordC1, wordD2, wordA1, wordB1, chunk[4], 0x00000000, 8);
+	MASTER_HASHLIB_RIPEMD256_FUNC4_2(wordB1, wordC1, wordD2, wordA1, chunk[1], 0x00000000, 11);
+	MASTER_HASHLIB_RIPEMD256_FUNC4_2(wordA1, wordB1, wordC1, wordD2, chunk[3], 0x00000000, 14);
+	MASTER_HASHLIB_RIPEMD256_FUNC4_2(wordD2, wordA1, wordB1, wordC1, chunk[11], 0x00000000, 14);
+	MASTER_HASHLIB_RIPEMD256_FUNC4_2(wordC1, wordD2, wordA1, wordB1, chunk[15], 0x00000000, 6);
+	MASTER_HASHLIB_RIPEMD256_FUNC4_2(wordB1, wordC1, wordD2, wordA1, chunk[0], 0x00000000, 14);
+	MASTER_HASHLIB_RIPEMD256_FUNC4_2(wordA1, wordB1, wordC1, wordD2, chunk[5], 0x00000000, 6);
+	MASTER_HASHLIB_RIPEMD256_FUNC4_2(wordD2, wordA1, wordB1, wordC1, chunk[12], 0x00000000, 9);
+	MASTER_HASHLIB_RIPEMD256_FUNC4_2(wordC1, wordD2, wordA1, wordB1, chunk[2], 0x00000000, 12);
+	MASTER_HASHLIB_RIPEMD256_FUNC4_2(wordB1, wordC1, wordD2, wordA1, chunk[13], 0x00000000, 9);
+	MASTER_HASHLIB_RIPEMD256_FUNC4_2(wordA1, wordB1, wordC1, wordD2, chunk[9], 0x00000000, 12);
+	MASTER_HASHLIB_RIPEMD256_FUNC4_2(wordD2, wordA1, wordB1, wordC1, chunk[7], 0x00000000, 5);
+	MASTER_HASHLIB_RIPEMD256_FUNC4_2(wordC1, wordD2, wordA1, wordB1, chunk[10], 0x00000000, 15);
+	MASTER_HASHLIB_RIPEMD256_FUNC4_2(wordB1, wordC1, wordD2, wordA1, chunk[14], 0x00000000, 8);
+	
+	ripemd256c->state[0] += wordA2;
+	ripemd256c->state[1] += wordB2;
+	ripemd256c->state[2] += wordC2;
+	ripemd256c->state[3] += wordD2;
+	ripemd256c->state[4] += wordA1;
+	ripemd256c->state[5] += wordB1;
+	ripemd256c->state[6] += wordC1;
+	ripemd256c->state[7] += wordD1;
 }
 
 void
@@ -1570,7 +1736,7 @@ MASTER_Hashlib_RIPEMD256_Update( MASTER_Hashlib_RIPEMD256_Context * const ripemd
 }
 
 void
-MASTER_Hashlib_RIPEMD256_Finish( MASTER_Hashlib_RIPEMD256_Context * const ripemd256c, UI1 out[MASTER_HASHLIB_RIPEMD256_DIGEST_SIZE] ) {
+MASTER_Hashlib_RIPEMD256_Finish( MASTER_Hashlib_RIPEMD256_Context * const ripemd256c, UI1 out[MASTER_HASHLIB_RIPEMD256_DIGEST_SIZE >> 3] ) {
 	UI1 index;
 	__MASTER_CHECK_NUL_RETURN( ripemd256c, MASTER_NOTHING );
 	__MASTER_CHECK_NUL_RETURN( out, MASTER_NOTHING );
@@ -1608,7 +1774,7 @@ MASTER_Hashlib_RIPEMD256_Finish( MASTER_Hashlib_RIPEMD256_Context * const ripemd
 }
 
 void
-MASTER_Hashlib_RIPEMD256_Calculate( const void * const bytes, const MASTER_maxint len, UI1 out[MASTER_HASHLIB_RIPEMD256_DIGEST_SIZE] ) {
+MASTER_Hashlib_RIPEMD256_Calculate( const void * const bytes, const MASTER_maxint len, UI1 out[MASTER_HASHLIB_RIPEMD256_DIGEST_SIZE >> 3] ) {
 	MASTER_Hashlib_RIPEMD256_Context ripemd256c;
 	__MASTER_CHECK_NUL_RETURN( bytes, MASTER_NOTHING );
 	__MASTER_CHECK_NUL_RETURN( out, MASTER_NOTHING );
@@ -1619,7 +1785,7 @@ MASTER_Hashlib_RIPEMD256_Calculate( const void * const bytes, const MASTER_maxin
 
 #endif /* #! RIPEMD256 !# */
 
-/* #! RIPEMD320 !# */
+/* #! RIPEMD-320 !# */
 
 typedef struct {
 	UI1 buffer[64];
@@ -1630,18 +1796,68 @@ typedef struct {
 MASTER_PREFER_EXTERN MASTER_Hashlib_RIPEMD320_Context
 MASTER_Hashlib_RIPEMD320_Create( void );
 MASTER_PREFER_EXTERN void
-MASTER_Hashlib_RIPEMD320_Init( MASTER_Hashlib_RIPEMD320_Context * const ripemd320c );
+MASTER_Hashlib_RIPEMD320_Init( MASTER_Hashlib_RIPEMD320_Context * const );
 #define MASTER_Hashlib_RIPEMD320_Flush MASTER_Hashlib_RIPEMD320_Init
-MASTER_PREFER_EXTERN MASTER_PREFER_STATIC void
-MASTER_Hashlib_RIPEMD320_Process( MASTER_Hashlib_RIPEMD320_Context * const ripemd320c );
+MASTER_PREFER_EXTERN_STATIC void
+MASTER_Hashlib_RIPEMD320_Process( MASTER_Hashlib_RIPEMD320_Context * const );
 MASTER_PREFER_EXTERN void
-MASTER_Hashlib_RIPEMD320_Update( MASTER_Hashlib_RIPEMD320_Context * const ripemd320c, const void * bytes, MASTER_maxint len );
+MASTER_Hashlib_RIPEMD320_Update( MASTER_Hashlib_RIPEMD320_Context * const, const void *, MASTER_maxint );
 MASTER_PREFER_EXTERN void
-MASTER_Hashlib_RIPEMD320_Finish( MASTER_Hashlib_RIPEMD320_Context * const ripemd320c, UI1 out[MASTER_HASHLIB_RIPEMD320_DIGEST_SIZE] );
+MASTER_Hashlib_RIPEMD320_Finish( MASTER_Hashlib_RIPEMD320_Context * const, UI1[MASTER_HASHLIB_RIPEMD320_DIGEST_SIZE >> 3] );
 MASTER_PREFER_EXTERN void
-MASTER_Hashlib_RIPEMD320_Calculate( const void * const bytes, const MASTER_maxint len, UI1 out[MASTER_HASHLIB_RIPEMD320_DIGEST_SIZE] );
+MASTER_Hashlib_RIPEMD320_Calculate( const void * const, const MASTER_maxint, UI1[MASTER_HASHLIB_RIPEMD320_DIGEST_SIZE >> 3] );
 
-#if MASTER_HASHLIB_RIPEMD320_COMPILE == 1
+#if MASTER_HASHLIB_RIPEMD320_IMPLEMENT == 1
+
+#define MASTER_HASHLIB_RIPEMD320_FUNC1_1( word1, word2, word3, word4, word5, plate, constant, shift ) do { \
+		(word1) = MASTER_RLL4((word1) + MASTER_OPERATION_XOR3(word2, word3, word4) + (plate) + (constant), shift) + (word5); \
+		(word3) = MASTER_RLL4(word3, 10); \
+	} while (0)
+
+#define MASTER_HASHLIB_RIPEMD320_FUNC2_1( word1, word2, word3, word4, word5, plate, constant, shift ) do { \
+		(word1) = MASTER_RLL4((word1) + MASTER_OPERATION_CHOICE(word2, word3, word4) + (plate) + (constant), shift) + (word5); \
+		(word3) = MASTER_RLL4(word3, 10); \
+	} while (0)
+
+#define MASTER_HASHLIB_RIPEMD320_FUNC3_1( word1, word2, word3, word4, word5, plate, constant, shift ) do { \
+		(word1) = MASTER_RLL4((word1) + MASTER_OPERATION_3XB1ON2E(word2, word3, word4) + (plate) + (constant), shift) + (word5); \
+		(word3) = MASTER_RLL4(word3, 10); \
+	} while (0)
+
+#define MASTER_HASHLIB_RIPEMD320_FUNC4_1( word1, word2, word3, word4, word5, plate, constant, shift ) do { \
+		(word1) = MASTER_RLL4((word1) + MASTER_OPERATION_CHOICE(word4, word2, word3) + (plate) + (constant), shift) + (word5); \
+		(word3) = MASTER_RLL4(word3, 10); \
+	} while (0)
+
+#define MASTER_HASHLIB_RIPEMD320_FUNC5_1( word1, word2, word3, word4, word5, plate, constant, shift ) do { \
+		(word1) = MASTER_RLL4((word1) + MASTER_OPERATION_1XB2ON3E(word2, word3, word4) + (plate) + (constant), shift) + (word5); \
+		(word3) = MASTER_RLL4(word3, 10); \
+	} while (0)
+
+#define MASTER_HASHLIB_RIPEMD320_FUNC1_2( word1, word2, word3, word4, word5, plate, constant, shift ) do { \
+		(word1) = MASTER_RLL4((word1) + MASTER_OPERATION_1XB2ON3E(word2, word3, word4) + (plate) + (constant), shift) + (word5); \
+		(word3) = MASTER_RLL4(word3, 10); \
+	} while (0)
+
+#define MASTER_HASHLIB_RIPEMD320_FUNC2_2( word1, word2, word3, word4, word5, plate, constant, shift ) do { \
+		(word1) = MASTER_RLL4((word1) + MASTER_OPERATION_CHOICE(word4, word2, word3) + (plate) + (constant), shift) + (word5); \
+		(word3) = MASTER_RLL4(word3, 10); \
+	} while (0)
+
+#define MASTER_HASHLIB_RIPEMD320_FUNC3_2( word1, word2, word3, word4, word5, plate, constant, shift ) do { \
+		(word1) = MASTER_RLL4((word1) + MASTER_OPERATION_3XB1ON2E(word2, word3, word4) + (plate) + (constant), shift) + (word5); \
+		(word3) = MASTER_RLL4(word3, 10); \
+	} while (0)
+
+#define MASTER_HASHLIB_RIPEMD320_FUNC4_2( word1, word2, word3, word4, word5, plate, constant, shift ) do { \
+		(word1) = MASTER_RLL4((word1) + MASTER_OPERATION_CHOICE(word2, word3, word4) + (plate) + (constant), shift) + (word5); \
+		(word3) = MASTER_RLL4(word3, 10); \
+	} while (0)
+
+#define MASTER_HASHLIB_RIPEMD320_FUNC5_2( word1, word2, word3, word4, word5, plate, constant, shift ) do { \
+		(word1) = MASTER_RLL4((word1) + MASTER_OPERATION_XOR3(word2, word3, word4) + (plate) + (constant), shift) + (word5); \
+		(word3) = MASTER_RLL4(word3, 10); \
+	} while (0)
 
 void
 MASTER_Hashlib_RIPEMD320_Init( MASTER_Hashlib_RIPEMD320_Context * const ripemd320c ) {
@@ -1669,10 +1885,14 @@ MASTER_Hashlib_RIPEMD320_Create( void ) {
 	return ripemd320c;
 }
 
-MASTER_PREFER_STATIC void
+#define MASTER_NUMBER_SWAP( value1, value2 ) do { \
+		(value1) ^= (value2); \
+		(value2) ^= (value1); \
+		(value1) ^= (value2); \
+	} while (0)
+
+MASTER_PREFER_EXTERN_STATIC void
 MASTER_Hashlib_RIPEMD320_Process( MASTER_Hashlib_RIPEMD320_Context * const ripemd320c ) {
-	MASTER_UNUSED( ripemd320c );
-	/* #!
 	UI4 chunk[16];
 	UI4 wordA1 = ripemd320c->state[0];
 	UI4 wordB1 = ripemd320c->state[1];
@@ -1687,7 +1907,195 @@ MASTER_Hashlib_RIPEMD320_Process( MASTER_Hashlib_RIPEMD320_Context * const ripem
 	UI1 index = 0;
 	for (; index < 16; index += 1)
 		chunk[index] = (ripemd320c->buffer[3 | (index << 2)] << 24) | (ripemd320c->buffer[2 | (index << 2)] << 16) | (ripemd320c->buffer[1 | (index << 2)] << 8) | ripemd320c->buffer[index << 2];
-	!# */
+	MASTER_HASHLIB_RIPEMD320_FUNC1_1(wordA1, wordB1, wordC1, wordD1, wordE1, chunk[0], 0x00000000, 11);
+	MASTER_HASHLIB_RIPEMD320_FUNC1_1(wordE1, wordA1, wordB1, wordC1, wordD1, chunk[1], 0x00000000, 14);
+	MASTER_HASHLIB_RIPEMD320_FUNC1_1(wordD1, wordE1, wordA1, wordB1, wordC1, chunk[2], 0x00000000, 15);
+	MASTER_HASHLIB_RIPEMD320_FUNC1_1(wordC1, wordD1, wordE1, wordA1, wordB1, chunk[3], 0x00000000, 12);
+	MASTER_HASHLIB_RIPEMD320_FUNC1_1(wordB1, wordC1, wordD1, wordE1, wordA1, chunk[4], 0x00000000, 5);
+	MASTER_HASHLIB_RIPEMD320_FUNC1_1(wordA1, wordB1, wordC1, wordD1, wordE1, chunk[5], 0x00000000, 8);
+	MASTER_HASHLIB_RIPEMD320_FUNC1_1(wordE1, wordA1, wordB1, wordC1, wordD1, chunk[6], 0x00000000, 7);
+	MASTER_HASHLIB_RIPEMD320_FUNC1_1(wordD1, wordE1, wordA1, wordB1, wordC1, chunk[7], 0x00000000, 9);
+	MASTER_HASHLIB_RIPEMD320_FUNC1_1(wordC1, wordD1, wordE1, wordA1, wordB1, chunk[8], 0x00000000, 11);
+	MASTER_HASHLIB_RIPEMD320_FUNC1_1(wordB1, wordC1, wordD1, wordE1, wordA1, chunk[9], 0x00000000, 13);
+	MASTER_HASHLIB_RIPEMD320_FUNC1_1(wordA1, wordB1, wordC1, wordD1, wordE1, chunk[10], 0x00000000, 14);
+	MASTER_HASHLIB_RIPEMD320_FUNC1_1(wordE1, wordA1, wordB1, wordC1, wordD1, chunk[11], 0x00000000, 15);
+	MASTER_HASHLIB_RIPEMD320_FUNC1_1(wordD1, wordE1, wordA1, wordB1, wordC1, chunk[12], 0x00000000, 6);
+	MASTER_HASHLIB_RIPEMD320_FUNC1_1(wordC1, wordD1, wordE1, wordA1, wordB1, chunk[13], 0x00000000, 7);
+	MASTER_HASHLIB_RIPEMD320_FUNC1_1(wordB1, wordC1, wordD1, wordE1, wordA1, chunk[14], 0x00000000, 9);
+	MASTER_HASHLIB_RIPEMD320_FUNC1_1(wordA1, wordB1, wordC1, wordD1, wordE1, chunk[15], 0x00000000, 8);
+
+	MASTER_HASHLIB_RIPEMD320_FUNC1_2(wordA2, wordB2, wordC2, wordD2, wordE2, chunk[5], 0x50A28BE6, 8);
+	MASTER_HASHLIB_RIPEMD320_FUNC1_2(wordE2, wordA2, wordB2, wordC2, wordD2, chunk[14], 0x50A28BE6, 9);
+	MASTER_HASHLIB_RIPEMD320_FUNC1_2(wordD2, wordE2, wordA2, wordB2, wordC2, chunk[7], 0x50A28BE6, 9);
+	MASTER_HASHLIB_RIPEMD320_FUNC1_2(wordC2, wordD2, wordE2, wordA2, wordB2, chunk[0], 0x50A28BE6, 11);
+	MASTER_HASHLIB_RIPEMD320_FUNC1_2(wordB2, wordC2, wordD2, wordE2, wordA2, chunk[9], 0x50A28BE6, 13);
+	MASTER_HASHLIB_RIPEMD320_FUNC1_2(wordA2, wordB2, wordC2, wordD2, wordE2, chunk[2], 0x50A28BE6, 15);
+	MASTER_HASHLIB_RIPEMD320_FUNC1_2(wordE2, wordA2, wordB2, wordC2, wordD2, chunk[11], 0x50A28BE6, 15);
+	MASTER_HASHLIB_RIPEMD320_FUNC1_2(wordD2, wordE2, wordA2, wordB2, wordC2, chunk[4], 0x50A28BE6, 5);
+	MASTER_HASHLIB_RIPEMD320_FUNC1_2(wordC2, wordD2, wordE2, wordA2, wordB2, chunk[13], 0x50A28BE6, 7);
+	MASTER_HASHLIB_RIPEMD320_FUNC1_2(wordB2, wordC2, wordD2, wordE2, wordA2, chunk[6], 0x50A28BE6, 7);
+	MASTER_HASHLIB_RIPEMD320_FUNC1_2(wordA2, wordB2, wordC2, wordD2, wordE2, chunk[15], 0x50A28BE6, 8);
+	MASTER_HASHLIB_RIPEMD320_FUNC1_2(wordE2, wordA2, wordB2, wordC2, wordD2, chunk[8], 0x50A28BE6, 11);
+	MASTER_HASHLIB_RIPEMD320_FUNC1_2(wordD2, wordE2, wordA2, wordB2, wordC2, chunk[1], 0x50A28BE6, 14);
+	MASTER_HASHLIB_RIPEMD320_FUNC1_2(wordC2, wordD2, wordE2, wordA2, wordB2, chunk[10], 0x50A28BE6, 14);
+	MASTER_HASHLIB_RIPEMD320_FUNC1_2(wordB2, wordC2, wordD2, wordE2, wordA2, chunk[3], 0x50A28BE6, 12);
+	MASTER_HASHLIB_RIPEMD320_FUNC1_2(wordA2, wordB2, wordC2, wordD2, wordE2, chunk[12], 0x50A28BE6, 6);
+	
+	MASTER_NUMBER_SWAP(wordA1, wordA2);
+
+	MASTER_HASHLIB_RIPEMD320_FUNC2_1(wordE1, wordA1, wordB1, wordC1, wordD1, chunk[7], 0x5A827999, 7);
+	MASTER_HASHLIB_RIPEMD320_FUNC2_1(wordD1, wordE1, wordA1, wordB1, wordC1, chunk[4], 0x5A827999, 6);
+	MASTER_HASHLIB_RIPEMD320_FUNC2_1(wordC1, wordD1, wordE1, wordA1, wordB1, chunk[13], 0x5A827999, 8);
+	MASTER_HASHLIB_RIPEMD320_FUNC2_1(wordB1, wordC1, wordD1, wordE1, wordA1, chunk[1], 0x5A827999, 13);
+	MASTER_HASHLIB_RIPEMD320_FUNC2_1(wordA1, wordB1, wordC1, wordD1, wordE1, chunk[10], 0x5A827999, 11);
+	MASTER_HASHLIB_RIPEMD320_FUNC2_1(wordE1, wordA1, wordB1, wordC1, wordD1, chunk[6], 0x5A827999, 9);
+	MASTER_HASHLIB_RIPEMD320_FUNC2_1(wordD1, wordE1, wordA1, wordB1, wordC1, chunk[15], 0x5A827999, 7);
+	MASTER_HASHLIB_RIPEMD320_FUNC2_1(wordC1, wordD1, wordE1, wordA1, wordB1, chunk[3], 0x5A827999, 15);
+	MASTER_HASHLIB_RIPEMD320_FUNC2_1(wordB1, wordC1, wordD1, wordE1, wordA1, chunk[12], 0x5A827999, 7);
+	MASTER_HASHLIB_RIPEMD320_FUNC2_1(wordA1, wordB1, wordC1, wordD1, wordE1, chunk[0], 0x5A827999, 12);
+	MASTER_HASHLIB_RIPEMD320_FUNC2_1(wordE1, wordA1, wordB1, wordC1, wordD1, chunk[9], 0x5A827999, 15);
+	MASTER_HASHLIB_RIPEMD320_FUNC2_1(wordD1, wordE1, wordA1, wordB1, wordC1, chunk[5], 0x5A827999, 9);
+	MASTER_HASHLIB_RIPEMD320_FUNC2_1(wordC1, wordD1, wordE1, wordA1, wordB1, chunk[2], 0x5A827999, 11);
+	MASTER_HASHLIB_RIPEMD320_FUNC2_1(wordB1, wordC1, wordD1, wordE1, wordA1, chunk[14], 0x5A827999, 7);
+	MASTER_HASHLIB_RIPEMD320_FUNC2_1(wordA1, wordB1, wordC1, wordD1, wordE1, chunk[11], 0x5A827999, 13);
+	MASTER_HASHLIB_RIPEMD320_FUNC2_1(wordE1, wordA1, wordB1, wordC1, wordD1, chunk[8], 0x5A827999, 12);
+
+	MASTER_HASHLIB_RIPEMD320_FUNC2_2(wordE2, wordA2, wordB2, wordC2, wordD2, chunk[6], 0x5C4DD124, 9); 
+	MASTER_HASHLIB_RIPEMD320_FUNC2_2(wordD2, wordE2, wordA2, wordB2, wordC2, chunk[11], 0x5C4DD124, 13);
+	MASTER_HASHLIB_RIPEMD320_FUNC2_2(wordC2, wordD2, wordE2, wordA2, wordB2, chunk[3], 0x5C4DD124, 15);
+	MASTER_HASHLIB_RIPEMD320_FUNC2_2(wordB2, wordC2, wordD2, wordE2, wordA2, chunk[7], 0x5C4DD124, 7);
+	MASTER_HASHLIB_RIPEMD320_FUNC2_2(wordA2, wordB2, wordC2, wordD2, wordE2, chunk[0], 0x5C4DD124, 12);
+	MASTER_HASHLIB_RIPEMD320_FUNC2_2(wordE2, wordA2, wordB2, wordC2, wordD2, chunk[13], 0x5C4DD124, 8);
+	MASTER_HASHLIB_RIPEMD320_FUNC2_2(wordD2, wordE2, wordA2, wordB2, wordC2, chunk[5], 0x5C4DD124, 9);
+	MASTER_HASHLIB_RIPEMD320_FUNC2_2(wordC2, wordD2, wordE2, wordA2, wordB2, chunk[10], 0x5C4DD124, 11);
+	MASTER_HASHLIB_RIPEMD320_FUNC2_2(wordB2, wordC2, wordD2, wordE2, wordA2, chunk[14], 0x5C4DD124, 7);
+	MASTER_HASHLIB_RIPEMD320_FUNC2_2(wordA2, wordB2, wordC2, wordD2, wordE2, chunk[15], 0x5C4DD124, 7);
+	MASTER_HASHLIB_RIPEMD320_FUNC2_2(wordE2, wordA2, wordB2, wordC2, wordD2, chunk[8], 0x5C4DD124, 12);
+	MASTER_HASHLIB_RIPEMD320_FUNC2_2(wordD2, wordE2, wordA2, wordB2, wordC2, chunk[12], 0x5C4DD124, 7);
+	MASTER_HASHLIB_RIPEMD320_FUNC2_2(wordC2, wordD2, wordE2, wordA2, wordB2, chunk[4], 0x5C4DD124, 6);
+	MASTER_HASHLIB_RIPEMD320_FUNC2_2(wordB2, wordC2, wordD2, wordE2, wordA2, chunk[9], 0x5C4DD124, 15);
+	MASTER_HASHLIB_RIPEMD320_FUNC2_2(wordA2, wordB2, wordC2, wordD2, wordE2, chunk[1], 0x5C4DD124, 13);
+	MASTER_HASHLIB_RIPEMD320_FUNC2_2(wordE2, wordA2, wordB2, wordC2, wordD2, chunk[2], 0x5C4DD124, 11);
+	
+	MASTER_NUMBER_SWAP(wordB1, wordB2);
+
+	MASTER_HASHLIB_RIPEMD320_FUNC3_1(wordD1, wordE1, wordA1, wordB1, wordC1, chunk[3], 0x6ED9EBA1, 11);
+	MASTER_HASHLIB_RIPEMD320_FUNC3_1(wordC1, wordD1, wordE1, wordA1, wordB1, chunk[10], 0x6ED9EBA1, 13);
+	MASTER_HASHLIB_RIPEMD320_FUNC3_1(wordB1, wordC1, wordD1, wordE1, wordA1, chunk[14], 0x6ED9EBA1, 6);
+	MASTER_HASHLIB_RIPEMD320_FUNC3_1(wordA1, wordB1, wordC1, wordD1, wordE1, chunk[4], 0x6ED9EBA1, 7);
+	MASTER_HASHLIB_RIPEMD320_FUNC3_1(wordE1, wordA1, wordB1, wordC1, wordD1, chunk[9], 0x6ED9EBA1, 14);
+	MASTER_HASHLIB_RIPEMD320_FUNC3_1(wordD1, wordE1, wordA1, wordB1, wordC1, chunk[15], 0x6ED9EBA1, 9);
+	MASTER_HASHLIB_RIPEMD320_FUNC3_1(wordC1, wordD1, wordE1, wordA1, wordB1, chunk[8], 0x6ED9EBA1, 13);
+	MASTER_HASHLIB_RIPEMD320_FUNC3_1(wordB1, wordC1, wordD1, wordE1, wordA1, chunk[1], 0x6ED9EBA1, 15);
+	MASTER_HASHLIB_RIPEMD320_FUNC3_1(wordA1, wordB1, wordC1, wordD1, wordE1, chunk[2], 0x6ED9EBA1, 14);
+	MASTER_HASHLIB_RIPEMD320_FUNC3_1(wordE1, wordA1, wordB1, wordC1, wordD1, chunk[7], 0x6ED9EBA1, 8);
+	MASTER_HASHLIB_RIPEMD320_FUNC3_1(wordD1, wordE1, wordA1, wordB1, wordC1, chunk[0], 0x6ED9EBA1, 13);
+	MASTER_HASHLIB_RIPEMD320_FUNC3_1(wordC1, wordD1, wordE1, wordA1, wordB1, chunk[6], 0x6ED9EBA1, 6);
+	MASTER_HASHLIB_RIPEMD320_FUNC3_1(wordB1, wordC1, wordD1, wordE1, wordA1, chunk[13], 0x6ED9EBA1, 5);
+	MASTER_HASHLIB_RIPEMD320_FUNC3_1(wordA1, wordB1, wordC1, wordD1, wordE1, chunk[11], 0x6ED9EBA1, 12);
+	MASTER_HASHLIB_RIPEMD320_FUNC3_1(wordE1, wordA1, wordB1, wordC1, wordD1, chunk[5], 0x6ED9EBA1, 7);
+	MASTER_HASHLIB_RIPEMD320_FUNC3_1(wordD1, wordE1, wordA1, wordB1, wordC1, chunk[12], 0x6ED9EBA1, 5);
+
+	MASTER_HASHLIB_RIPEMD320_FUNC3_2(wordD2, wordE2, wordA2, wordB2, wordC2, chunk[15], 0x6D703EF3, 9);
+	MASTER_HASHLIB_RIPEMD320_FUNC3_2(wordC2, wordD2, wordE2, wordA2, wordB2, chunk[5], 0x6D703EF3, 7);
+	MASTER_HASHLIB_RIPEMD320_FUNC3_2(wordB2, wordC2, wordD2, wordE2, wordA2, chunk[1], 0x6D703EF3, 15);
+	MASTER_HASHLIB_RIPEMD320_FUNC3_2(wordA2, wordB2, wordC2, wordD2, wordE2, chunk[3], 0x6D703EF3, 11);
+	MASTER_HASHLIB_RIPEMD320_FUNC3_2(wordE2, wordA2, wordB2, wordC2, wordD2, chunk[7], 0x6D703EF3, 8);
+	MASTER_HASHLIB_RIPEMD320_FUNC3_2(wordD2, wordE2, wordA2, wordB2, wordC2, chunk[14], 0x6D703EF3, 6);
+	MASTER_HASHLIB_RIPEMD320_FUNC3_2(wordC2, wordD2, wordE2, wordA2, wordB2, chunk[6], 0x6D703EF3, 6);
+	MASTER_HASHLIB_RIPEMD320_FUNC3_2(wordB2, wordC2, wordD2, wordE2, wordA2, chunk[9], 0x6D703EF3, 14);
+	MASTER_HASHLIB_RIPEMD320_FUNC3_2(wordA2, wordB2, wordC2, wordD2, wordE2, chunk[11], 0x6D703EF3, 12);
+	MASTER_HASHLIB_RIPEMD320_FUNC3_2(wordE2, wordA2, wordB2, wordC2, wordD2, chunk[8], 0x6D703EF3, 13);
+	MASTER_HASHLIB_RIPEMD320_FUNC3_2(wordD2, wordE2, wordA2, wordB2, wordC2, chunk[12], 0x6D703EF3, 5);
+	MASTER_HASHLIB_RIPEMD320_FUNC3_2(wordC2, wordD2, wordE2, wordA2, wordB2, chunk[2], 0x6D703EF3, 14);
+	MASTER_HASHLIB_RIPEMD320_FUNC3_2(wordB2, wordC2, wordD2, wordE2, wordA2, chunk[10], 0x6D703EF3, 13);
+	MASTER_HASHLIB_RIPEMD320_FUNC3_2(wordA2, wordB2, wordC2, wordD2, wordE2, chunk[0], 0x6D703EF3, 13);
+	MASTER_HASHLIB_RIPEMD320_FUNC3_2(wordE2, wordA2, wordB2, wordC2, wordD2, chunk[4], 0x6D703EF3, 7);
+	MASTER_HASHLIB_RIPEMD320_FUNC3_2(wordD2, wordE2, wordA2, wordB2, wordC2, chunk[13], 0x6D703EF3, 5);
+	
+	MASTER_NUMBER_SWAP(wordC1, wordC2);
+
+	MASTER_HASHLIB_RIPEMD320_FUNC4_1(wordC1, wordD1, wordE1, wordA1, wordB1, chunk[1], 0x8F1BBCDC, 11);
+	MASTER_HASHLIB_RIPEMD320_FUNC4_1(wordB1, wordC1, wordD1, wordE1, wordA1, chunk[9], 0x8F1BBCDC, 12);
+	MASTER_HASHLIB_RIPEMD320_FUNC4_1(wordA1, wordB1, wordC1, wordD1, wordE1, chunk[11], 0x8F1BBCDC, 14);
+	MASTER_HASHLIB_RIPEMD320_FUNC4_1(wordE1, wordA1, wordB1, wordC1, wordD1, chunk[10], 0x8F1BBCDC, 15);
+	MASTER_HASHLIB_RIPEMD320_FUNC4_1(wordD1, wordE1, wordA1, wordB1, wordC1, chunk[0], 0x8F1BBCDC, 14);
+	MASTER_HASHLIB_RIPEMD320_FUNC4_1(wordC1, wordD1, wordE1, wordA1, wordB1, chunk[8], 0x8F1BBCDC, 15);
+	MASTER_HASHLIB_RIPEMD320_FUNC4_1(wordB1, wordC1, wordD1, wordE1, wordA1, chunk[12], 0x8F1BBCDC, 9);
+	MASTER_HASHLIB_RIPEMD320_FUNC4_1(wordA1, wordB1, wordC1, wordD1, wordE1, chunk[4], 0x8F1BBCDC, 8);
+	MASTER_HASHLIB_RIPEMD320_FUNC4_1(wordE1, wordA1, wordB1, wordC1, wordD1, chunk[13], 0x8F1BBCDC, 9);
+	MASTER_HASHLIB_RIPEMD320_FUNC4_1(wordD1, wordE1, wordA1, wordB1, wordC1, chunk[3], 0x8F1BBCDC, 14);
+	MASTER_HASHLIB_RIPEMD320_FUNC4_1(wordC1, wordD1, wordE1, wordA1, wordB1, chunk[7], 0x8F1BBCDC, 5);
+	MASTER_HASHLIB_RIPEMD320_FUNC4_1(wordB1, wordC1, wordD1, wordE1, wordA1, chunk[15], 0x8F1BBCDC, 6);
+	MASTER_HASHLIB_RIPEMD320_FUNC4_1(wordA1, wordB1, wordC1, wordD1, wordE1, chunk[14], 0x8F1BBCDC, 8);
+	MASTER_HASHLIB_RIPEMD320_FUNC4_1(wordE1, wordA1, wordB1, wordC1, wordD1, chunk[5], 0x8F1BBCDC, 6);
+	MASTER_HASHLIB_RIPEMD320_FUNC4_1(wordD1, wordE1, wordA1, wordB1, wordC1, chunk[6], 0x8F1BBCDC, 5);
+	MASTER_HASHLIB_RIPEMD320_FUNC4_1(wordC1, wordD1, wordE1, wordA1, wordB1, chunk[2], 0x8F1BBCDC, 12);
+
+	MASTER_HASHLIB_RIPEMD320_FUNC4_2(wordC2, wordD2, wordE2, wordA2, wordB2, chunk[8], 0x7A6D76E9, 15);
+	MASTER_HASHLIB_RIPEMD320_FUNC4_2(wordB2, wordC2, wordD2, wordE2, wordA2, chunk[6], 0x7A6D76E9, 5);
+	MASTER_HASHLIB_RIPEMD320_FUNC4_2(wordA2, wordB2, wordC2, wordD2, wordE2, chunk[4], 0x7A6D76E9, 8);
+	MASTER_HASHLIB_RIPEMD320_FUNC4_2(wordE2, wordA2, wordB2, wordC2, wordD2, chunk[1], 0x7A6D76E9, 11);
+	MASTER_HASHLIB_RIPEMD320_FUNC4_2(wordD2, wordE2, wordA2, wordB2, wordC2, chunk[3], 0x7A6D76E9, 14);
+	MASTER_HASHLIB_RIPEMD320_FUNC4_2(wordC2, wordD2, wordE2, wordA2, wordB2, chunk[11], 0x7A6D76E9, 14);
+	MASTER_HASHLIB_RIPEMD320_FUNC4_2(wordB2, wordC2, wordD2, wordE2, wordA2, chunk[15], 0x7A6D76E9, 6);
+	MASTER_HASHLIB_RIPEMD320_FUNC4_2(wordA2, wordB2, wordC2, wordD2, wordE2, chunk[0], 0x7A6D76E9, 14);
+	MASTER_HASHLIB_RIPEMD320_FUNC4_2(wordE2, wordA2, wordB2, wordC2, wordD2, chunk[5], 0x7A6D76E9, 6);
+	MASTER_HASHLIB_RIPEMD320_FUNC4_2(wordD2, wordE2, wordA2, wordB2, wordC2, chunk[12], 0x7A6D76E9, 9);
+	MASTER_HASHLIB_RIPEMD320_FUNC4_2(wordC2, wordD2, wordE2, wordA2, wordB2, chunk[2], 0x7A6D76E9, 12);
+	MASTER_HASHLIB_RIPEMD320_FUNC4_2(wordB2, wordC2, wordD2, wordE2, wordA2, chunk[13], 0x7A6D76E9, 9);
+	MASTER_HASHLIB_RIPEMD320_FUNC4_2(wordA2, wordB2, wordC2, wordD2, wordE2, chunk[9], 0x7A6D76E9, 12);
+	MASTER_HASHLIB_RIPEMD320_FUNC4_2(wordE2, wordA2, wordB2, wordC2, wordD2, chunk[7], 0x7A6D76E9, 5);
+	MASTER_HASHLIB_RIPEMD320_FUNC4_2(wordD2, wordE2, wordA2, wordB2, wordC2, chunk[10], 0x7A6D76E9, 15);
+	MASTER_HASHLIB_RIPEMD320_FUNC4_2(wordC2, wordD2, wordE2, wordA2, wordB2, chunk[14], 0x7A6D76E9, 8);
+	
+	MASTER_NUMBER_SWAP(wordD1, wordD2);
+
+	MASTER_HASHLIB_RIPEMD320_FUNC5_1(wordB1, wordC1, wordD1, wordE1, wordA1, chunk[4], 0xA953FD4E, 9);
+	MASTER_HASHLIB_RIPEMD320_FUNC5_1(wordA1, wordB1, wordC1, wordD1, wordE1, chunk[0], 0xA953FD4E, 15);
+	MASTER_HASHLIB_RIPEMD320_FUNC5_1(wordE1, wordA1, wordB1, wordC1, wordD1, chunk[5], 0xA953FD4E, 5);
+	MASTER_HASHLIB_RIPEMD320_FUNC5_1(wordD1, wordE1, wordA1, wordB1, wordC1, chunk[9], 0xA953FD4E, 11);
+	MASTER_HASHLIB_RIPEMD320_FUNC5_1(wordC1, wordD1, wordE1, wordA1, wordB1, chunk[7], 0xA953FD4E, 6);
+	MASTER_HASHLIB_RIPEMD320_FUNC5_1(wordB1, wordC1, wordD1, wordE1, wordA1, chunk[12], 0xA953FD4E, 8);
+	MASTER_HASHLIB_RIPEMD320_FUNC5_1(wordA1, wordB1, wordC1, wordD1, wordE1, chunk[2], 0xA953FD4E, 13);
+	MASTER_HASHLIB_RIPEMD320_FUNC5_1(wordE1, wordA1, wordB1, wordC1, wordD1, chunk[10], 0xA953FD4E, 12);
+	MASTER_HASHLIB_RIPEMD320_FUNC5_1(wordD1, wordE1, wordA1, wordB1, wordC1, chunk[14], 0xA953FD4E, 5);
+	MASTER_HASHLIB_RIPEMD320_FUNC5_1(wordC1, wordD1, wordE1, wordA1, wordB1, chunk[1], 0xA953FD4E, 12);
+	MASTER_HASHLIB_RIPEMD320_FUNC5_1(wordB1, wordC1, wordD1, wordE1, wordA1, chunk[3], 0xA953FD4E, 13);
+	MASTER_HASHLIB_RIPEMD320_FUNC5_1(wordA1, wordB1, wordC1, wordD1, wordE1, chunk[8], 0xA953FD4E, 14);
+	MASTER_HASHLIB_RIPEMD320_FUNC5_1(wordE1, wordA1, wordB1, wordC1, wordD1, chunk[11], 0xA953FD4E, 11);
+	MASTER_HASHLIB_RIPEMD320_FUNC5_1(wordD1, wordE1, wordA1, wordB1, wordC1, chunk[6], 0xA953FD4E, 8);
+	MASTER_HASHLIB_RIPEMD320_FUNC5_1(wordC1, wordD1, wordE1, wordA1, wordB1, chunk[15], 0xA953FD4E, 5);
+	MASTER_HASHLIB_RIPEMD320_FUNC5_1(wordB1, wordC1, wordD1, wordE1, wordA1, chunk[13], 0xA953FD4E, 6);
+
+	MASTER_HASHLIB_RIPEMD320_FUNC5_2(wordB2, wordC2, wordD2, wordE2, wordA2, chunk[12], 0x00000000, 8);
+	MASTER_HASHLIB_RIPEMD320_FUNC5_2(wordA2, wordB2, wordC2, wordD2, wordE2, chunk[15], 0x00000000, 5);
+	MASTER_HASHLIB_RIPEMD320_FUNC5_2(wordE2, wordA2, wordB2, wordC2, wordD2, chunk[10], 0x00000000, 12);
+	MASTER_HASHLIB_RIPEMD320_FUNC5_2(wordD2, wordE2, wordA2, wordB2, wordC2, chunk[4], 0x00000000, 9);
+	MASTER_HASHLIB_RIPEMD320_FUNC5_2(wordC2, wordD2, wordE2, wordA2, wordB2, chunk[1], 0x00000000, 12);
+	MASTER_HASHLIB_RIPEMD320_FUNC5_2(wordB2, wordC2, wordD2, wordE2, wordA2, chunk[5], 0x00000000, 5);
+	MASTER_HASHLIB_RIPEMD320_FUNC5_2(wordA2, wordB2, wordC2, wordD2, wordE2, chunk[8], 0x00000000, 14);
+	MASTER_HASHLIB_RIPEMD320_FUNC5_2(wordE2, wordA2, wordB2, wordC2, wordD2, chunk[7], 0x00000000, 6);
+	MASTER_HASHLIB_RIPEMD320_FUNC5_2(wordD2, wordE2, wordA2, wordB2, wordC2, chunk[6], 0x00000000, 8);
+	MASTER_HASHLIB_RIPEMD320_FUNC5_2(wordC2, wordD2, wordE2, wordA2, wordB2, chunk[2], 0x00000000, 13);
+	MASTER_HASHLIB_RIPEMD320_FUNC5_2(wordB2, wordC2, wordD2, wordE2, wordA2, chunk[13], 0x00000000, 6);
+	MASTER_HASHLIB_RIPEMD320_FUNC5_2(wordA2, wordB2, wordC2, wordD2, wordE2, chunk[14], 0x00000000, 5);
+	MASTER_HASHLIB_RIPEMD320_FUNC5_2(wordE2, wordA2, wordB2, wordC2, wordD2, chunk[0], 0x00000000, 15);
+	MASTER_HASHLIB_RIPEMD320_FUNC5_2(wordD2, wordE2, wordA2, wordB2, wordC2, chunk[3], 0x00000000, 13);
+	MASTER_HASHLIB_RIPEMD320_FUNC5_2(wordC2, wordD2, wordE2, wordA2, wordB2, chunk[9], 0x00000000, 11);
+	MASTER_HASHLIB_RIPEMD320_FUNC5_2(wordB2, wordC2, wordD2, wordE2, wordA2, chunk[11], 0x00000000, 11);
+	
+	MASTER_NUMBER_SWAP(wordE1, wordE2);
+	ripemd320c->state[0] += wordA1;
+	ripemd320c->state[1] += wordB1;
+	ripemd320c->state[2] += wordC1;
+	ripemd320c->state[3] += wordD1;
+	ripemd320c->state[4] += wordE1;
+	ripemd320c->state[5] += wordA2;
+	ripemd320c->state[6] += wordB2;
+	ripemd320c->state[7] += wordC2;
+	ripemd320c->state[8] += wordD2;
+	ripemd320c->state[9] += wordE2;
 }
 
 void
@@ -1707,7 +2115,7 @@ MASTER_Hashlib_RIPEMD320_Update( MASTER_Hashlib_RIPEMD320_Context * const ripemd
 }
 
 void
-MASTER_Hashlib_RIPEMD320_Finish( MASTER_Hashlib_RIPEMD320_Context * const ripemd320c, UI1 out[MASTER_HASHLIB_RIPEMD320_DIGEST_SIZE] ) {
+MASTER_Hashlib_RIPEMD320_Finish( MASTER_Hashlib_RIPEMD320_Context * const ripemd320c, UI1 out[MASTER_HASHLIB_RIPEMD320_DIGEST_SIZE >> 3] ) {
 	UI1 index;
 	__MASTER_CHECK_NUL_RETURN( ripemd320c, MASTER_NOTHING );
 	__MASTER_CHECK_NUL_RETURN( out, MASTER_NOTHING );
@@ -1747,7 +2155,7 @@ MASTER_Hashlib_RIPEMD320_Finish( MASTER_Hashlib_RIPEMD320_Context * const ripemd
 }
 
 void
-MASTER_Hashlib_RIPEMD320_Calculate( const void * const bytes, const MASTER_maxint len, UI1 out[MASTER_HASHLIB_RIPEMD320_DIGEST_SIZE] ) {
+MASTER_Hashlib_RIPEMD320_Calculate( const void * const bytes, const MASTER_maxint len, UI1 out[MASTER_HASHLIB_RIPEMD320_DIGEST_SIZE >> 3] ) {
 	MASTER_Hashlib_RIPEMD320_Context ripemd320c;
 	__MASTER_CHECK_NUL_RETURN( bytes, MASTER_NOTHING );
 	__MASTER_CHECK_NUL_RETURN( out, MASTER_NOTHING );
@@ -1768,20 +2176,20 @@ typedef struct {
 MASTER_PREFER_EXTERN MASTER_Hashlib_<HASHBIG>_Context
 MASTER_Hashlib_<HASHBIG>_Create( void );
 MASTER_PREFER_EXTERN void
-MASTER_Hashlib_<HASHBIG>_Init( MASTER_Hashlib_<HASHBIG>_Context * const <hashlow>c );
+MASTER_Hashlib_<HASHBIG>_Init( MASTER_Hashlib_<HASHBIG>_Context * const );
 #define MASTER_Hashlib_<HASHBIG>_Flush MASTER_Hashlib_<HASHBIG>_Init
-MASTER_PREFER_EXTERN MASTER_PREFER_STATIC void
-MASTER_Hashlib_<HASHBIG>_Process( MASTER_Hashlib_<HASHBIG>_Context * const <hashlow>c );
+MASTER_PREFER_EXTERN_STATIC void
+MASTER_Hashlib_<HASHBIG>_Process( MASTER_Hashlib_<HASHBIG>_Context * const );
 MASTER_PREFER_EXTERN void
-MASTER_Hashlib_<HASHBIG>_Update( MASTER_Hashlib_<HASHBIG>_Context * const <hashlow>c, const void * bytes, MASTER_maxint len );
+MASTER_Hashlib_<HASHBIG>_Update( MASTER_Hashlib_<HASHBIG>_Context * const, const void *, MASTER_maxint );
 MASTER_PREFER_EXTERN void
-MASTER_Hashlib_<HASHBIG>_Finish( MASTER_Hashlib_<HASHBIG>_Context * const <hashlow>c, UI1 out[MASTER_HASHLIB_<HASHBIG>_DIGEST_SIZE] );
+MASTER_Hashlib_<HASHBIG>_Finish( MASTER_Hashlib_<HASHBIG>_Context * const, UI1[MASTER_HASHLIB_<HASHBIG>_DIGEST_SIZE >> 3] );
 MASTER_PREFER_EXTERN void
-MASTER_Hashlib_<HASHBIG>_Calculate( const void * const bytes, const MASTER_maxint len, UI1 out[MASTER_HASHLIB_<HASHBIG>_DIGEST_SIZE] );
+MASTER_Hashlib_<HASHBIG>_Calculate( const void * const, const MASTER_maxint, UI1[MASTER_HASHLIB_<HASHBIG>_DIGEST_SIZE >> 3] );
 
 const UI4 MASTER_Hashlib_<HASHBIG>_Table1[4];
 
-#if MASTER_HASHLIB_<HASHBIG>_COMPILE == 1
+#if MASTER_HASHLIB_<HASHBIG>_IMPLEMENT == 1
 
 void
 MASTER_Hashlib_<HASHBIG>_Init( MASTER_Hashlib_<HASHBIG>_Context * const <hashlow>c ) {
@@ -1810,7 +2218,7 @@ MASTER_Hashlib_<HASHBIG>_Update( MASTER_Hashlib_<HASHBIG>_Context * const <hashl
 }
 
 void
-MASTER_Hashlib_<HASHBIG>_Finish( MASTER_Hashlib_<HASHBIG>_Context * const <hashlow>c, UI1 out[MASTER_HASHLIB_<HASHBIG>_DIGEST_SIZE] ) {
+MASTER_Hashlib_<HASHBIG>_Finish( MASTER_Hashlib_<HASHBIG>_Context * const <hashlow>c, UI1 out[MASTER_HASHLIB_<HASHBIG>_DIGEST_SIZE >> 3] ) {
 	UI1 index;
 	__MASTER_CHECK_NUL_RETURN( <hashlow>c, MASTER_NOTHING );
 	__MASTER_CHECK_NUL_RETURN( out, MASTER_NOTHING );
@@ -1818,7 +2226,7 @@ MASTER_Hashlib_<HASHBIG>_Finish( MASTER_Hashlib_<HASHBIG>_Context * const <hashl
 }
 
 void
-MASTER_Hashlib_<HASHBIG>_Calculate( const void * const bytes, const MASTER_maxint len, UI1 out[MASTER_HASHLIB_<HASHBIG>_DIGEST_SIZE] ) {
+MASTER_Hashlib_<HASHBIG>_Calculate( const void * const bytes, const MASTER_maxint len, UI1 out[MASTER_HASHLIB_<HASHBIG>_DIGEST_SIZE >> 3] ) {
 	MASTER_Hashlib_<HASHBIG>_Context <hashlow>c;
 	__MASTER_CHECK_NUL_RETURN( bytes, MASTER_NOTHING );
 	__MASTER_CHECK_NUL_RETURN( out, MASTER_NOTHING );
@@ -1843,23 +2251,23 @@ typedef struct {
 } MASTER_Hashlib_Context;
 
 MASTER_PREFER_EXTERN MASTER_Hashlib_Context
-MASTER_Hashlib_Create( const UI1 id );
+MASTER_Hashlib_Create( const UI1 );
 MASTER_PREFER_EXTERN void
-MASTER_Hashlib_Init( MASTER_Hashlib_Context * const hash, const UI1 id );
+MASTER_Hashlib_Init( MASTER_Hashlib_Context * const, const UI1 );
 MASTER_PREFER_EXTERN void
-MASTER_Hashlib_Flush( MASTER_Hashlib_Context * const hash );
+MASTER_Hashlib_Flush( MASTER_Hashlib_Context * const );
 MASTER_PREFER_EXTERN void
-MASTER_Hashlib_Update( MASTER_Hashlib_Context * const hash, const void * const bytes, const MASTER_maxint len );
+MASTER_Hashlib_Update( MASTER_Hashlib_Context * const, const void * const, const MASTER_maxint );
 MASTER_PREFER_EXTERN void
-MASTER_Hashlib_Finish( MASTER_Hashlib_Context * const hash, UI1 * const out );
+MASTER_Hashlib_Finish( MASTER_Hashlib_Context * const, UI1 * const );
 MASTER_PREFER_EXTERN void
-MASTER_Hashlib_Calculate( const UI1 id, const void * const bytes, const MASTER_maxint len, UI1 * const out );
+MASTER_Hashlib_Calculate( const UI1, const void * const, const MASTER_maxint, UI1 * const );
 MASTER_PREFER_EXTERN const char *
-MASTER_Hashlib_GetAlgorithmName( const UI1 id );
+MASTER_Hashlib_GetAlgorithmName( const UI1 );
 MASTER_PREFER_EXTERN MASTER_maxint
-MASTER_Hashlib_GetAlgorithmOutputSize( const UI1 id );
+MASTER_Hashlib_GetAlgorithmOutputSize( const UI1 );
 
-#if MASTER_HASHLIB_API_COMPILE == 1
+#if MASTER_HASHLIB_API_IMPLEMENT == 1
 
 MASTER_Hashlib_Context
 MASTER_Hashlib_Create( const UI1 id ) {
@@ -1960,6 +2368,10 @@ MASTER_Hashlib_GetAlgorithmOutputSize( const UI1 id ) {
 
 #endif /* #! API !# */
 
+#ifdef MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS
+	const UI4 __MASTER_HASHLIB_INCLUDE_H_LAST_LINE__ = MASTER_LINE + 6;
+#endif /* #! MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS !# */
+
 #endif /* #! __MASTER_HASHLIB_INCLUDE_H__ !# */
 
 /* #! be master~ !# */
@@ -2021,7 +2433,7 @@ drunked_walk( const UI1 * bytes, MASTER_maxint len, char out[9][18] ) {
 int
 main(int argc, char** argv) {
 	MASTER_Hashlib_Context hash;
-	UI1 sum[MASTER_HASHLIB_MAX_DIGEST_SIZE];
+	UI1 sum[MASTER_HASHLIB_MAX_DIGEST_SIZE >> 3];
 #ifndef NODRUNKENWALK
 	UI1 algoused = 0;
 	char * dwnames[MASTER_HASHLIB_MAX_ID + 1];

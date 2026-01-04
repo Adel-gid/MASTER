@@ -11,14 +11,84 @@
 
 #include <master_enum.h>
 
-/* #! Byte Stack !# */
+/* #! Bit Stream !# */
 
+typedef struct {
+	const UI1 * data;
+	UI4 available;
+	UI4 value;
+	UI1 value_bits;
+} MASTER_BitStream;
+
+MASTER_PREFER_EXTERN UI1
+MASTER_BitStream_Grant( MASTER_BitStream * const, const UI1 );
+MASTER_PREFER_EXTERN UI4
+MASTER_BitStream_Peek( MASTER_BitStream * const, const UI1 );
+MASTER_PREFER_EXTERN void
+MASTER_BitStream_Flush( MASTER_BitStream * const, const UI1 );
+MASTER_PREFER_EXTERN void
+MASTER_BitStream_ByteAlign( MASTER_BitStream * const );
+
+UI1
+MASTER_BitStream_Grant( MASTER_BitStream * const stream, const UI1 bits ) {
+	if (stream == nul || stream->data == nul || bits > 32) return 0;
+	while (stream->value_bits < bits && stream->available > 0) {
+		stream->value |= *(stream->data) << stream->value_bits;
+		stream->value_bits += 8;
+		stream->data += 1;
+		stream->available -= 1;
+	}
+	return stream->value_bits >= bits;
+}
+
+UI4
+MASTER_BitStream_Peek( MASTER_BitStream * const stream, const UI1 bits ) {
+	if (stream == nul || stream->data == nul || bits > 32) return 0;
+	return (bits == 32) ? (stream->value) : (stream->value & ((1 << bits) - 1));
+}
+
+void
+MASTER_BitStream_Flush( MASTER_BitStream * const stream, const UI1 bits ) {
+	if (stream == nul || stream->data == nul) return;
+	if (bits >= 32) stream->value = 0;
+	else stream->value >>= bits;
+	if ((SI1)(stream->value_bits -= bits) < 0)
+		stream->value_bits = 0;
+}
+
+void
+MASTER_BitStream_ByteAlign( MASTER_BitStream * const stream ) {
+	if (stream == nul || stream->data == nul) return;
+	stream->value >>= stream->value_bits & 7;
+	stream->value_bits &= ~7;
+}
+
+/* #! Byte Stack !# */
 
 typedef struct {
 	UI1 * byte_buffer;
 	UI4 buffer_capacity;
 	UI4 buffer_position;
 } MASTER_ByteStack;
+
+MASTER_PREFER_EXTERN void
+MASTER_ByteStack_Init( MASTER_ByteStack * const, const UI4 );
+MASTER_PREFER_EXTERN MASTER_ByteStack
+MASTER_ByteStack_Create( const UI4 );
+MASTER_PREFER_EXTERN void
+MASTER_ByteStack_Flush( MASTER_ByteStack * const );
+MASTER_PREFER_EXTERN void
+MASTER_ByteStack_Free( MASTER_ByteStack * const );
+MASTER_PREFER_EXTERN UI1
+MASTER_ByteStack_AddByte( MASTER_ByteStack * const, const UI1 );
+MASTER_PREFER_EXTERN UI1
+MASTER_ByteStack_PopByte( MASTER_ByteStack * const );
+MASTER_PREFER_EXTERN UI1
+MASTER_ByteStack_PopBytes( MASTER_ByteStack * const, const UI4 );
+MASTER_PREFER_EXTERN UI1
+MASTER_ByteStack_PeekByte( MASTER_ByteStack * const, const UI4 );
+MASTER_PREFER_EXTERN UI1
+MASTER_ByteStack_IsEmpty( MASTER_ByteStack * const );
 
 void
 MASTER_ByteStack_Init( MASTER_ByteStack * const bstack, const UI4 capacity ) {
@@ -85,6 +155,103 @@ MASTER_ByteStack_IsEmpty( MASTER_ByteStack * const bstack ) {
 	return bstack->buffer_position == 0;
 }
 
+/* #! Monotonic Stack !# */
+
+#define MASTER_MONOTONICSTACK_DECREASING 0
+#define MASTER_MONOTONICSTACK_INCREASING 1
+
+typedef struct {
+	void * buffer;
+	UI4 buffer_capacity;
+	UI4 buffer_element_size;
+	UI4 buffer_position;
+	UI1 monotone_type;
+} MASTER_MonotonicStack;
+
+MASTER_PREFER_EXTERN void
+MASTER_MonotonicStack_Init( MASTER_MonotonicStack * const, const UI4, const UI4, const UI1 );
+MASTER_PREFER_EXTERN MASTER_MonotonicStack
+MASTER_MonotonicStack_Create( const UI4, const UI4, const UI1 );
+MASTER_PREFER_EXTERN void
+MASTER_MonotonicStack_Flush( MASTER_MonotonicStack * const );
+MASTER_PREFER_EXTERN void
+MASTER_MonotonicStack_Free( MASTER_MonotonicStack * const );
+MASTER_PREFER_EXTERN UI1
+MASTER_MonotonicStack_Pop( MASTER_MonotonicStack * const );
+MASTER_PREFER_EXTERN UI1
+MASTER_MonotonicStack_Insert( MASTER_MonotonicStack * const, const void * );
+MASTER_PREFER_EXTERN UI1
+MASTER_MonotonicStack_Peek( MASTER_MonotonicStack * const, const UI4, void * const );
+MASTER_PREFER_EXTERN UI1
+MASTER_MonotonicStack_IsEmpty( MASTER_MonotonicStack * const );
+
+void
+MASTER_MonotonicStack_Init( MASTER_MonotonicStack * const mstack, const UI4 capacity, const UI4 element_size, const UI1 monotone_type ) {
+	if (mstack == nul) return;
+	mstack->buffer = (UT *)MASTER_MALLOC(capacity * element_size);
+	mstack->buffer_capacity = capacity;
+	mstack->buffer_element_size = element_size;
+	mstack->buffer_position = 0;
+	mstack->monotone_type = monotone_type;
+}
+
+MASTER_MonotonicStack
+MASTER_MonotonicStack_Create( const UI4 capacity, const UI4 element_size, const UI1 monotone_type ) {
+	MASTER_MonotonicStack mstack;
+	mstack.buffer = nul;
+	MASTER_MonotonicStack_Init(&mstack, capacity, element_size, monotone_type);
+	return mstack;
+}
+
+void
+MASTER_MonotonicStack_Flush( MASTER_MonotonicStack * const mstack ) {
+	if (mstack == nul) return;
+	mstack->buffer_position = 0;
+}
+
+void
+MASTER_MonotonicStack_Free( MASTER_MonotonicStack * const mstack ) {
+	if (mstack == nul) return;
+	MASTER_FREE(mstack->buffer);
+}
+
+UI1
+MASTER_MonotonicStack_Pop( MASTER_MonotonicStack * const mstack ) {
+	if (mstack == nul || mstack->buffer_position == 0) return MASTER_ERROR;
+	mstack->buffer_position -= 1;
+	return MASTER_NO_ERROR;
+}
+
+UI1
+MASTER_MonotonicStack_Insert( MASTER_MonotonicStack * const mstack, const void * value ) {
+	if (mstack == nul) return MASTER_ERROR;
+	/* #! Unoptimized !# */
+	while (mstack->buffer_position > 0 && 
+		   MASTER_MEMCMP((UI1 *)mstack->buffer + (mstack->buffer_position - 1) * mstack->buffer_element_size, (UI1 *)value, mstack->buffer_element_size) *
+		   ((mstack->monotone_type == MASTER_MONOTONICSTACK_INCREASING) ? (-1) : (+1)) <= 0)
+		mstack->buffer_position -= 1;
+	if (mstack->buffer_position >= mstack->buffer_capacity) {
+		mstack->buffer_capacity <<= 1;
+		mstack->buffer = (UT *)MASTER_REALLOC(mstack->buffer, mstack->buffer_capacity * mstack->buffer_element_size);
+	}
+	MASTER_MEMCPY((UI1 *)mstack->buffer + mstack->buffer_position * mstack->buffer_element_size, (UI1 *)value, mstack->buffer_element_size);
+	mstack->buffer_position += 1;
+	return MASTER_NO_ERROR;
+}
+
+UI1
+MASTER_MonotonicStack_Peek( MASTER_MonotonicStack * const mstack, const UI4 offset, void * const output_value ) {
+	if (mstack == nul || offset + 1 > mstack->buffer_position) return MASTER_ERROR;
+	MASTER_MEMCPY((UI1 *)output_value, (UI1 *)mstack->buffer + (mstack->buffer_position - offset - 1) * mstack->buffer_element_size, mstack->buffer_element_size);
+	return MASTER_NO_ERROR;
+}
+
+UI1
+MASTER_MonotonicStack_IsEmpty( MASTER_MonotonicStack * const mstack ) {
+	if (mstack == nul) return 0;
+	return mstack->buffer_position == 0;
+}
+
 /* #! Ring Buffer !# */
 
 typedef struct {
@@ -92,6 +259,25 @@ typedef struct {
 	UI4 size;
 	UI4 source;
 } MASTER_RingBuffer;
+
+MASTER_PREFER_EXTERN void
+MASTER_RingBuffer_Flush( MASTER_RingBuffer * const );
+MASTER_PREFER_EXTERN void
+MASTER_RingBuffer_Init( MASTER_RingBuffer * const, UI1 * const, const UI4 );
+MASTER_PREFER_EXTERN MASTER_RingBuffer
+MASTER_RingBuffer_Create( UI1 * const, const UI4 );
+MASTER_PREFER_EXTERN void
+MASTER_RingBuffer_AddByte( MASTER_RingBuffer * const, const UI1 );
+MASTER_PREFER_EXTERN void
+MASTER_RingBuffer_AddBytes( MASTER_RingBuffer * const, const UI1 * bytes, UI4 );
+MASTER_PREFER_EXTERN void
+MASTER_RingBuffer_FlushByte( MASTER_RingBuffer * const );
+MASTER_PREFER_EXTERN void
+MASTER_RingBuffer_FlushBytes( MASTER_RingBuffer * const, const UI4 );
+MASTER_PREFER_EXTERN void
+MASTER_RingBuffer_CopyBytes( MASTER_RingBuffer * const, UI1 *, UI4, UI4 );
+MASTER_PREFER_EXTERN void
+MASTER_RingBuf_CopyAndUpdateBytes( MASTER_RingBuffer * const, UI1 *, const UI4, UI4 );
 
 void
 MASTER_RingBuffer_Flush( MASTER_RingBuffer * const ringbuf ) {
@@ -196,6 +382,9 @@ MASTER_RingBuf_CopyAndUpdateBytes( MASTER_RingBuffer * const ringbuf, UI1 * outp
 	MASTER_RingBuffer_AddBytes(ringbuf, output, length);
 }
 
+#ifdef MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS
+	const UI4 __MASTER_ABSTRACT_INCLUDE_H_LAST_LINE__ = MASTER_LINE + 6;
+#endif /* #! MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS !# */
 
 #endif /* #! __MASTER_ABSTRACT_INCLUDE_H__ !# */
 

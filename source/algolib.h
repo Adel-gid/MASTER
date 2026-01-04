@@ -10,6 +10,190 @@
 #define __MASTER_ALGOLIB_INCLUDE_H__
 
 #include <master_enum.h>
+#include <abstract.h>
+
+MASTER_PREFER_EXTERN UI1
+MASTER_Algolib_IsPrime( const SI4 );
+
+/* #! Tasks from LeetCode !# */
+
+/* #! 4. Median of Two Sorted Arrays !# */ double
+MASTER_Algolib_FindMedianInTwoSortedArrays( const SI4 * const nums1, const SI4 nums1Size, const SI4 * const nums2, const SI4 nums2Size ) {
+    SI4 index;
+    SI4 jndex;
+    SI4 low = 0;
+    SI4 high = nums1Size;
+    SI4 half = (nums1Size + nums2Size + 1) >> 1;
+    SI4 left1;
+    SI4 left2;
+    SI4 right1;
+    SI4 right2;
+    if (nums1Size > nums2Size)
+        return MASTER_Algolib_FindMedianInTwoSortedArrays(nums2, nums2Size, nums1, nums1Size);
+    while (low <= high) {
+        index = (low + high) >> 1;
+        jndex = half - index;
+        left1 = (index <= 0) ? (MASTER_SI4_MIN) : (nums1[index - 1]);
+        right1 = (index >= nums1Size) ? (MASTER_SI4_MAX) : (nums1[index]);
+        left2 = (jndex <= 0) ? (MASTER_SI4_MIN) : (nums2[jndex - 1]);
+        right2 = (jndex >= nums2Size) ? (MASTER_SI4_MAX) : (nums2[jndex]);
+        if (left1 <= right2 && left2 <= right1) {
+            if ((nums1Size + nums2Size) % 2 == 1)
+                return (left1 > left2) ? (left1) : (left2);
+            return (((left1 > left2) ? (left1) : (left2)) + ((right1 < right2) ? (right1) : (right2))) / 2.0;
+        } otherwise (left1 > right2) high = index - 1;
+        else low = index + 1;
+    }
+    /* #! If all correct - unreachable !# */
+    return -1;
+}
+
+/* #! 20. Valid Parentheses !# */ UI1
+MASTER_Algolib_IsValidParentheses( const char * const string ) {
+    const UI4 length = MASTER_CPRLEN(string);
+    char * stack = (char *)MASTER_MALLOC(length);
+    UI4 stack_ptr = 0;
+    UI4 index = 0;
+    for (; index < length; index += 1) {
+        if (string[index] == '(' || string[index] == '[' || string[index] == '{') {
+            stack[stack_ptr] = string[index];
+            stack_ptr += 1;
+        } else {
+            if (stack_ptr == 0) goto failure;
+            stack_ptr -= 1;
+            if (string[index] - stack[stack_ptr] != 1 && 
+                string[index] - stack[stack_ptr] != 2) {
+                free(stack);
+                return 0;
+            }
+        }
+    }
+    MASTER_FREE(stack);
+    return stack_ptr == 0;
+failure :
+    MASTER_FREE(stack);
+    return 0;
+}
+
+
+/* #! 41. First Missing Positive !# */ SI4
+MASTER_Algolib_FindMissingPositive( SI4 * const nums, const UI4 numsSize ) {
+    SI4 value;
+    UI4 index = 0;
+    UI4 correct_index;
+    for (; index < numsSize; index += 1) {
+        value = nums[index];
+        while (value > 0 && (UI4)value < numsSize && value != nums[value - 1]) {
+            correct_index = value - 1;
+            value = nums[correct_index];
+            nums[correct_index] = nums[index];
+            nums[index] = value;
+            value = nums[index];
+        }
+    }
+    for (index = 0; index < numsSize; index += 1) {
+        if (nums[index] != (SI4)index + 1)
+            return index + 1;
+    }
+    return numsSize + 1;
+}
+
+/* #! 69. Sqrt(x) !# */ SI4
+MASTER_Algolib_FloorSqrt( const SI4 value ) {
+	SI4 estimate = value;
+	SI4 quotient;
+	if (value <= 0) return 0;
+	while (estimate > value / estimate) {
+		quotient = value / estimate;
+		estimate = (estimate >> 1) + (quotient >> 1) + (((estimate & 1) + (quotient & 1)) >> 1);
+	}
+	return estimate;
+}
+
+/* #! 231. Power of Two !# */ UI1
+MASTER_Algolib_IsPowerOfTwo( const SI4 value ) {
+    return MASTER_ISPOW2(value);
+}
+
+/* #! 342. Power of Four !# */ UI1
+MASTER_Algolib_IsPowerOfFour( const SI4 value ) {
+    return MASTER_ISPOW4(value);
+}
+
+/* #! 961. N-Repeated Element in Size 2N Array !# */ SI4
+MASTER_Algolib_RepeatedNTimes( const SI4 * const numbers, const UI4 number_count ) {
+	UI4 index = 0;
+	if (numbers[0] == numbers[number_count - 1])
+		return numbers[0];
+	for (; index + 2 < number_count; index += 3) {
+		if (numbers[index] == numbers[index + 1] || numbers[index] == numbers[index + 2])
+			return numbers[index];
+		if (numbers[index + 1] == numbers[index + 2])
+			return numbers[index + 1];
+	}
+	if (numbers[number_count - 3] == numbers[number_count - 2] || numbers[number_count - 3] == numbers[number_count - 1])
+		return numbers[number_count - 3];
+	if (numbers[number_count - 2] == numbers[number_count - 1])
+		return numbers[number_count - 2];
+	/* #! If all correct - unreachable !# */
+	return 0;
+}
+
+/* #! 1390. Four Divisors !# */ UI4
+sumFourDivisors( const UI4 * numbers, const UI4 number_count ) {
+    UI4 sum_of_divs = 0;
+    UI4 divisor_p;
+    UI4 divisor_q;
+    UI1 is_prime_p;
+    UI4 index = 0;
+    UI4 iterat;
+    UI4 root;
+    for (; index < number_count; index += 1) {
+        if (numbers[index] < 6) continue;
+        divisor_p = 0;
+        if (numbers[index] % 2 == 0) divisor_p = 2;
+        else {
+            root = MASTER_Algolib_FloorSqrt(numbers[index]);
+            for (iterat = 3; iterat <= root; iterat += 2)
+                if (numbers[index] % iterat == 0) {
+                    divisor_p = iterat;
+                    break;
+                }
+        }
+        if (divisor_p != 0) {
+            divisor_q = numbers[index] / divisor_p;
+            if (divisor_p == divisor_q) continue;
+            is_prime_p = MASTER_Algolib_IsPrime(divisor_p);
+            if (divisor_p * divisor_p == divisor_q && is_prime_p)
+                sum_of_divs += 1 + divisor_p + divisor_p * divisor_p + numbers[index];
+            otherwise (is_prime_p && MASTER_Algolib_IsPrime(divisor_q))
+                sum_of_divs += 1 + divisor_p + divisor_q + numbers[index];
+        }
+    }
+    return sum_of_divs;
+}
+
+/* #! 1411. Number of Ways to Paint N × 3 Grid !# */ SI4
+MASTER_Algolib_NumberOfWaysToPaintN3Grid( const UI4 row_count ) {
+	const UI4 modulo = 1000000007;
+    UI4 prevA = 6;
+    UI4 prevB = 6;
+    UI4 curA;
+    UI4 curB;
+    UI4 summ;
+    UI4 index = 1;
+	if (row_count == 0) return 0;
+    for (; index < row_count; index += 1) {
+        curA = ((prevA * 3) % modulo + (prevB * 2) % modulo) % modulo;
+        curB = ((prevA * 2) % modulo + (prevB * 2) % modulo) % modulo;
+        prevA = curA;
+        prevB = curB;
+    }
+    summ = (prevA + prevB) % modulo;
+    return summ;
+}
+
+/* #! Check Algorithms !# */
 
 UI1
 MASTER_Algolib_CheckBrackets( const char * const string ) {
@@ -39,6 +223,42 @@ failure :
 	return 0;
 }
 
+UI1
+MASTER_Algolib_IsPrime( const SI4 value ) {
+    SI4 iterat = 5;
+    SI4 limit;
+    if (value <= 1) return 0;
+    if (value <= 3) return 1;
+    if ((value & 1) == 0 || value % 3 == 0) return 0;
+    limit = MASTER_Algolib_FloorSqrt(value);
+    for (; iterat <= limit; iterat += 6)
+        if (value % iterat == 0 || value % (iterat + 2) == 0) return 0;
+    return 1;
+}
+
+/* #! Some Algorithms !# */
+
+UI1
+MASTER_Algolib_CalculateSpan( const UI4 * const array, UI4 * const output, const UI4 length ) {
+	UI4 * mstack;
+	UI4 mstack_pos = 0;
+	UI4 index = 0;
+	if (array == nul || output == nul || length == 0) return MASTER_ERROR;
+	mstack = (UI4 *)MASTER_MALLOC(length * sizeof(UI4));
+	for (; index < length; index += 1) {
+		while (mstack_pos > 0 && array[mstack[mstack_pos - 1]] <= array[index]) {
+			mstack_pos -= 1;
+			mstack[mstack_pos] = 0;
+		}
+		if (mstack_pos == 0) output[index] = index + 1;
+		else output[index] = index - mstack[mstack_pos - 1];
+		mstack[mstack_pos] = index;
+		mstack_pos += 1;
+	}
+	MASTER_FREE(mstack);
+	return MASTER_NO_ERROR;
+}
+
 /* #! Dancing Links !# */
 
 typedef struct MASTER_Algolib_Cell MASTER_Algolib_Cell;
@@ -56,14 +276,19 @@ struct MASTER_Algolib_Cell {
 };
 
 typedef struct {
-	struct MASTER_Algolib_Cell** column_table;
-	struct MASTER_Algolib_Cell** row_table;
+	MASTER_Algolib_Cell** column_table;
+	MASTER_Algolib_Cell** row_table;
 	UI4 column_count;
 	UI4 row_count;
 	UI4 column_capacity;
 	UI4 row_capacity;
 	struct MASTER_Algolib_Cell * root_cell;
 } MASTER_Algolib_DancingLinks;
+
+typedef void(*MASTER_Algolib_DancingLinks_FoundType)( void );
+typedef void(*MASTER_Algolib_DancingLinks_StuckedType)( const UI4 );
+typedef void(*MASTER_Algolib_DancingLinks_TryingType)( const UI4, const UI4, const UI4 );
+typedef void(*MASTER_Algolib_DancingLinks_UndoType)( const UI4, const UI4, const UI4 );
 
 #define MASTER_ALGOLIB_CELL_DELETE_VERTI( cur_cell ) do { \
 		(cur_cell)->up_cell->down_cell = (cur_cell)->down_cell; \
@@ -286,11 +511,6 @@ MASTER_Algolib_DancingLinks_Uncover( MASTER_Algolib_Cell * const column_cell ) {
 	MASTER_ALGOLIB_CELL_REINSTATE_HORIZ(column_cell);
 }
 
-typedef void(*MASTER_Algolib_DancingLinks_FoundType)( void );
-typedef void(*MASTER_Algolib_DancingLinks_StuckedType)( const UI4 );
-typedef void(*MASTER_Algolib_DancingLinks_TryingType)( const UI4, const UI4, const UI4 );
-typedef void(*MASTER_Algolib_DancingLinks_UndoType)( const UI4, const UI4, const UI4 );
-
 void
 MASTER_Algolib_DancingLinks_Solve( MASTER_Algolib_DancingLinks * const dancing_links, const MASTER_Algolib_DancingLinks_FoundType found_func, const MASTER_Algolib_DancingLinks_StuckedType stucked_func, const MASTER_Algolib_DancingLinks_TryingType trying_func, const MASTER_Algolib_DancingLinks_UndoType undo_func ) {
 	MASTER_Algolib_Cell * column_cell;
@@ -374,6 +594,10 @@ MASTER_Algolib_DancingLinks_RemoveRow( MASTER_Algolib_DancingLinks * const danci
 	}
 	return MASTER_NO_ERROR;
 }
+
+#ifdef MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS
+	const UI4 __MASTER_ALGOLIB_INCLUDE_H_LAST_LINE__ = MASTER_LINE + 6;
+#endif /* #! MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS !# */
 
 #endif /* #! __MASTER_ALGOLIB_INCLUDE_H__ !# */
 

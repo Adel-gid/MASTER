@@ -12,7 +12,30 @@
 #include <master_enum.h>
 
 #ifdef MASTER_CHECKSUM_EXTERN_ONLY
-	#define MASTER_CHECKSUM_ADLER32_EXTERN_ONLY
+#	define MASTER_CHECKSUM_ADLER32_IMPLEMENT 0
+#	define MASTER_CHECKSUM_API_IMPLEMENT 0
+#else
+#	define MASTER_CHECKSUM_API_IMPLEMENT 1
+#	if defined(MASTER_CHECKSUM_ADLER32_USE)
+#		define MASTER_CHECKSUM_WHITELIST_MODE 1
+#	else
+#		define MASTER_CHECKSUM_WHITELIST_MODE 0
+#	endif /* #! Whitelist Setting !# */
+#	ifdef MASTER_CHECKSUM_ADLER32_EXTERN
+#		define MASTER_CHECKSUM_ADLER32_IMPLEMENT 0
+#		ifdef MASTER_CHECKSUM_ADLER32_USE
+#			warning "Adler32 is defined to USE, but also defined to EXTERN. Adler32 will NOT be compiled."
+#		endif /* #! Adler32 Conflict of Use & Extern !# */
+#	elif MASTER_CHECKSUM_WHITELIST_MODE == 1
+#		ifdef MASTER_CHECKSUM_ADLER32_USE
+#			define MASTER_CHECKSUM_ADLER32_IMPLEMENT 1
+#		else
+#			define MASTER_CHECKSUM_ADLER32_IMPLEMENT 0
+#		endif /* #! Adler32 Use !# */
+#	else
+#		define MASTER_CHECKSUM_ADLER32_IMPLEMENT 1
+#	endif /* #! Adler32 !# */
+#	undef MASTER_CHECKSUM_WHITELIST_MODE
 #endif /* #! MASTER_CHECKSUM_EXTERN_ONLY !# */
 
 #define MASTER_CHECKSUM_ADLER32_ID 0
@@ -35,16 +58,18 @@ typedef struct {
 MASTER_PREFER_EXTERN MASTER_Checksum_Adler32_Context
 MASTER_Checksum_Adler32_Create( void );
 MASTER_PREFER_EXTERN void
-MASTER_Checksum_Adler32_Init( MASTER_Checksum_Adler32_Context * const adler32c );
+MASTER_Checksum_Adler32_Init( MASTER_Checksum_Adler32_Context * const );
 #define MASTER_Checksum_Adler32_Flush MASTER_Checksum_Adler32_Init
 MASTER_PREFER_EXTERN void
-MASTER_Checksum_Adler32_Update( MASTER_Checksum_Adler32_Context * const adler32c, const void * bytes, MASTER_maxint len );
+MASTER_Checksum_Adler32_Update( MASTER_Checksum_Adler32_Context * const, const void *, MASTER_maxint );
 MASTER_PREFER_EXTERN UI4
-MASTER_Checksum_Adler32_Finish( MASTER_Checksum_Adler32_Context * const adler32c, UI1 * const out );
+MASTER_Checksum_Adler32_Finish( MASTER_Checksum_Adler32_Context * const, UI1 * const );
 MASTER_PREFER_EXTERN UI4
-MASTER_Checksum_Adler32_Calculate( const void * const bytes, const MASTER_maxint len, UI1 * const out );
+MASTER_Checksum_Adler32_Calculate( const void * const, const MASTER_maxint, UI1 * const );
+MASTER_PREFER_EXTERN UI1
+MASTER_Checksum_Adler32_Combine( MASTER_Checksum_Adler32_Context * const, const MASTER_Checksum_Adler32_Context * const, const MASTER_Checksum_Adler32_Context * const, const UI4 );
 
-#ifndef MASTER_HASHLIB_ADLER32_EXTERN_ONLY
+#if MASTER_CHECKSUM_ADLER32_IMPLEMENT == 1
 
 MASTER_Checksum_Adler32_Context
 MASTER_Checksum_Adler32_Create( void ) {
@@ -59,6 +84,7 @@ MASTER_Checksum_Adler32_Init( MASTER_Checksum_Adler32_Context * const adler32c )
 	adler32c->checksum = 1;
 }
 
+/* #! Naive !# */
 void
 MASTER_Checksum_Adler32_Update( MASTER_Checksum_Adler32_Context * const adler32c, const void * bytes, MASTER_maxint len ) {
 	UI4 part1;
@@ -91,7 +117,18 @@ MASTER_Checksum_Adler32_Calculate( const void * const bytes, const MASTER_maxint
 	return MASTER_Checksum_Adler32_Finish(&adler32c, out);
 }
 
-#endif /* #! MASTER_HASHLIB_ADLER32_EXTERN_ONLY !# */
+UI1
+MASTER_Checksum_Adler32_Combine( MASTER_Checksum_Adler32_Context * const adler32cout, const MASTER_Checksum_Adler32_Context * const adler32c1, const MASTER_Checksum_Adler32_Context * const adler32c2, const UI4 length2 ) {
+	UI4 state1;
+	UI4 state2;
+	if (adler32cout == nul || adler32c1 == nul || adler32c2 == nul) return MASTER_ERROR;
+	state1 = (adler32c1->checksum & 0xFFFF) + (adler32c2->checksum & 0xFFFF) - 1;
+	state2 = ((adler32c1->checksum >> 16) & 0xFFFF) + ((adler32c2->checksum >> 16) & 0xFFFF) + 65521 + ((adler32c1->checksum & 0xFFFF) - 1) * (length2 % 65521);
+	adler32cout->checksum = ((state2 % 65521) << 16) | (state1 % 65521);
+	return MASTER_NO_ERROR;
+}
+
+#endif /* #! Adler32 !# */
 
 /* #! API !# */
 
@@ -106,23 +143,23 @@ typedef struct {
 } MASTER_Checksum_Context;
 
 MASTER_PREFER_EXTERN MASTER_Checksum_Context
-MASTER_Checksum_Create( const UI1 id );
+MASTER_Checksum_Create( const UI1 );
 MASTER_PREFER_EXTERN void
-MASTER_Checksum_Init( MASTER_Checksum_Context * const checksum, const UI1 id );
+MASTER_Checksum_Init( MASTER_Checksum_Context * const, const UI1 );
 MASTER_PREFER_EXTERN void
-MASTER_Checksum_Flush( MASTER_Checksum_Context * const checksum );
+MASTER_Checksum_Flush( MASTER_Checksum_Context * const );
 MASTER_PREFER_EXTERN void
-MASTER_Checksum_Update( MASTER_Checksum_Context * const checksum, const void * const bytes, const MASTER_maxint len );
+MASTER_Checksum_Update( MASTER_Checksum_Context * const, const void * const, const MASTER_maxint );
 MASTER_PREFER_EXTERN UI4
-MASTER_Checksum_Finish( MASTER_Checksum_Context * const checksum, UI1 * const out );
+MASTER_Checksum_Finish( MASTER_Checksum_Context * const, UI1 * const );
 MASTER_PREFER_EXTERN UI4
-MASTER_Checksum_Calculate( const UI1 id, const void * const bytes, const MASTER_maxint len, UI1 * const out );
+MASTER_Checksum_Calculate( const UI1, const void * const, const MASTER_maxint, UI1 * const );
 MASTER_PREFER_EXTERN const char *
-MASTER_Checksum_GetAlgorithmName( const UI1 id );
+MASTER_Checksum_GetAlgorithmName( const UI1 );
 MASTER_PREFER_EXTERN MASTER_maxint
-MASTER_Checksum_GetAlgorithmOutputSize( const UI1 id );
+MASTER_Checksum_GetAlgorithmOutputSize( const UI1 );
 
-#ifndef MASTER_CHECKSUM_API_EXTERN_ONLY
+#if MASTER_CHECKSUM_API_IMPLEMENT == 1
 
 MASTER_Checksum_Context
 MASTER_Checksum_Create( const UI1 id ) {
@@ -221,7 +258,11 @@ MASTER_Checksum_GetAlgorithmOutputSize( const UI1 id ) {
 	}
 }
 
-#endif /* #! MASTER_HASHLIB_API_EXTERN_ONLY !# */
+#endif /* #! API !# */
+
+#ifdef MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS
+	const UI4 __MASTER_CHECKSUM_INCLUDE_H_LAST_LINE__ = MASTER_LINE + 6;
+#endif /* #! MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS !# */
 
 #endif /* #! __MASTER_HASHLIB_INCLUDE_H__ !# */
 

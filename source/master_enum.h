@@ -9,7 +9,35 @@
 #ifndef __MASTER_CODE_STYLE_INCLUDE_H__
 #define __MASTER_CODE_STYLE_INCLUDE_H__
 
-#define MASTER_VERSION (((27) << 18) | ((12) << 14) | (2025))
+#define MASTER_VERSION (((5) << 18) | ((1) << 14) | (2026))
+
+/* #! MASTER Minimal Package !# */
+
+typedef unsigned char UI1;
+typedef unsigned short UI2;
+typedef unsigned int UI4;
+typedef signed char SI1;
+typedef signed short SI2;
+typedef signed int SI4;
+
+/* #! MASTER Syntax !# */
+
+#define otherwise else if
+#define nul 0
+
+/* #! MASTER Predefined Macroses !# */
+
+/* #!! K&R !!# */
+#define MASTER_LINE __LINE__
+#define MASTER_FILE __FILE__
+
+/* #!! C89 !!# */
+#define MASTER_DATE __DATE__
+#define MASTER_TIME __TIME__
+#define MASTER_STDC __STDC__
+
+/* #!! C99 !!# */
+#define MASTER_FUNC __func__
 
 /* #! MASTER Generalization Of Macroses !# */
 
@@ -40,7 +68,7 @@
 
 #ifndef MASTER_64_AVAILABLE
 #	ifdef __cplusplus
-#		if __cplusplus >= 201103L
+#		if __cplusplus + 0 >= 201103L
 			typedef unsigned long long MASTER_maxint;
 #			define MASTER_64_AVAILABLE 1
 #		else
@@ -52,7 +80,7 @@
 #		if defined(ULLONG_MAX)
 			typedef unsigned __MASTER_PREFER_LONGLONG MASTER_maxint;
 #			define MASTER_64_AVAILABLE __MASTER_PREFER_64
-#		elif defined(ULONG_MAX) && (ULONG_MAX >= 0xFFFFFFFFFFFFFFFFULL)
+#		elif defined(ULONG_MAX) && (ULONG_MAX + 0 >= 0xFFFFFFFFFFFFFFFFULL)
 			typedef unsigned long MASTER_maxint;
 #			define MASTER_64_AVAILABLE __MASTER_PREFER_64
 #		else
@@ -85,7 +113,7 @@
 #				define MASTER_64_AVAILABLE 0
 #			else
 #				include <limits.h>
-#				if defined(ULONG_MAX) && (ULONG_MAX >= 0xFFFFFFFFFFFFFFFFULL)
+#				if defined(ULONG_MAX) && (ULONG_MAX + 0 >= 0xFFFFFFFFFFFFFFFFULL)
 					typedef unsigned __MASTER_PREFER_LONGLONG MASTER_maxint;
 #					define MASTER_64_AVAILABLE __MASTER_PREFER_64
 #				elif defined(ULONG_MAX) && (ULONG_MAX >= 0xFFFFFFFFUL)
@@ -104,10 +132,6 @@
 #	define MASTER_UI8_TYPE unsigned long long int
 #	define MASTER_SI8_TYPE signed long long int
 #endif /* #! MASTER_64_AVAILABLE !# */
-
-typedef unsigned char UI1;
-typedef unsigned short UI2;
-typedef unsigned int UI4;
 
 #ifdef MASTER_UI8_TYPE
 	typedef MASTER_UI8_TYPE UI8;
@@ -143,10 +167,6 @@ typedef unsigned int UI4;
 #	define MASTER_UI128_ARRAY_TYPE 1
 	typedef UI4 UI128[32];
 #endif /* #! UI128 Type !# */
-
-typedef signed char SI1;
-typedef signed short SI2;
-typedef signed int SI4;
 
 #ifdef MASTER_SI8_TYPE
 	typedef MASTER_SI8_TYPE SI8;
@@ -195,7 +215,7 @@ typedef UI4 UT;
 #define MASTER_SI8_POSTFIX_C( value ) value##LL
 #define MASTER_UI8_POSTFIX_C( value ) value##ULL
 
-#if !defined(__STDC_VERSION__) || __STDC_VERSION__ < 199001L
+#if !defined(__STDC_VERSION__) || __STDC_VERSION__ + 0 < 199001L
 #	define MASTER_CONSTANT( constant ) MASTER_UI4_POSTFIX_C( constant )
 #else
 #	define MASTER_CONSTANT( constant ) MASTER_UI8_POSTFIX_C( constant )
@@ -205,11 +225,19 @@ typedef UI4 UT;
 #define MASTER_UI2_BITS (sizeof(UI2) << 3)
 #define MASTER_UI4_BITS (sizeof(UI4) << 3)
 #define MASTER_UI8_BITS (sizeof(UI8) << 3)
+#define MASTER_UI16_BITS (sizeof(UI16) << 3)
+#define MASTER_UI32_BITS (sizeof(UI32) << 3)
+#define MASTER_UI64_BITS (sizeof(UI64) << 3)
+#define MASTER_UI128_BITS (sizeof(UI128) << 3)
 
 #define MASTER_SI1_BITS (sizeof(SI1) << 3)
 #define MASTER_SI2_BITS (sizeof(SI2) << 3)
 #define MASTER_SI4_BITS (sizeof(SI4) << 3)
 #define MASTER_SI8_BITS (sizeof(SI8) << 3)
+#define MASTER_SI16_BITS (sizeof(SI16) << 3)
+#define MASTER_SI32_BITS (sizeof(SI32) << 3)
+#define MASTER_SI64_BITS (sizeof(SI64) << 3)
+#define MASTER_SI128_BITS (sizeof(SI128) << 3)
 
 #define MASTER_SI1_MIN (SI1)(MASTER_CONSTANT(1) << (MASTER_SI1_BITS - 1))
 #define MASTER_SI1_MAX (SI1)(MASTER_SI1_MIN - 1)
@@ -217,26 +245,27 @@ typedef UI4 UT;
 #define MASTER_SI2_MAX (SI2)(MASTER_SI2_MIN - 1)
 #define MASTER_SI4_MIN (SI4)(MASTER_CONSTANT(1) << (MASTER_SI4_BITS - 1))
 #define MASTER_SI4_MAX (SI4)((UI4)MASTER_SI4_MIN - MASTER_SI4_POSTFIX_C(1))
+#ifdef MASTER_SI8_TYPE
+#	define MASTER_SI8_MIN (SI8)(MASTER_CONSTANT(1) << (MASTER_SI8_BITS - 1))
+#	define MASTER_SI8_MAX (SI8)((UI8)MASTER_SI4_MIN - MASTER_SI8_POSTFIX_C(1))
+#endif /* #! SI8 !# */
 
 #define MASTER_UI1_MIN (UI1)0
 #define MASTER_UI1_MAX (UI1)(MASTER_UI1_MIN - 1)
 #define MASTER_UI2_MIN (UI2)0
 #define MASTER_UI2_MAX (UI2)(MASTER_UI2_MIN - 1)
-#define MASTER_UI4_MIN (UI4)MASTER_UI4_POSTFIX_C(0)
+#define MASTER_UI4_MIN (UI4)MASTER_CONSTANT(0)
 #define MASTER_UI4_MAX (UI4)(MASTER_UI4_MIN - MASTER_UI4_POSTFIX_C(1))
+#ifdef MASTER_UI8_TYPE
+#	define MASTER_UI8_MIN (UI8)MASTER_CONSTANT(0)
+#	define MASTER_UI8_MAX (UI8)(MASTER_UI8_MIN - MASTER_UI8_POSTFIX_C(1))
+#endif /* #! UI8 !# */
 
 #define MASTER_OUI_BITS (sizeof(OUI) << 3)
 #define MASTER_OSI_BITS (sizeof(OSI) << 3)
 #define MASTER_UT_BITS (sizeof(UT) << 3)
 
 #define MASTER_MAXINT_BITS (sizeof(MASTER_maxint) << 3)
-
-#if MASTER_64_AVAILABLE == 1
-#	define MASTER_SI8_MAX (SI8)MASTER_SI8_POSTFIX_C(0x7FFFFFFFFFFFFFFF)
-#	define MASTER_SI8_MIN (SI8)MASTER_SI8_POSTFIX_C(0x8000000000000000)
-#	define MASTER_UI8_MAX (UI8)MASTER_UI8_POSTFIX_C(0xFFFFFFFFFFFFFFFF)
-#	define MASTER_UI8_MIN (UI8)MASTER_UI8_POSTFIX_C(0)
-#endif /* #! MASTER_64_AVAILABLE !# */
 
 /* #! compiler trash !# */
 
@@ -246,13 +275,21 @@ typedef UI4 UT;
 #define MASTER_SUPPORT_STATE( nivel ) (nivel)
 
 #ifndef MASTER_COMPILER_SETTINGS
-#	if !defined(MASTER_NO_COMPILER_SETTINGS_DEPENDENCY) && defined(MASTER_PREFER_USE_COMPILER_SETTING) && 0
+#	if !defined(MASTER_NO_COMPILER_SETTINGS_DEPENDENCY) && 0
 		/* #! todo !# */
 		/* #! #include <compiler_settings.h> !# */
 #	else
-#		define MASTER_PREFER_CONST
-#		define MASTER_PREFER_INLINE
-#		define MASTER_PREFER_STATIC
+#		define MASTER_PREFER_CONST const
+#		ifdef __cplusplus
+#			define MASTER_PREFER_INLINE inline
+#		else
+#			if defined(__STDC_VERSION__) && __STDC_VERSION__ + 0 >= 199901L
+#				define MASTER_PREFER_INLINE inline
+#			else
+#				define MASTER_PREFER_INLINE
+#			endif /* #! C99+ !# */
+#		endif /* #! C++ !# */
+#		define MASTER_PREFER_STATIC static
 #		ifdef __cplusplus
 #			define MASTER_PREFER_EXTERN extern
 #		else
@@ -260,40 +297,52 @@ typedef UI4 UT;
 #		endif /* #! C++ !# */
 #		define MASTER_PREFER_HOT
 #		define MASTER_PREFER_COLD
+#		define MASTER_PREFER_VISIBLE
 #		define MASTER_PREFER_HIDDEN
-#		define MASTER_PREFER_UNUSED
-#		define MASTER_PREFER_DEPRECATED
+#		if defined(__cplusplus) || (defined(__STDC_VERSION__) && __STDC_VERSION__ + 0 >= 202311L)
+#			define MASTER_PREFER_UNUSED [[maybe_unused]]
+#		else 
+#			define MASTER_PREFER_UNUSED
+#		endif /* #! C++ / C23+ !# */
+#		if defined(__cplusplus) || (defined(__STDC_VERSION__) && __STDC_VERSION__ + 0 >= 201710L)
+#			define MASTER_PREFER_DEPRECATED [[deprecated]]
+#		else 
+#			define MASTER_PREFER_DEPRECATED
+#		endif /* #! C++ / C17+ !# */
 #		define MASTER_COMPILER_SETTINGS 0
-#	endif /* #! MASTER_PREFER_USE_COMPILER_SETTING !# */
+#	endif /* #! Compiler / Standard !# */
 #endif /* #! MASTER_COMPILER_SETTINGS !# */
+#define MASTER_PREFER_EXTERN_STATIC MASTER_PREFER_STATIC
 
 #ifdef __cplusplus
 #	define MASTER_C_STANDARD 0
-#	if __cplusplus >= 202302L
+#	if __cplusplus + 0 >= 202302L
 #		define MASTER_CPP_STANDARD 2023
-#	elif __cplusplus >= 202002L
+#	elif __cplusplus + 0 >= 202002L
 #		define MASTER_CPP_STANDARD 2020
-#	elif __cplusplus >= 201703L
+#	elif __cplusplus + 0 >= 201703L
 #		define MASTER_CPP_STANDARD 2017
-#	elif __cplusplus >= 201402L
+#	elif __cplusplus + 0 >= 201402L
 #		define MASTER_CPP_STANDARD 2014
-#	elif __cplusplus >= 201103L
+#	elif __cplusplus + 0 >= 201103L
 #		define MASTER_CPP_STANDARD 2011
-#	elif __cplusplus >= 199711L
+#	elif __cplusplus + 0 >= 199711L
+#		define MASTER_CPP_STANDARD 1997
+#	else
 #		define MASTER_CPP_STANDARD 1997
 #	endif /* #! __cplusplus !# */
 #elif defined(__STDC__)
 #	define MASTER_CPP_STANDARD 0
 #	if defined(__STDC_VERSION__)
-#		if __STDC_VERSION__ >= 202311L
+#		if __STDC_VERSION__ + 0 >= 202311L
 #			define MASTER_C_STANDARD 2023
-#		elif __STDC_VERSION__ >= 201710L
+#		elif __STDC_VERSION__ + 0 >= 201710L
 #			define MASTER_C_STANDARD 2017
-#		elif __STDC_VERSION__ >= 201112L
+#		elif __STDC_VERSION__ + 0 >= 201112L
 #			define MASTER_C_STANDARD 2011
-#		elif __STDC_VERSION__ >= 199901L
+#		elif __STDC_VERSION__ + 0 >= 199901L
 #			define MASTER_C_STANDARD 1999
-#		elif __STDC_VERSION__ >= 199409L
+#		elif __STDC_VERSION__ + 0 >= 199409L
 #			define MASTER_C_STANDARD 1994
 #		else
 #			define MASTER_C_STANDARD 1990
@@ -439,30 +488,29 @@ const char * const MASTER_error_codes[] = {
 #	define MASTER_FREE( __ptr ) free(__ptr)
 #endif /* #! MASTER_MEMORY_SAFE !# */
 
-/* #! MASTER Syntax !# */
-
-#define otherwise else if
-#define nul 0
-
 /* #! MASTER Code Manipulations !# */
 
 #define MASTER_REPEAT2( code ) code code
 #define MASTER_REPEAT3( code ) code code code
 #define MASTER_REPEAT4( code ) code code code code
+#define MASTER_REPEAT5( code ) code code code code code
 #define MASTER_CODE_REPEAT2( code ) code; code
 #define MASTER_CODE_REPEAT3( code ) code; code; code
 #define MASTER_CODE_REPEAT4( code ) code; code; code; code
+#define MASTER_CODE_REPEAT5( code ) code; code; code; code; code
 #define MASTER_DO_CODE_REPEAT2( code ) do { MASTER_REPEAT2(code); } while (0)
 #define MASTER_DO_CODE_REPEAT3( code ) do { MASTER_REPEAT3(code); } while (0)
 #define MASTER_DO_CODE_REPEAT4( code ) do { MASTER_REPEAT4(code); } while (0)
+#define MASTER_DO_CODE_REPEAT5( code ) do { MASTER_REPEAT5(code); } while (0)
 #define MASTER_XMACRO_CREATE_ENUM( name, value, Unused3_ ) name = value,
-#define MASTER_XMACRO_CASE_STRING( name, Unused2_, string ) case name: return string;
+#define MASTER_XMACRO_CASE_STRING( name, Unused2_, string ) case name : return string;
 #define MASTER_XMACRO_CREATE_NAME_ARRAY( name, Unused2_, Unused3_ ) #name,
 #define MASTER_XMACRO_CREATE_VALUE_DICTIONARY( name, value, Unused3_ ) #name " : " #value,
 #define MASTER_XMACRO_CREATE_STRING_DICTIONARY( name, Unused2_, string ) #name " : " #string,
 #define MASTER_ERRORRISE ;!@;
 #define MASTER_NOTHING ;
 #define MASTER_TO_BOOL( expression ) (!!(expression))
+#define MASTER_STATIC_ASSERT( expression ) (void)(sizeof(char [1 - 2 * !(expression)]))
 
 /* #! MASTER Checks !# */
 
@@ -493,20 +541,6 @@ const char * const MASTER_error_codes[] = {
 #		define __MASTER_CHECK_NUL_ASSERT( pointer ) MASTER_ASSERT_IF_NUL(pointer)
 #	endif /* #! MASTER_ENABLE_ASSERTIONS !# */
 #endif /* #! MASTER_DONT_CHECK_NUL_OPERANDS !# */
-
-/* #! MASTER Predefined Macroses !# */
-
-/* #!! K&R !!# */
-#define MASTER_LINE __LINE__
-#define MASTER_FILE __FILE__
-
-/* #!! C89 !!# */
-#define MASTER_DATE __DATE__
-#define MASTER_TIME __TIME__
-#define MASTER_STDC __STDC__
-
-/* #!! C99 !!# */
-#define MASTER_FUNC __func__
 
 /* #! MASTER Argument List Macroses !# */
 
@@ -618,6 +652,7 @@ const char * const MASTER_error_codes[] = {
 
 /* #! MASTER String !# */
 
+/* #! TODO : Use !# */
 #ifndef MASTER_USE_LONG_STRING
 	typedef char MASTER_char;
 #	define MASTER_CHAR( character ) character
@@ -629,6 +664,7 @@ const char * const MASTER_error_codes[] = {
 #endif /* #! MASTER_USE_LONG_STRING !# */
 
 #define MASTER_STRINGIFY( string ) #string
+#define MASTER_STRINGIFY_FALL( string ) MASTER_STRINGIFY(string)
 #define MASTER_CONCAT( string1, string2 ) string1##string2
 #define MASTER_CONCAT3( string1, string2, string3 ) string1##string2##string3
 #define MASTER_CONCAT4( string1, string2, string3, string4 ) string1##string2##string3##string4
@@ -658,6 +694,7 @@ const char * const MASTER_error_codes[] = {
 #define MASTER_IMIN3( value1, value2, value3 ) (value1) = MASTER_MIN3(value1, value2, value3)
 #define MASTER_IMIN4( value1, value2, value3, value4 ) (value1) = MASTER_MIN4(value1, value2, value3, value4)
 #define MASTER_CLAMP( value, min_value, max_value ) MASTER_MAX(min_value, MASTER_MIN(max_value, value))
+#define MASTER_ICLAMP( value, min_value, max_value ) (value) = MASTER_CLAMP(value, min_value, max_value)
 #define MASTER_ABS( value ) (((value) < 0) ? (-(value)) : (value))
 #define MASTER_ABS_BRANCHLESS( value ) (((value) + ((value) >> (sizeof(value) * 8 - 1))) - ((value) >> (sizeof(value) * 8 - 1)))
 #define MASTER_SIGN( value ) ((value > 0) - (value < 0))
@@ -802,10 +839,10 @@ MASTER_DEFINE_FUNCTION1(
 
 #endif /* #! MASTER_64_AVAILABLE !# */
 
-#define __MASTER_BITLEN_MACROS_PROCESS( value, bitcount, bits, cast_type ) do { \
-		if ((value) >= ((cast_type)1 << bits)) { \
-			(bitcount) += bits; \
-			(value) >>= bits; \
+#define __MASTER_BITLEN_MACROS_PROCESS( value, bitcount, bit_count, cast_type ) do { \
+		if ((value) >= ((cast_type)1 << (bit_count))) { \
+			(bitcount) += (bit_count); \
+			(value) >>= (bit_count); \
 		} \
 	} while (0)
 
@@ -911,29 +948,29 @@ MASTER_DEFINE_FUNCTION1(
 #		define MASTER_LOG2ROUND8( value ) (((value) < (MASTER_POW2FLOOR8(value) | (MASTER_POW2FLOOR8(value) >> 1))) ? (MASTER_LOG2FLOOR8(value)) : (MASTER_LOG2CEIL8(value)))
 #	endif /* #! MASTER_64_AVAILABLE !# */
 #else
-#	define __MASTER_POW2ROUNDX_GENERATE_MACRO( suff ) \
+#	define __MASTER_POW2ROUNDX_GENERATE_MACRO( suffix ) \
 		MASTER_DEFINE_FUNCTION1( \
 			MASTER_NO_FLAGS, \
 			MASTER_EMPTY_DESCRIPTION, \
-			/* ! */ MASTER_POW2ROUND ## suff /* ! */, \
-			MASTER_PREFER_INLINE UI ## suff, \
-			( UI ## suff, value ) \
+			/* ! */ MASTER_POW2ROUND ## suffix /* ! */, \
+			MASTER_PREFER_INLINE UI ## suffix, \
+			( UI ## suffix, value ) \
 		) { \
-			UI ## suff floored = MASTER_POW2FLOOR ## suff(value); \
+			UI ## suffix floored = MASTER_POW2FLOOR ## suffix(value); \
 			floored |= floored >> 1; \
 			if (value < floored) return floored & (floored << 1); \
-			return MASTER_POW2CEIL ## suff(value); \
+			return MASTER_POW2CEIL ## suffix(value); \
 		}
-#	define __MASTER_LOG2ROUNDX_GENERATE_MACRO( suff, numsuff ) \
+#	define __MASTER_LOG2ROUNDX_GENERATE_MACRO( suffix, numsuff ) \
 		MASTER_DEFINE_FUNCTION1( \
 			MASTER_NO_FLAGS, \
 			MASTER_EMPTY_DESCRIPTION, \
-			/* ! */ MASTER_LOG2ROUND ## suff /* ! */, \
-			MASTER_PREFER_INLINE UI ## suff, \
-			( UI ## suff, value ) \
+			/* ! */ MASTER_LOG2ROUND ## suffix /* ! */, \
+			MASTER_PREFER_INLINE UI ## suffix, \
+			( UI ## suffix, value ) \
 		) { \
-			const UI1 bits = MASTER_LOG2FLOOR ## suff(value); \
-			UI ## suff floored = 1 ## numsuff << bits; \
+			const UI1 bits = MASTER_LOG2FLOOR ## suffix(value); \
+			UI ## suffix floored = 1 ## numsuff << bits; \
 			if (value <= 1) return value - 1; \
 			floored |= floored >> 1; \
 			return bits + (value >= floored); \
@@ -1065,22 +1102,22 @@ MASTER_DEFINE_FUNCTION1(
 #	define MASTER_POW2MATHROUND8( value ) (1L << MASTER_LOG2MATHROUND8(value))
 #endif /* #! MASTER_64_AVAILABLE !# */
 
-#define MASTER_ADD_OVERFLOW_UI1( a, b, carry ) carry = ((a >= ((UI1)-1) - b) ? (1) : (0))
-#define MASTER_ADD_OVERFLOW_UI2( a, b, carry ) carry = ((a >= ((UI2)-1) - b) ? (1) : (0))
-#define MASTER_ADD_OVERFLOW_UI4( a, b, carry ) carry = ((a >= ((UI4)-1) - b) ? (1) : (0))
+#define MASTER_ADD_OVERFLOW_UI1( a, b, carry ) (carry) = ((a >= ((UI1)-1) - b) ? (1) : (0))
+#define MASTER_ADD_OVERFLOW_UI2( a, b, carry ) (carry) = ((a >= ((UI2)-1) - b) ? (1) : (0))
+#define MASTER_ADD_OVERFLOW_UI4( a, b, carry ) (carry) = ((a >= ((UI4)-1) - b) ? (1) : (0))
 
 /* #! MASTER Shifts !# */
 
 #define MASTER_RLLN( a, k, n ) (((a) << (k)) | ((a) >> ((n) - (k))))
 #define MASTER_RLRN( a, k, n ) (((a) >> (k)) | ((a) << ((n) - (k))))
-#define MASTER_RLL8( a, k ) MASTER_RLLN(a, k, 8)
-#define MASTER_RLL16( a, k ) MASTER_RLLN(a, k, 16)
-#define MASTER_RLL32( a, k ) MASTER_RLLN(a, k, 32)
-#define MASTER_RLL64( a, k ) MASTER_RLLN(a, k, 64)
-#define MASTER_RLR8( a, k ) MASTER_RLRN(a, k, 8)
-#define MASTER_RLR16( a, k ) MASTER_RLRN(a, k, 16)
-#define MASTER_RLR32( a, k ) MASTER_RLRN(a, k, 32)
-#define MASTER_RLR64( a, k ) MASTER_RLRN(a, k, 64)
+#define MASTER_RLL1( a, k ) MASTER_RLLN(a, k, 8)
+#define MASTER_RLL2( a, k ) MASTER_RLLN(a, k, 16)
+#define MASTER_RLL4( a, k ) MASTER_RLLN(a, k, 32)
+#define MASTER_RLL8( a, k ) MASTER_RLLN(a, k, 64)
+#define MASTER_RLR1( a, k ) MASTER_RLRN(a, k, 8)
+#define MASTER_RLR2( a, k ) MASTER_RLRN(a, k, 16)
+#define MASTER_RLR4( a, k ) MASTER_RLRN(a, k, 32)
+#define MASTER_RLR8( a, k ) MASTER_RLRN(a, k, 64)
 /* #! add (((value) < 0) ? (-1 - ((-1 - (value)) >> (shift))) : ((value) >> (shift))) ? !# */
 #define MASTER_SRAGEN( x, k ) (((x) < 0) ? (~((~(x)) >> (k))) : ((x) >> (k)))
 #define MASTER_SRA1( x, k ) (((x) >> (k)) | (((x) & 0x80) ? (~(0xFF  >> (k))) : 0))
@@ -1101,13 +1138,13 @@ MASTER_DEFINE_FUNCTION1(
 #define MASTER_NUXI_ENDIAN 3
 #define MASTER_PDP_ENDIAN 4
 
-#if (defined(__BYTE_ORDER__) && defined(__ORDER_LITTLE_ENDIAN__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__) || (defined(__LITTLE_ENDIAN__) && __LITTLE_ENDIAN__ == 1)
+#if (defined(__BYTE_ORDER__) && defined(__ORDER_LITTLE_ENDIAN__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__) || (defined(__LITTLE_ENDIAN__) && __LITTLE_ENDIAN__ + 0 == 1)
 #	define MASTER_ENDIANNESS MASTER_LITTLE_ENDIAN
-#elif (defined(__BYTE_ORDER__) && defined(__ORDER_BIG_ENDIAN__) && __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__) || (defined(__BIG_ENDIAN__) && __BIG_ENDIAN__ == 1)
+#elif (defined(__BYTE_ORDER__) && defined(__ORDER_BIG_ENDIAN__) && __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__) || (defined(__BIG_ENDIAN__) && __BIG_ENDIAN__ + 0 == 1)
 #	define MASTER_ENDIANNESS MASTER_BIG_ENDIAN
-#elif 0
+#elif (defined(__BYTE_ORDER__) && defined(__ORDER_NUXI_ENDIAN__) && __BYTE_ORDER__ == __ORDER_NUXI_ENDIAN__) || (defined(__NUXI_ENDIAN__) && __NUXI_ENDIAN__ + 0 == 1)
 #	define MASTER_ENDIANNESS MASTER_NUXI_ENDIAN
-#elif (defined(__BYTE_ORDER__) && defined(__ORDER_PDP_ENDIAN__) && __BYTE_ORDER__ == __ORDER_PDP_ENDIAN__) || (defined(__PDP_ENDIAN__) && __PDP_ENDIAN__ == 1)
+#elif (defined(__BYTE_ORDER__) && defined(__ORDER_PDP_ENDIAN__) && __BYTE_ORDER__ == __ORDER_PDP_ENDIAN__) || (defined(__PDP_ENDIAN__) && __PDP_ENDIAN__ + 0 == 1)
 #	define MASTER_ENDIANNESS MASTER_PDP_ENDIAN
 #else
 #	ifndef MASTER_NO_ARCHITECTURE_DETECT_DEPENDENCY
@@ -1151,13 +1188,13 @@ MASTER_DEFINE_FUNCTION1(
 #	endif /* #! MASTER_ENDIANNESS !# */
 #endif /* #! ENDIANNESS !# */
 
-#define MASTER_BSWAP16( value ) (((value) >> 8) | ((value) << 8))
-#define MASTER_BSWAP32( value ) ( \
+#define MASTER_BSWAP2( value ) (((value) >> 8) | ((value) << 8))
+#define MASTER_BSWAP4( value ) ( \
 	(((value) >> 24) & 0x000000FF) | \
 	(((value) >>  8) & 0x0000FF00) | \
 	(((value) <<  8) & 0x00FF0000) | \
 	(((value) << 24) & 0xFF000000))
-#define MASTER_BSWAP64( value ) ( \
+#define MASTER_BSWAP8( value ) ( \
 	(((value) >> 56) & 0x00000000000000FF) | \
 	(((value) >> 40) & 0x000000000000FF00) | \
 	(((value) >> 24) & 0x0000000000FF0000) | \
@@ -1167,7 +1204,7 @@ MASTER_DEFINE_FUNCTION1(
 	(((value) << 40) & 0x00FF000000000000) | \
 	(((value) << 56) & 0xFF00000000000000))
 #define MASTER_BSWAP_GENERIC( value, byte_count ) ( \
-	((byte_count) == 1) ? (value) : ((byte_count) == 2) ? (MASTER_BSWAP16(value)) : ((byte_count) == 4) ? (MASTER_BSWAP32(value)) : (MASTER_BSWAP64(value)))
+	((byte_count) == 1) ? (value) : ((byte_count) == 2) ? (MASTER_BSWAP2(value)) : ((byte_count) == 4) ? (MASTER_BSWAP4(value)) : (MASTER_BSWAP8(value)))
 
 #define MASTER_IS_LE() (MASTER_ENDIANNESS == MASTER_LITTLE_ENDIAN)
 #define MASTER_IS_BE() (MASTER_ENDIANNESS == MASTER_BIG_ENDIAN)
@@ -1179,21 +1216,21 @@ MASTER_DEFINE_FUNCTION1(
 #	define MASTER_IS_GENE() (0)
 #endif /* #! MASTER_UNKNOWN_ENDIANNESS !# */
 
-#define MASTER_L2LE16( value ) (value)
-#define MASTER_L2LE32( value ) (value)
-#define MASTER_L2LE64( value ) (value)
-#define MASTER_L2BE16( value ) MASTER_BSWAP16(value)
-#define MASTER_L2BE32( value ) MASTER_BSWAP32(value)
-#define MASTER_L2BE64( value ) MASTER_BSWAP64(value)
-#define MASTER_L2NUXI16( value ) (value)
-#define MASTER_L2NUXI32( value ) ( \
+#define MASTER_L2LE2( value ) (value)
+#define MASTER_L2LE4( value ) (value)
+#define MASTER_L2LE8( value ) (value)
+#define MASTER_L2BE2( value ) MASTER_BSWAP2(value)
+#define MASTER_L2BE4( value ) MASTER_BSWAP4(value)
+#define MASTER_L2BE8( value ) MASTER_BSWAP8(value)
+#define MASTER_L2NUXI2( value ) (value)
+#define MASTER_L2NUXI4( value ) ( \
 	(((value) >> 8) & 0x00FF00FF) | \
 	(((value) << 8) & 0xFF00FF00))
-#define MASTER_L2NUXI64( value ) ( \
+#define MASTER_L2NUXI8( value ) ( \
 	(((value) >> 8) & 0x00FF00FF00FF00FF) | \
 	(((value) << 8) & 0xFF00FF00FF00FF00))
-#define MASTER_L2PDPE16( value ) MASTER_BSWAP16(value)
-#define MASTER_L2PDPE32( value ) ( \
+#define MASTER_L2PDPE2( value ) MASTER_BSWAP2(value)
+#define MASTER_L2PDPE4( value ) ( \
 	(((value) >> 16) & 0x0000FFFF) | \
 	(((value) << 16) & 0xFFFF0000))
 #define MASTER_L2PDP64( value ) ( \
@@ -1204,97 +1241,97 @@ MASTER_DEFINE_FUNCTION1(
 #define MASTER_L2LE( value ) (value)
 #define MASTER_L2BE( value ) MASTER_BSWAP_GENERIC(value, sizeof(value))
 #define MASTER_L2NUXI( value, byte_count ) ( \
-	((byte_count) == 1) ? (value) : ((byte_count) == 2) ? (MASTER_L2NUXI16(value)) : ((byte_count) == 4) ? (MASTER_L2NUXI32(value)) : (MASTER_L2NUXI64(value)))
+	((byte_count) == 1) ? (value) : ((byte_count) == 2) ? (MASTER_L2NUXI2(value)) : ((byte_count) == 4) ? (MASTER_L2NUXI4(value)) : (MASTER_L2NUXI8(value)))
 #define MASTER_L2PDPE( value, byte_count ) ( \
-	((byte_count) == 1) ? (value) : ((byte_count) == 2) ? (MASTER_L2PDPE16(value)) : ((byte_count) == 4) ? (MASTER_L2PDPE32(value)) : (MASTER_L2PDP64(value)))
+	((byte_count) == 1) ? (value) : ((byte_count) == 2) ? (MASTER_L2PDPE2(value)) : ((byte_count) == 4) ? (MASTER_L2PDPE4(value)) : (MASTER_L2PDP64(value)))
 
-#define MASTER_B2LE16( value ) MASTER_BSWAP16(value)
-#define MASTER_B2LE32( value ) MASTER_BSWAP32(value)
-#define MASTER_B2LE64( value ) MASTER_BSWAP64(value)
-#define MASTER_B2BE16( value ) (value)
-#define MASTER_B2BE32( value ) (value)
-#define MASTER_B2BE64( value ) (value)
-#define MASTER_B2NUXI16( value ) MASTER_BSWAP16(value)
-#define MASTER_B2NUXI32( value ) ( \
+#define MASTER_B2LE2( value ) MASTER_BSWAP2(value)
+#define MASTER_B2LE4( value ) MASTER_BSWAP4(value)
+#define MASTER_B2LE8( value ) MASTER_BSWAP8(value)
+#define MASTER_B2BE2( value ) (value)
+#define MASTER_B2BE4( value ) (value)
+#define MASTER_B2BE8( value ) (value)
+#define MASTER_B2NUXI2( value ) MASTER_BSWAP2(value)
+#define MASTER_B2NUXI4( value ) ( \
 	(((value) >> 16) & 0x0000FFFF) | \
 	(((value) << 16) & 0xFFFF0000))
-#define MASTER_B2NUXI64( value ) ( \
+#define MASTER_B2NUXI8( value ) ( \
 	(((value) >> 48) & 0x000000000000FFFF) | \
 	(((value) >> 16) & 0x00000000FFFF0000) | \
 	(((value) << 16) & 0x0000FFFF00000000) | \
 	(((value) << 48) & 0xFFFF000000000000))
-#define MASTER_B2PDPE16( value ) (value)
-#define MASTER_B2PDPE32( value ) ( \
+#define MASTER_B2PDPE2( value ) (value)
+#define MASTER_B2PDPE4( value ) ( \
 	(((value) >> 8) & 0x00FF00FF) | \
 	(((value) << 8) & 0xFF00FF00))
-#define MASTER_B2PDPE64( value ) ( \
+#define MASTER_B2PDPE8( value ) ( \
 	(((value) >> 8) & 0x00FF00FF00FF00FF) | \
 	(((value) << 8) & 0xFF00FF00FF00FF00))
 #define MASTER_B2LE( value ) MASTER_BSWAP_GENERIC(value, sizeof(value))
 #define MASTER_B2BE( value ) (value)
 #define MASTER_B2NUXI( value, byte_count ) ( \
-	((byte_count) == 1) ? (value) : ((byte_count) == 2) ? (MASTER_B2NUXI16(value)) : ((byte_count) == 4) ? (MASTER_B2NUXI32(value)) : (MASTER_B2NUXI64(value)))
+	((byte_count) == 1) ? (value) : ((byte_count) == 2) ? (MASTER_B2NUXI2(value)) : ((byte_count) == 4) ? (MASTER_B2NUXI4(value)) : (MASTER_B2NUXI8(value)))
 #define MASTER_B2PDPE( value, byte_count ) ( \
-	((byte_count) == 1) ? (value) : ((byte_count) == 2) ? (MASTER_B2PDPE16(value)) : ((byte_count) == 4) ? (MASTER_B2PDPE32(value)) : (MASTER_B2PDP64(value)))
+	((byte_count) == 1) ? (value) : ((byte_count) == 2) ? (MASTER_B2PDPE2(value)) : ((byte_count) == 4) ? (MASTER_B2PDPE4(value)) : (MASTER_B2PDP64(value)))
 
-#define MASTER_NUXI2LE16( value ) (value)
-#define MASTER_NUXI2LE32( value ) ( \
+#define MASTER_NUXI2LE2( value ) (value)
+#define MASTER_NUXI2LE4( value ) ( \
 	(((value) >> 8) & 0x00FF00FF) | \
 	(((value) << 8) & 0xFF00FF00))
-#define MASTER_NUXI2LE64( value ) ( \
+#define MASTER_NUXI2LE8( value ) ( \
 	(((value) >> 8) & 0x00FF00FF) | \
 	(((value) << 8) & 0xFF00FF00))
-#define MASTER_NUXI2BE16( value ) MASTER_BSWAP16(value)
-#define MASTER_NUXI2BE32( value ) ( \
+#define MASTER_NUXI2BE2( value ) MASTER_BSWAP2(value)
+#define MASTER_NUXI2BE4( value ) ( \
 	(((value) >> 16) & 0x0000FFFF) | \
 	(((value) << 16) & 0xFFFF0000))
-#define MASTER_NUXI2BE64( value ) ( \
+#define MASTER_NUXI2BE8( value ) ( \
 	(((value) >> 48) & 0x000000000000FFFF) | \
 	(((value) >> 16) & 0x00000000FFFF0000) | \
 	(((value) << 16) & 0x0000FFFF00000000) | \
 	(((value) << 48) & 0xFFFF000000000000))
-#define MASTER_NUXI2NUXI16( value ) (value)
-#define MASTER_NUXI2NUXI32( value ) (value)
-#define MASTER_NUXI2NUXI64( value ) (value)
-#define MASTER_NUXI2PDPE16( value ) MASTER_BSWAP16(value)
-#define MASTER_NUXI2PDPE32( value ) MASTER_BSWAP32(value)
-#define MASTER_NUXI2PDPE64( value ) MASTER_BSWAP64(value)
+#define MASTER_NUXI2NUXI2( value ) (value)
+#define MASTER_NUXI2NUXI4( value ) (value)
+#define MASTER_NUXI2NUXI8( value ) (value)
+#define MASTER_NUXI2PDPE2( value ) MASTER_BSWAP2(value)
+#define MASTER_NUXI2PDPE4( value ) MASTER_BSWAP4(value)
+#define MASTER_NUXI2PDPE8( value ) MASTER_BSWAP8(value)
 #define MASTER_NUXI2LE( value ) ( \
-	((byte_count) == 1) ? (value) : ((byte_count) == 2) ? (MASTER_NUXI2LE16(value)) : ((byte_count) == 4) ? (MASTER_NUXI2LE32(value)) : (MASTER_NUXI2LE64(value)))
+	((byte_count) == 1) ? (value) : ((byte_count) == 2) ? (MASTER_NUXI2LE2(value)) : ((byte_count) == 4) ? (MASTER_NUXI2LE4(value)) : (MASTER_NUXI2LE8(value)))
 #define MASTER_NUXI2BE( value ) ( \
-	((byte_count) == 1) ? (value) : ((byte_count) == 2) ? (MASTER_NUXI2BE16(value)) : ((byte_count) == 4) ? (MASTER_NUXI2BE32(value)) : (MASTER_NUXI2BE64(value)))
+	((byte_count) == 1) ? (value) : ((byte_count) == 2) ? (MASTER_NUXI2BE2(value)) : ((byte_count) == 4) ? (MASTER_NUXI2BE4(value)) : (MASTER_NUXI2BE8(value)))
 #define MASTER_NUXI2NUXI( value ) (value)
 #define MASTER_NUXI2PDPE( value, byte_count ) ( \
-	((byte_count) == 1) ? (value) : ((byte_count) == 2) ? (MASTER_NUXI2PDPE16(value)) : ((byte_count) == 4) ? (MASTER_NUXI2PDPE32(value)) : (MASTER_NUXI2PDPE64(value)))
+	((byte_count) == 1) ? (value) : ((byte_count) == 2) ? (MASTER_NUXI2PDPE2(value)) : ((byte_count) == 4) ? (MASTER_NUXI2PDPE4(value)) : (MASTER_NUXI2PDPE8(value)))
 
-#define MASTER_PDP2LE16( value ) MASTER_BSWAP16(value)
-#define MASTER_PDP2LE32( value ) ( \
+#define MASTER_PDP2LE2( value ) MASTER_BSWAP2(value)
+#define MASTER_PDP2LE4( value ) ( \
 	(((value) >> 16) & 0x0000FFFF) | \
 	(((value) << 16) & 0xFFFF0000))
-#define MASTER_PDP2LE64( value ) ( \
+#define MASTER_PDP2LE8( value ) ( \
 	(((value) >> 48) & 0x000000000000FFFF) | \
 	(((value) >> 16) & 0x00000000FFFF0000) | \
 	(((value) << 16) & 0x0000FFFF00000000) | \
 	(((value) << 48) & 0xFFFF000000000000))
-#define MASTER_PDP2BE16( value ) (value)
-#define MASTER_PDP2BE32( value ) ( \
+#define MASTER_PDP2BE2( value ) (value)
+#define MASTER_PDP2BE4( value ) ( \
 	(((value) >> 8) & 0x00FF00FF) | \
 	(((value) << 8) & 0xFF00FF00))
-#define MASTER_PDP2BE64( value ) ( \
+#define MASTER_PDP2BE8( value ) ( \
 	(((value) >> 8) & 0x00FF00FF00FF00FF) | \
 	(((value) << 8) & 0xFF00FF00FF00FF00))
-#define MASTER_PDP2NUXI16( value ) MASTER_BSWAP16(value)
-#define MASTER_PDP2NUXI32( value ) MASTER_BSWAP32(value)
-#define MASTER_PDP2NUXI64( value ) MASTER_BSWAP64(value)
-#define MASTER_PDP2PDPE16( value ) (value)
-#define MASTER_PDP2PDPE32( value ) (value)
-#define MASTER_PDP2PDPE64( value ) (value)
+#define MASTER_PDP2NUXI2( value ) MASTER_BSWAP2(value)
+#define MASTER_PDP2NUXI4( value ) MASTER_BSWAP4(value)
+#define MASTER_PDP2NUXI8( value ) MASTER_BSWAP8(value)
+#define MASTER_PDP2PDPE2( value ) (value)
+#define MASTER_PDP2PDPE4( value ) (value)
+#define MASTER_PDP2PDPE8( value ) (value)
 #define MASTER_PDP2LE( value ) ( \
-	((byte_count) == 1) ? (value) : ((byte_count) == 2) ? (MASTER_PDP2LE16(value)) : ((byte_count) == 4) ? (MASTER_PDP2LE32(value)) : (MASTER_PDP2LE64(value)))
+	((byte_count) == 1) ? (value) : ((byte_count) == 2) ? (MASTER_PDP2LE2(value)) : ((byte_count) == 4) ? (MASTER_PDP2LE4(value)) : (MASTER_PDP2LE8(value)))
 #define MASTER_PDP2BE( value ) ( \
-	((byte_count) == 1) ? (value) : ((byte_count) == 2) ? (MASTER_PDP2BE16(value)) : ((byte_count) == 4) ? (MASTER_PDP2BE32(value)) : (MASTER_PDP2BE64(value)))
+	((byte_count) == 1) ? (value) : ((byte_count) == 2) ? (MASTER_PDP2BE2(value)) : ((byte_count) == 4) ? (MASTER_PDP2BE4(value)) : (MASTER_PDP2BE8(value)))
 #define MASTER_PDP2NUXI( value, byte_count ) ( \
-	((byte_count) == 1) ? (value) : ((byte_count) == 2) ? (MASTER_PDP2NUXI16(value)) : ((byte_count) == 4) ? (MASTER_PDP2NUXI32(value)) : (MASTER_PDP2NUXI64(value)))
+	((byte_count) == 1) ? (value) : ((byte_count) == 2) ? (MASTER_PDP2NUXI2(value)) : ((byte_count) == 4) ? (MASTER_PDP2NUXI4(value)) : (MASTER_PDP2NUXI8(value)))
 #define MASTER_PDP2PDPE( value, byte_count ) (value)
 
 #define MASTER_FUNC_ENDIAN( endian_little_func, endian_big_func, endian_nuxi_func, endian_pdp_func ) ( \
@@ -1323,107 +1360,107 @@ MASTER_DEFINE_FUNCTION1(
 #		define MASTER_TOLE32( value ) (value)
 #		define MASTER_TOLE64( value ) (value)
 #		define MASTER_TOBE( value ) MASTER_L2BE(value)
-#		define MASTER_TOBE16( value ) MASTER_L2BE16(value)
-#		define MASTER_TOBE32( value ) MASTER_L2BE32(value)
-#		define MASTER_TOBE64( value ) MASTER_L2BE64(value)
+#		define MASTER_TOBE16( value ) MASTER_L2BE2(value)
+#		define MASTER_TOBE32( value ) MASTER_L2BE4(value)
+#		define MASTER_TOBE64( value ) MASTER_L2BE8(value)
 #		define MASTER_TONUXI( value ) MASTER_L2NUXI(value)
-#		define MASTER_TONUXI16( value ) MASTER_L2NUXI16(value)
-#		define MASTER_TONUXI32( value ) MASTER_L2NUXI32(value)
-#		define MASTER_TONUXI64( value ) MASTER_L2NUXI64(value)
+#		define MASTER_TONUXI16( value ) MASTER_L2NUXI2(value)
+#		define MASTER_TONUXI32( value ) MASTER_L2NUXI4(value)
+#		define MASTER_TONUXI64( value ) MASTER_L2NUXI8(value)
 #		define MASTER_TOPDPE( value ) MASTER_L2PDPE(value)
-#		define MASTER_TOPDPE16( value ) MASTER_L2PDPE16(value)
-#		define MASTER_TOPDPE32( value ) MASTER_L2PDPE32(value)
-#		define MASTER_TOPDPE64( value ) MASTER_L2PDPE64(value)
+#		define MASTER_TOPDPE16( value ) MASTER_L2PDPE2(value)
+#		define MASTER_TOPDPE32( value ) MASTER_L2PDPE4(value)
+#		define MASTER_TOPDPE64( value ) MASTER_L2PDPE8(value)
 #		define MASTER_FROMLE( value ) (value)
 #		define MASTER_FROMLE16( value ) (value)
 #		define MASTER_FROMLE32( value ) (value)
 #		define MASTER_FROMLE64( value ) (value)
 #		define MASTER_FROMBE( value ) MASTER_B2LE(value)
-#		define MASTER_FROMBE16( value ) MASTER_B2LE16(value)
-#		define MASTER_FROMBE32( value ) MASTER_B2LE32(value)
-#		define MASTER_FROMBE64( value ) MASTER_B2LE64(value)
+#		define MASTER_FROMBE16( value ) MASTER_B2LE2(value)
+#		define MASTER_FROMBE32( value ) MASTER_B2LE4(value)
+#		define MASTER_FROMBE64( value ) MASTER_B2LE8(value)
 #		define MASTER_FROMNUXI( value ) MASTER_NUXI2LE(value)
-#		define MASTER_FROMNUXI16( value ) MASTER_NUXI2LE16(value)
-#		define MASTER_FROMNUXI32( value ) MASTER_NUXI2LE32(value)
-#		define MASTER_FROMNUXI64( value ) MASTER_NUXI2LE64(value)
+#		define MASTER_FROMNUXI16( value ) MASTER_NUXI2LE2(value)
+#		define MASTER_FROMNUXI32( value ) MASTER_NUXI2LE4(value)
+#		define MASTER_FROMNUXI64( value ) MASTER_NUXI2LE8(value)
 #		define MASTER_FROMPDPE( value ) MASTER_PDP2LE(value)
-#		define MASTER_FROMPDPE16( value ) MASTER_PDP2LE16(value)
-#		define MASTER_FROMPDPE32( value ) MASTER_PDP2LE32(value)
-#		define MASTER_FROMPDPE64( value ) MASTER_PDP2LE64(value)
+#		define MASTER_FROMPDPE16( value ) MASTER_PDP2LE2(value)
+#		define MASTER_FROMPDPE32( value ) MASTER_PDP2LE4(value)
+#		define MASTER_FROMPDPE64( value ) MASTER_PDP2LE8(value)
 #		define MASTER_ITERATE_L2H( value ) MASTER_ITERATE_L2H_LE(value)
 #		define MASTER_ITERATE_H2L( value ) MASTER_ITERATE_H2L_LE(value)
 #		define MASTER_GLIBE( min_value, max_value ) MASTER_LELOW( min_value, max_value )
 #		define MASTER_GHIBE( min_value, max_value ) MASTER_LEHIGH( min_value, max_value )
 #	elif MASTER_ENDIANNESS == MASTER_BIG_ENDIAN
 #		define MASTER_TOLE( value ) MASTER_B2LE(value)
-#		define MASTER_TOLE16( value ) MASTER_B2LE16(value)
-#		define MASTER_TOLE32( value ) MASTER_B2LE32(value)
-#		define MASTER_TOLE64( value ) MASTER_B2LE64(value)
+#		define MASTER_TOLE16( value ) MASTER_B2LE2(value)
+#		define MASTER_TOLE32( value ) MASTER_B2LE4(value)
+#		define MASTER_TOLE64( value ) MASTER_B2LE8(value)
 #		define MASTER_TOBE( value ) (value)
 #		define MASTER_TOBE16( value ) (value)
 #		define MASTER_TOBE32( value ) (value)
 #		define MASTER_TOBE64( value ) (value)
 #		define MASTER_TONUXI( value ) MASTER_B2NUXI(value)
-#		define MASTER_TONUXI16( value ) MASTER_B2NUXI16(value)
-#		define MASTER_TONUXI32( value ) MASTER_B2NUXI32(value)
-#		define MASTER_TONUXI64( value ) MASTER_B2NUXI64(value)
+#		define MASTER_TONUXI16( value ) MASTER_B2NUXI2(value)
+#		define MASTER_TONUXI32( value ) MASTER_B2NUXI4(value)
+#		define MASTER_TONUXI64( value ) MASTER_B2NUXI8(value)
 #		define MASTER_TOPDPE( value ) MASTER_B2PDPE(value)
-#		define MASTER_TOPDPE16( value ) MASTER_B2PDPE16(value)
-#		define MASTER_TOPDPE32( value ) MASTER_B2PDPE32(value)
-#		define MASTER_TOPDPE64( value ) MASTER_B2PDPE64(value)
+#		define MASTER_TOPDPE16( value ) MASTER_B2PDPE2(value)
+#		define MASTER_TOPDPE32( value ) MASTER_B2PDPE4(value)
+#		define MASTER_TOPDPE64( value ) MASTER_B2PDPE8(value)
 #		define MASTER_FROMLE( value ) MASTER_L2BE(value)
-#		define MASTER_FROMLE16( value ) MASTER_L2BE16(value)
-#		define MASTER_FROMLE32( value ) MASTER_L2BE32(value)
-#		define MASTER_FROMLE64( value ) MASTER_L2BE64(value)
+#		define MASTER_FROMLE16( value ) MASTER_L2BE2(value)
+#		define MASTER_FROMLE32( value ) MASTER_L2BE4(value)
+#		define MASTER_FROMLE64( value ) MASTER_L2BE8(value)
 #		define MASTER_FROMBE( value ) (value)
 #		define MASTER_FROMBE16( value ) (value)
 #		define MASTER_FROMBE32( value ) (value)
 #		define MASTER_FROMBE64( value ) (value)
 #		define MASTER_FROMNUXI( value ) MASTER_NUXI2BE(value)
-#		define MASTER_FROMNUXI16( value ) MASTER_NUXI2BE16(value)
-#		define MASTER_FROMNUXI32( value ) MASTER_NUXI2BE32(value)
-#		define MASTER_FROMNUXI64( value ) MASTER_NUXI2BE64(value)
+#		define MASTER_FROMNUXI16( value ) MASTER_NUXI2BE2(value)
+#		define MASTER_FROMNUXI32( value ) MASTER_NUXI2BE4(value)
+#		define MASTER_FROMNUXI64( value ) MASTER_NUXI2BE8(value)
 #		define MASTER_FROMPDPE( value ) MASTER_PDP2BE(value)
-#		define MASTER_FROMPDPE16( value ) MASTER_PDP2BE16(value)
-#		define MASTER_FROMPDPE32( value ) MASTER_PDP2BE32(value)
-#		define MASTER_FROMPDPE64( value ) MASTER_PDP2BE64(value)
+#		define MASTER_FROMPDPE16( value ) MASTER_PDP2BE2(value)
+#		define MASTER_FROMPDPE32( value ) MASTER_PDP2BE4(value)
+#		define MASTER_FROMPDPE64( value ) MASTER_PDP2BE8(value)
 #		define MASTER_ITERATE_L2H( value ) MASTER_ITERATE_L2H_BE(value)
 #		define MASTER_ITERATE_H2L( value ) MASTER_ITERATE_H2L_BE(value)
 #		define MASTER_GLIBE( min_value, max_value ) MASTER_BELOW( min_value, max_value )
 #		define MASTER_GHIBE( min_value, max_value ) MASTER_BEHIGH( min_value, max_value )
 #	elif MASTER_ENDIANNESS == MASTER_NUXI_ENDIAN
 #		define MASTER_TOLE( value ) MASTER_NUXI2LE(value)
-#		define MASTER_TOLE16( value ) MASTER_NUXI2LE16(value)
-#		define MASTER_TOLE32( value ) MASTER_NUXI2LE32(value)
-#		define MASTER_TOLE64( value ) MASTER_NUXI2LE64(value)
+#		define MASTER_TOLE16( value ) MASTER_NUXI2LE2(value)
+#		define MASTER_TOLE32( value ) MASTER_NUXI2LE4(value)
+#		define MASTER_TOLE64( value ) MASTER_NUXI2LE8(value)
 #		define MASTER_TOBE( value ) MASTER_NUXI2BE(value)
-#		define MASTER_TOBE16( value ) MASTER_NUXI2BE16(value)
-#		define MASTER_TOBE32( value ) MASTER_NUXI2BE32(value)
-#		define MASTER_TOBE64( value ) MASTER_NUXI2BE64(value)
+#		define MASTER_TOBE16( value ) MASTER_NUXI2BE2(value)
+#		define MASTER_TOBE32( value ) MASTER_NUXI2BE4(value)
+#		define MASTER_TOBE64( value ) MASTER_NUXI2BE8(value)
 #		define MASTER_TONUXI( value ) (value)
 #		define MASTER_TONUXI16( value ) (value)
 #		define MASTER_TONUXI32( value ) (value)
 #		define MASTER_TONUXI64( value ) (value)
 #		define MASTER_TOPDPE( value ) MASTER_NUXI2PDPE(value)
-#		define MASTER_TOPDPE16( value ) MASTER_NUXI2PDPE16(value)
-#		define MASTER_TOPDPE32( value ) MASTER_NUXI2PDPE32(value)
-#		define MASTER_TOPDPE64( value ) MASTER_NUXI2PDPE64(value)
+#		define MASTER_TOPDPE16( value ) MASTER_NUXI2PDPE2(value)
+#		define MASTER_TOPDPE32( value ) MASTER_NUXI2PDPE4(value)
+#		define MASTER_TOPDPE64( value ) MASTER_NUXI2PDPE8(value)
 #		define MASTER_FROMLE( value ) MASTER_L2PDPE(value)
-#		define MASTER_FROMLE16( value ) MASTER_L2PDPE16(value)
-#		define MASTER_FROMLE32( value ) MASTER_L2PDPE32(value)
-#		define MASTER_FROMLE64( value ) MASTER_L2PDPE64(value)
+#		define MASTER_FROMLE16( value ) MASTER_L2PDPE2(value)
+#		define MASTER_FROMLE32( value ) MASTER_L2PDPE4(value)
+#		define MASTER_FROMLE64( value ) MASTER_L2PDPE8(value)
 #		define MASTER_FROMBE( value ) MASTER_B2NUXI(value)
-#		define MASTER_FROMBE16( value ) MASTER_B2NUXI16(value)
-#		define MASTER_FROMBE32( value ) MASTER_B2NUXI32(value)
-#		define MASTER_FROMBE64( value ) MASTER_B2NUXI64(value)
+#		define MASTER_FROMBE16( value ) MASTER_B2NUXI2(value)
+#		define MASTER_FROMBE32( value ) MASTER_B2NUXI4(value)
+#		define MASTER_FROMBE64( value ) MASTER_B2NUXI8(value)
 #		define MASTER_FROMNUXI( value ) (value)
 #		define MASTER_FROMNUXI16( value ) (value)
 #		define MASTER_FROMNUXI32( value ) (value)
 #		define MASTER_FROMNUXI64( value ) (value)
 #		define MASTER_FROMPDPE( value ) MASTER_PDP2NUXI(value)
-#		define MASTER_FROMPDPE16( value ) MASTER_PDP2NUXI16(value)
-#		define MASTER_FROMPDPE32( value ) MASTER_PDP2NUXI32(value)
-#		define MASTER_FROMPDPE64( value ) MASTER_PDP2NUXI64(value)
+#		define MASTER_FROMPDPE16( value ) MASTER_PDP2NUXI2(value)
+#		define MASTER_FROMPDPE32( value ) MASTER_PDP2NUXI4(value)
+#		define MASTER_FROMPDPE64( value ) MASTER_PDP2NUXI8(value)
 #		define MASTER_ITERATE_L2H( value ) MASTER_ITERATE_L2H_PDPE(value)
 #		define MASTER_ITERATE_H2L( value ) MASTER_ITERATE_H2L_PDPE(value)
 #		define MASTER_GLIBE( min_value, max_value ) MASTER_PDPELOW( min_value, max_value )
@@ -1431,33 +1468,33 @@ MASTER_DEFINE_FUNCTION1(
 #	elif MASTER_ENDIANNESS == MASTER_PDP_ENDIAN
 		/* #! PDP have maximum 32 bits. But in 64 bit endian will be 78563412 !# */
 #		define MASTER_TOLE( value ) MASTER_PDP2LE(value)
-#		define MASTER_TOLE16( value ) MASTER_PDP2LE16(value)
-#		define MASTER_TOLE32( value ) MASTER_PDP2LE32(value)
-#		define MASTER_TOLE64( value ) MASTER_PDP2LE64(value)
+#		define MASTER_TOLE16( value ) MASTER_PDP2LE2(value)
+#		define MASTER_TOLE32( value ) MASTER_PDP2LE4(value)
+#		define MASTER_TOLE64( value ) MASTER_PDP2LE8(value)
 #		define MASTER_TOBE( value ) MASTER_PDP2BE(value)
-#		define MASTER_TOBE16( value ) MASTER_PDP2BE16(value)
-#		define MASTER_TOBE32( value ) MASTER_PDP2BE32(value)
-#		define MASTER_TOBE64( value ) MASTER_PDP2BE64(value)
+#		define MASTER_TOBE16( value ) MASTER_PDP2BE2(value)
+#		define MASTER_TOBE32( value ) MASTER_PDP2BE4(value)
+#		define MASTER_TOBE64( value ) MASTER_PDP2BE8(value)
 #		define MASTER_TONUXI( value ) MASTER_PDP2NUXI(value)
-#		define MASTER_TONUXI16( value ) MASTER_PDP2NUXI16(value)
-#		define MASTER_TONUXI32( value ) MASTER_PDP2NUXI32(value)
-#		define MASTER_TONUXI64( value ) MASTER_PDP2NUXI64(value)
+#		define MASTER_TONUXI16( value ) MASTER_PDP2NUXI2(value)
+#		define MASTER_TONUXI32( value ) MASTER_PDP2NUXI4(value)
+#		define MASTER_TONUXI64( value ) MASTER_PDP2NUXI8(value)
 #		define MASTER_TOPDPE( value ) (value)
 #		define MASTER_TOPDPE16( value ) (value)
 #		define MASTER_TOPDPE32( value ) (value)
 #		define MASTER_TOPDPE64( value ) (value)
 #		define MASTER_FROMLE( value ) MASTER_L2PDPE(value)
-#		define MASTER_FROMLE16( value ) MASTER_L2PDPE16(value)
-#		define MASTER_FROMLE32( value ) MASTER_L2PDPE32(value)
-#		define MASTER_FROMLE64( value ) MASTER_L2PDPE64(value)
+#		define MASTER_FROMLE16( value ) MASTER_L2PDPE2(value)
+#		define MASTER_FROMLE32( value ) MASTER_L2PDPE4(value)
+#		define MASTER_FROMLE64( value ) MASTER_L2PDPE8(value)
 #		define MASTER_FROMBE( value ) MASTER_B2PDPE(value)
-#		define MASTER_FROMBE16( value ) MASTER_B2PDPE16(value)
-#		define MASTER_FROMBE32( value ) MASTER_B2PDPE32(value)
-#		define MASTER_FROMBE64( value ) MASTER_B2PDPE64(value)
+#		define MASTER_FROMBE16( value ) MASTER_B2PDPE2(value)
+#		define MASTER_FROMBE32( value ) MASTER_B2PDPE4(value)
+#		define MASTER_FROMBE64( value ) MASTER_B2PDPE8(value)
 #		define MASTER_FROMNUXI( value ) MASTER_NUXI2PDPE(value)
-#		define MASTER_FROMNUXI16( value ) MASTER_NUXI2PDPE16(value)
-#		define MASTER_FROMNUXI32( value ) MASTER_NUXI2PDPE32(value)
-#		define MASTER_FROMNUXI64( value ) MASTER_NUXI2PDPE64(value)
+#		define MASTER_FROMNUXI16( value ) MASTER_NUXI2PDPE2(value)
+#		define MASTER_FROMNUXI32( value ) MASTER_NUXI2PDPE4(value)
+#		define MASTER_FROMNUXI64( value ) MASTER_NUXI2PDPE8(value)
 #		define MASTER_FROMPDPE( value ) (value)
 #		define MASTER_FROMPDPE16( value ) (value)
 #		define MASTER_FROMPDPE32( value ) (value)
@@ -1470,37 +1507,37 @@ MASTER_DEFINE_FUNCTION1(
 #else /* #! MASTER_UNKNOWN_ENDIAN - runtime check !# */
 /* #! TODO !# */
 #	define MASTER_TOLE( value ) MASTER_FUNC_ENDIAN(MASTER_L2LE(value), MASTER_B2LE(value), MASTER_NUXI2LE(value), MASTER_PDP2LE(value))
-#	define MASTER_TOLE16( value ) MASTER_FUNC_ENDIAN(MASTER_L2LE16(value), MASTER_B2LE16(value), MASTER_NUXI2LE16(value), MASTER_PDP2LE16(value))
-#	define MASTER_TOLE32( value ) MASTER_FUNC_ENDIAN(MASTER_L2LE32(value), MASTER_B2LE32(value), MASTER_NUXI2LE32(value), MASTER_PDP2LE32(value))
-#	define MASTER_TOLE64( value ) MASTER_FUNC_ENDIAN(MASTER_L2LE64(value), MASTER_B2LE64(value), MASTER_NUXI2LE64(value), MASTER_PDP2LE64(value))
+#	define MASTER_TOLE16( value ) MASTER_FUNC_ENDIAN(MASTER_L2LE2(value), MASTER_B2LE2(value), MASTER_NUXI2LE2(value), MASTER_PDP2LE2(value))
+#	define MASTER_TOLE32( value ) MASTER_FUNC_ENDIAN(MASTER_L2LE4(value), MASTER_B2LE4(value), MASTER_NUXI2LE4(value), MASTER_PDP2LE4(value))
+#	define MASTER_TOLE64( value ) MASTER_FUNC_ENDIAN(MASTER_L2LE8(value), MASTER_B2LE8(value), MASTER_NUXI2LE8(value), MASTER_PDP2LE8(value))
 #	define MASTER_TOBE( value ) MASTER_FUNC_ENDIAN(MASTER_L2BE(value), MASTER_B2BE(value), MASTER_NUXI2BE(value), MASTER_PDP2BE(value))
-#	define MASTER_TOBE16( value ) MASTER_FUNC_ENDIAN(MASTER_L2BE16(value), MASTER_B2BE16(value), MASTER_NUXI2BE16(value), MASTER_PDP2BE16(value))
-#	define MASTER_TOBE32( value ) MASTER_FUNC_ENDIAN(MASTER_L2BE32(value), MASTER_B2BE32(value), MASTER_NUXI2BE32(value), MASTER_PDP2BE32(value))
-#	define MASTER_TOBE64( value ) MASTER_FUNC_ENDIAN(MASTER_L2BE64(value), MASTER_B2BE64(value), MASTER_NUXI2BE64(value), MASTER_PDP2BE64(value))
+#	define MASTER_TOBE16( value ) MASTER_FUNC_ENDIAN(MASTER_L2BE2(value), MASTER_B2BE2(value), MASTER_NUXI2BE2(value), MASTER_PDP2BE2(value))
+#	define MASTER_TOBE32( value ) MASTER_FUNC_ENDIAN(MASTER_L2BE4(value), MASTER_B2BE4(value), MASTER_NUXI2BE4(value), MASTER_PDP2BE4(value))
+#	define MASTER_TOBE64( value ) MASTER_FUNC_ENDIAN(MASTER_L2BE8(value), MASTER_B2BE8(value), MASTER_NUXI2BE8(value), MASTER_PDP2BE8(value))
 #	define MASTER_TONUXI( value ) MASTER_FUNC_ENDIAN(MASTER_L2NUXI(value), MASTER_B2NUXI(value), MASTER_NUXI2NUXI(value), MASTER_PDP2NUXI(value))
-#	define MASTER_TONUXI16( value ) MASTER_FUNC_ENDIAN(MASTER_L2NUXI16(value), MASTER_B2NUXI16(value), MASTER_NUXI2NUXI16(value), MASTER_PDP2NUXI16(value))
-#	define MASTER_TONUXI32( value ) MASTER_FUNC_ENDIAN(MASTER_L2NUXI32(value), MASTER_B2NUXI32(value), MASTER_NUXI2NUXI32(value), MASTER_PDP2NUXI32(value))
-#	define MASTER_TONUXI64( value ) MASTER_FUNC_ENDIAN(MASTER_L2NUXI64(value), MASTER_B2NUXI64(value), MASTER_NUXI2NUXI64(value), MASTER_PDP2NUXI64(value))
+#	define MASTER_TONUXI16( value ) MASTER_FUNC_ENDIAN(MASTER_L2NUXI2(value), MASTER_B2NUXI2(value), MASTER_NUXI2NUXI2(value), MASTER_PDP2NUXI2(value))
+#	define MASTER_TONUXI32( value ) MASTER_FUNC_ENDIAN(MASTER_L2NUXI4(value), MASTER_B2NUXI4(value), MASTER_NUXI2NUXI4(value), MASTER_PDP2NUXI4(value))
+#	define MASTER_TONUXI64( value ) MASTER_FUNC_ENDIAN(MASTER_L2NUXI8(value), MASTER_B2NUXI8(value), MASTER_NUXI2NUXI8(value), MASTER_PDP2NUXI8(value))
 #	define MASTER_TOPDPE( value ) MASTER_FUNC_ENDIAN(MASTER_L2PDPE(value), MASTER_B2PDPE(value), MASTER_NUXI2PDPE(value), MASTER_PDP2PDPE(value))
-#	define MASTER_TOPDPE16( value ) MASTER_FUNC_ENDIAN(MASTER_L2PDPE16(value), MASTER_B2PDPE16(value), MASTER_NUXI2PDPE16(value), MASTER_PDP2PDPE16(value))
-#	define MASTER_TOPDPE32( value ) MASTER_FUNC_ENDIAN(MASTER_L2PDPE32(value), MASTER_B2PDPE32(value), MASTER_NUXI2PDPE32(value), MASTER_PDP2PDPE32(value))
-#	define MASTER_TOPDPE64( value ) MASTER_FUNC_ENDIAN(MASTER_L2PDPE64(value), MASTER_B2PDPE64(value), MASTER_NUXI2PDPE64(value), MASTER_PDP2PDPE64(value))
+#	define MASTER_TOPDPE16( value ) MASTER_FUNC_ENDIAN(MASTER_L2PDPE2(value), MASTER_B2PDPE2(value), MASTER_NUXI2PDPE2(value), MASTER_PDP2PDPE2(value))
+#	define MASTER_TOPDPE32( value ) MASTER_FUNC_ENDIAN(MASTER_L2PDPE4(value), MASTER_B2PDPE4(value), MASTER_NUXI2PDPE4(value), MASTER_PDP2PDPE4(value))
+#	define MASTER_TOPDPE64( value ) MASTER_FUNC_ENDIAN(MASTER_L2PDPE8(value), MASTER_B2PDPE8(value), MASTER_NUXI2PDPE8(value), MASTER_PDP2PDPE8(value))
 #	define MASTER_FROMLE( value ) MASTER_FUNC_ENDIAN(MASTER_L2LE(value), MASTER_L2BE(value), MASTER_L2NUXI(value), MASTER_L2PDPE(value))
-#	define MASTER_FROMLE16( value ) MASTER_FUNC_ENDIAN(MASTER_L2LE16(value), MASTER_L2BE16(value), MASTER_L2NUXI16(value), MASTER_L2PDPE16(value))
-#	define MASTER_FROMLE32( value ) MASTER_FUNC_ENDIAN(MASTER_L2LE32(value), MASTER_L2BE32(value), MASTER_L2NUXI32(value), MASTER_L2PDPE32(value))
-#	define MASTER_FROMLE64( value ) MASTER_FUNC_ENDIAN(MASTER_L2LE64(value), MASTER_L2BE64(value), MASTER_L2NUXI64(value), MASTER_L2PDPE64(value))
+#	define MASTER_FROMLE16( value ) MASTER_FUNC_ENDIAN(MASTER_L2LE2(value), MASTER_L2BE2(value), MASTER_L2NUXI2(value), MASTER_L2PDPE2(value))
+#	define MASTER_FROMLE32( value ) MASTER_FUNC_ENDIAN(MASTER_L2LE4(value), MASTER_L2BE4(value), MASTER_L2NUXI4(value), MASTER_L2PDPE4(value))
+#	define MASTER_FROMLE64( value ) MASTER_FUNC_ENDIAN(MASTER_L2LE8(value), MASTER_L2BE8(value), MASTER_L2NUXI8(value), MASTER_L2PDPE8(value))
 #	define MASTER_FROMBE( value ) MASTER_FUNC_ENDIAN(MASTER_B2LE(value), MASTER_B2BE(value), MASTER_B2NUXI(value), MASTER_B2PDPE(value))
-#	define MASTER_FROMBE16( value ) MASTER_FUNC_ENDIAN(MASTER_B2LE16(value), MASTER_B2BE16(value), MASTER_B2NUXI16(value), MASTER_B2PDPE16(value))
-#	define MASTER_FROMBE32( value ) MASTER_FUNC_ENDIAN(MASTER_B2LE32(value), MASTER_B2BE32(value), MASTER_B2NUXI32(value), MASTER_B2PDPE32(value))
-#	define MASTER_FROMBE64( value ) MASTER_FUNC_ENDIAN(MASTER_B2LE64(value), MASTER_B2BE64(value), MASTER_B2NUXI64(value), MASTER_B2PDPE64(value))
+#	define MASTER_FROMBE16( value ) MASTER_FUNC_ENDIAN(MASTER_B2LE2(value), MASTER_B2BE2(value), MASTER_B2NUXI2(value), MASTER_B2PDPE2(value))
+#	define MASTER_FROMBE32( value ) MASTER_FUNC_ENDIAN(MASTER_B2LE4(value), MASTER_B2BE4(value), MASTER_B2NUXI4(value), MASTER_B2PDPE4(value))
+#	define MASTER_FROMBE64( value ) MASTER_FUNC_ENDIAN(MASTER_B2LE8(value), MASTER_B2BE8(value), MASTER_B2NUXI8(value), MASTER_B2PDPE8(value))
 #	define MASTER_FROMNUXI( value ) MASTER_FUNC_ENDIAN(MASTER_NUXI2LE(value), MASTER_NUXI2BE(value), MASTER_NUXI2NUXI(value), MASTER_NUXI2PDPE(value))
-#	define MASTER_FROMNUXI16( value ) MASTER_FUNC_ENDIAN(MASTER_NUXI2LE16(value), MASTER_NUXI2BE16(value), MASTER_NUXI2NUXI16(value), MASTER_NUXI2PDPE16(value))
-#	define MASTER_FROMNUXI32( value ) MASTER_FUNC_ENDIAN(MASTER_NUXI2LE32(value), MASTER_NUXI2BE32(value), MASTER_NUXI2NUXI32(value), MASTER_NUXI2PDPE32(value))
-#	define MASTER_FROMNUXI64( value ) MASTER_FUNC_ENDIAN(MASTER_NUXI2LE64(value), MASTER_NUXI2BE64(value), MASTER_NUXI2NUXI64(value), MASTER_NUXI2PDPE64(value))
+#	define MASTER_FROMNUXI16( value ) MASTER_FUNC_ENDIAN(MASTER_NUXI2LE2(value), MASTER_NUXI2BE2(value), MASTER_NUXI2NUXI2(value), MASTER_NUXI2PDPE2(value))
+#	define MASTER_FROMNUXI32( value ) MASTER_FUNC_ENDIAN(MASTER_NUXI2LE4(value), MASTER_NUXI2BE4(value), MASTER_NUXI2NUXI4(value), MASTER_NUXI2PDPE4(value))
+#	define MASTER_FROMNUXI64( value ) MASTER_FUNC_ENDIAN(MASTER_NUXI2LE8(value), MASTER_NUXI2BE8(value), MASTER_NUXI2NUXI8(value), MASTER_NUXI2PDPE8(value))
 #	define MASTER_FROMPDPE( value ) MASTER_FUNC_ENDIAN(MASTER_PDP2LE(value), MASTER_PDP2BE(value), MASTER_PDP2NUXI(value), MASTER_PDP2PDPE(value))
-#	define MASTER_FROMPDPE16( value ) MASTER_FUNC_ENDIAN(MASTER_PDP2LE16(value), MASTER_PDP2BE16(value), MASTER_PDP2NUXI16(value), MASTER_PDP2PDPE16(value))
-#	define MASTER_FROMPDPE32( value ) MASTER_FUNC_ENDIAN(MASTER_PDP2LE32(value), MASTER_PDP2BE32(value), MASTER_PDP2NUXI32(value), MASTER_PDP2PDPE32(value))
-#	define MASTER_FROMPDPE64( value ) MASTER_FUNC_ENDIAN(MASTER_PDP2LE64(value), MASTER_PDP2BE64(value), MASTER_PDP2NUXI64(value), MASTER_PDP2PDPE64(value))
+#	define MASTER_FROMPDPE16( value ) MASTER_FUNC_ENDIAN(MASTER_PDP2LE2(value), MASTER_PDP2BE2(value), MASTER_PDP2NUXI2(value), MASTER_PDP2PDPE2(value))
+#	define MASTER_FROMPDPE32( value ) MASTER_FUNC_ENDIAN(MASTER_PDP2LE4(value), MASTER_PDP2BE4(value), MASTER_PDP2NUXI4(value), MASTER_PDP2PDPE4(value))
+#	define MASTER_FROMPDPE64( value ) MASTER_FUNC_ENDIAN(MASTER_PDP2LE8(value), MASTER_PDP2BE8(value), MASTER_PDP2NUXI8(value), MASTER_PDP2PDPE8(value))
 /* #! TODO !# */
 #	define MASTER_ITERATE_L2H( value )
 #	define MASTER_ITERATE_H2L( value )
@@ -1530,90 +1567,90 @@ define_macros( long double, ld ); \
 #define MASTER_SaturateUI2( value ) (UI2)MASTER_CLAMP(value, MASTER_UI2_MIN, MASTER_UI2_MAX)
 #define MASTER_SaturateUI4( value ) (UI4)MASTER_CLAMP(value, MASTER_UI4_MIN, MASTER_UI4_MAX)
 
-#define __MASTER_MACROS_DEFINE_AddSaturateSIx( type ) \
-MASTER_DEFINE_FUNCTION2( \
-	MASTER_NO_FLAGS, \
-	MASTER_EMPTY_DESCRIPTION, \
-	/* ! */ MASTER_AddSaturate ## type /* ! */, \
-	type, \
-	( const type, value1 ), \
-	( const type, value2 ) \
-) { \
-	const type value3 = value1 + value2; \
-	if (value1 > 0 && value2 > 0 && value3 < 0) return MASTER_ ## type ## _MAX; \
-	if (value1 < 0 && value2 < 0 && value3 > 0) return MASTER_ ## type ## _MIN; \
-	return value3; \
-}
+#define __MASTER_MACROS_DEFINE_AddSaturateSIx( variable_type ) \
+	MASTER_DEFINE_FUNCTION2( \
+		MASTER_NO_FLAGS, \
+		MASTER_EMPTY_DESCRIPTION, \
+		/* ! */ MASTER_AddSaturate ## variable_type /* ! */, \
+		variable_type, \
+		( const variable_type, value1 ), \
+		( const variable_type, value2 ) \
+	) { \
+		const variable_type value3 = value1 + value2; \
+		if (value1 > 0 && value2 > 0 && value3 < 0) return MASTER_ ## variable_type ## _MAX; \
+		if (value1 < 0 && value2 < 0 && value3 > 0) return MASTER_ ## variable_type ## _MIN; \
+		return value3; \
+	}
 
-#define __MASTER_MACROS_DEFINE_AddSaturateUIx( type ) \
-MASTER_DEFINE_FUNCTION2( \
-	MASTER_NO_FLAGS, \
-	MASTER_EMPTY_DESCRIPTION, \
-	/* ! */ MASTER_AddSaturate ## type /* ! */, \
-	type, \
-	( const type, value1 ), \
-	( const type, value2 ) \
-) { \
-	const type value3 = value1 + value2; \
-	if (value3 < value1) return MASTER_ ## type ## _MAX; \
-	return value3; \
-}
+#define __MASTER_MACROS_DEFINE_AddSaturateUIx( variable_type ) \
+	MASTER_DEFINE_FUNCTION2( \
+		MASTER_NO_FLAGS, \
+		MASTER_EMPTY_DESCRIPTION, \
+		/* ! */ MASTER_AddSaturate ## variable_type /* ! */, \
+		variable_type, \
+		( const variable_type, value1 ), \
+		( const variable_type, value2 ) \
+	) { \
+		const variable_type value3 = value1 + value2; \
+		if (value3 < value1) return MASTER_ ## variable_type ## _MAX; \
+		return value3; \
+	}
 
-#define __MASTER_MACROS_DEFINE_SubSaturateSIx( type ) \
-MASTER_DEFINE_FUNCTION2( \
-	MASTER_NO_FLAGS, \
-	MASTER_EMPTY_DESCRIPTION, \
-	/* ! */ MASTER_SubSaturate ## type /* ! */, \
-	type, \
-	( const type, value1 ), \
-	( const type, value2 ) \
-) { \
-	const type value3 = value1 - value2; \
-	if (value1 >= 0 && value2 < 0 && value3 < 0) return MASTER_ ## type ## _MAX; \
-	if (value1 < 0 && value2 > 0 && value3 > 0) return MASTER_ ## type ## _MIN; \
-	return value3; \
-}
+#define __MASTER_MACROS_DEFINE_SubSaturateSIx( variable_type ) \
+	MASTER_DEFINE_FUNCTION2( \
+		MASTER_NO_FLAGS, \
+		MASTER_EMPTY_DESCRIPTION, \
+		/* ! */ MASTER_SubSaturate ## variable_type /* ! */, \
+		variable_type, \
+		( const variable_type, value1 ), \
+		( const variable_type, value2 ) \
+	) { \
+		const variable_type value3 = value1 - value2; \
+		if (value1 >= 0 && value2 < 0 && value3 < 0) return MASTER_ ## variable_type ## _MAX; \
+		if (value1 < 0 && value2 > 0 && value3 > 0) return MASTER_ ## variable_type ## _MIN; \
+		return value3; \
+	}
 
-#define __MASTER_MACROS_DEFINE_SubSaturateUIx( type ) \
-MASTER_DEFINE_FUNCTION2( \
-	MASTER_NO_FLAGS, \
-	MASTER_EMPTY_DESCRIPTION, \
-	/* ! */ MASTER_SubSaturate ## type /* ! */, \
-	type, \
-	( const type, value1 ), \
-	( const type, value2 ) \
-) { \
-	const type value3 = value1 - value2; \
-	if (value3 > value1) return MASTER_ ## type ## _MIN; \
-	return value3; \
-}
+#define __MASTER_MACROS_DEFINE_SubSaturateUIx( variable_type ) \
+	MASTER_DEFINE_FUNCTION2( \
+		MASTER_NO_FLAGS, \
+		MASTER_EMPTY_DESCRIPTION, \
+		/* ! */ MASTER_SubSaturate ## variable_type /* ! */, \
+		variable_type, \
+		( const variable_type, value1 ), \
+		( const variable_type, value2 ) \
+	) { \
+		const variable_type value3 = value1 - value2; \
+		if (value3 > value1) return MASTER_ ## variable_type ## _MIN; \
+		return value3; \
+	}
 
-#define __MASTER_MACROS_DEFINE_MulSaturateSIx( type ) \
-MASTER_DEFINE_FUNCTION2( \
-	MASTER_NO_FLAGS, \
-	MASTER_EMPTY_DESCRIPTION, \
-	/* ! */ MASTER_MulSaturate ## type /* ! */, \
-	type, \
-	( const type, value1 ), \
-	( const type, value2 ) \
-) { \
-	const type value3 = value1 * value2; \
-	return (value2 != 0 && value3 / value2 != value1) ? ( ((value1 > 0) == (value2 > 0)) ? (MASTER_ ## type ## _MAX) : (MASTER_ ## type ## _MIN) ) : (value3); \
-}
+#define __MASTER_MACROS_DEFINE_MulSaturateSIx( variable_type ) \
+	MASTER_DEFINE_FUNCTION2( \
+		MASTER_NO_FLAGS, \
+		MASTER_EMPTY_DESCRIPTION, \
+		/* ! */ MASTER_MulSaturate ## variable_type /* ! */, \
+		variable_type, \
+		( const variable_type, value1 ), \
+		( const variable_type, value2 ) \
+	) { \
+		const variable_type value3 = value1 * value2; \
+		return (value2 != 0 && value3 / value2 != value1) ? ( ((value1 > 0) == (value2 > 0)) ? (MASTER_ ## variable_type ## _MAX) : (MASTER_ ## variable_type ## _MIN) ) : (value3); \
+	}
 
-#define __MASTER_MACROS_DEFINE_MulSaturateUIx( type ) \
-MASTER_DEFINE_FUNCTION2( \
-	MASTER_NO_FLAGS, \
-	MASTER_EMPTY_DESCRIPTION, \
-	/* ! */ MASTER_MulSaturate ## type /* ! */, \
-	type, \
-	( const type, value1 ), \
-	( const type, value2 ) \
-) { \
-	const type value3 = value1 * value2; \
-	if (value2 != 0 && value3 / value2 != value1) return MASTER_ ## type ## _MAX; \
-	return value3; \
-}
+#define __MASTER_MACROS_DEFINE_MulSaturateUIx( variable_type ) \
+	MASTER_DEFINE_FUNCTION2( \
+		MASTER_NO_FLAGS, \
+		MASTER_EMPTY_DESCRIPTION, \
+		/* ! */ MASTER_MulSaturate ## variable_type /* ! */, \
+		variable_type, \
+		( const variable_type, value1 ), \
+		( const variable_type, value2 ) \
+	) { \
+		const variable_type value3 = value1 * value2; \
+		if (value2 != 0 && value3 / value2 != value1) return MASTER_ ## variable_type ## _MAX; \
+		return value3; \
+	}
 
 __MASTER_MACROS_DEFINE_AddSaturateSIx( SI1 )
 __MASTER_MACROS_DEFINE_SubSaturateSIx( SI1 )

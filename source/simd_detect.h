@@ -687,6 +687,10 @@ MASTER_AvailableFutureExtensions[] = {
 
 const UI2 MASTER_AvailableFutureExtensionsCount = sizeof(MASTER_AvailableFutureExtensions) / sizeof(MASTER_AvailableFutureExtensions[0]);
 
+#ifdef MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS
+	const UI4 __MASTER_SIMD_DETECT_INCLUDE_H_LAST_LINE__ = MASTER_LINE + 6;
+#endif /* #! MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS !# */
+
 #endif /* #! __MASTER_SIMD_DETECT_INCLUDE_H__ !# */
 
 /* #! be master~ !# */
