@@ -11,14 +11,20 @@
 
 #include <master_enum.h>
 
+MASTER_BEGIN_DECLARATIONS
+
 #ifdef MASTER_RANDOMLIB_EXTERN_ONLY
 #	define MASTER_RANDOMLIB_XORSHIFT32_IMPLEMENT 0
 #	define MASTER_RANDOMLIB_XORSHIFT64_IMPLEMENT 0
 #	define MASTER_RANDOMLIB_XORSHIFT128_IMPLEMENT 0
+#	define MASTER_RANDOMLIB_MT19937_IMPLEMENT 0
+#	define MASTER_RANDOMLIB_WELL_FAMILY_IMPLEMENT 0
 #else
 #	if defined(MASTER_RANDOMLIB_XORSHIFT32_USE) || \
 	   defined(MASTER_RANDOMLIB_XORSHIFT64_USE) || \
-	   defined(MASTER_RANDOMLIB_XORSHIFT128_USE)
+	   defined(MASTER_RANDOMLIB_XORSHIFT128_USE) || \
+	   defined(MASTER_RANDOMLIB_MT19937_USE) || \
+	   defined(MASTER_RANDOMLIB_WELL_FAMILY_USE)
 #		define MASTER_RANDOMLIB_WHITELIST_MODE 1
 #	else
 #		define MASTER_RANDOMLIB_WHITELIST_MODE 0
@@ -65,6 +71,34 @@
 #	else
 #		define MASTER_RANDOMLIB_XORSHIFT128_IMPLEMENT 1
 #	endif /* #! xorshift128 !# */
+#	ifdef MASTER_RANDOMLIB_MT19937_EXTERN
+#		define MASTER_RANDOMLIB_MT19937_IMPLEMENT 0
+#		ifdef MASTER_RANDOMLIB_MT19937_USE
+#			warning "MT19937 is defined to USE, but also defined to EXTERN. MT19937 will NOT be compiled."
+#		endif /* #! MT19937 Conflict of Use & Extern !# */
+#	elif MASTER_RANDOMLIB_WHITELIST_MODE == 1
+#		ifdef MASTER_RANDOMLIB_MT19937_USE
+#			define MASTER_RANDOMLIB_MT19937_IMPLEMENT 1
+#		else
+#			define MASTER_RANDOMLIB_MT19937_IMPLEMENT 0
+#		endif /* #! MT19937 Use !# */
+#	else
+#		define MASTER_RANDOMLIB_MT19937_IMPLEMENT 1
+#	endif /* #! MT19937 !# */
+#	ifdef MASTER_RANDOMLIB_WELL_FAMILY_EXTERN
+#		define MASTER_RANDOMLIB_WELL_FAMILY_IMPLEMENT 0
+#		ifdef MASTER_RANDOMLIB_WELL_FAMILY_USE
+#			warning "WELL family is defined to USE, but also defined to EXTERN. WELL family will NOT be compiled."
+#		endif /* #! WELL family Conflict of Use & Extern !# */
+#	elif MASTER_RANDOMLIB_WHITELIST_MODE == 1
+#		ifdef MASTER_RANDOMLIB_WELL_FAMILY_USE
+#			define MASTER_RANDOMLIB_WELL_FAMILY_IMPLEMENT 1
+#		else
+#			define MASTER_RANDOMLIB_WELL_FAMILY_IMPLEMENT 0
+#		endif /* #! WELL family Use !# */
+#	else
+#		define MASTER_RANDOMLIB_WELL_FAMILY_IMPLEMENT 1
+#	endif /* #! WELL family !# */
 #	undef MASTER_RANDOMLIB_WHITELIST_MODE
 #endif /* #! MASTER_RANDOMLIB_EXTERN_ONLY !# */
 
@@ -74,8 +108,7 @@ typedef struct {
 	UI4 state;
 } MASTER_Randomlib_xorshift32;
 
-MASTER_PREFER_EXTERN UI4
-MASTER_Randomlib_xorshift32_Next( MASTER_Randomlib_xorshift32 * const, UI4 * const );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI4, MASTER_Randomlib_xorshift32_Next, ( MASTER_Randomlib_xorshift32 * const, UI4 * const ) );
 
 #if MASTER_RANDOMLIB_XORSHIFT32_IMPLEMENT == 1
 
@@ -104,8 +137,7 @@ typedef struct {
 	UI8 state;
 } MASTER_Randomlib_xorshift64;
 
-MASTER_PREFER_EXTERN UI4
-MASTER_Randomlib_xorshift64_Next( MASTER_Randomlib_xorshift64 * const, UI8 * const );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI4, MASTER_Randomlib_xorshift64_Next, ( MASTER_Randomlib_xorshift64 * const, UI8 * const ) );
 
 #if MASTER_RANDOMLIB_XORSHIFT64_IMPLEMENT == 1
 
@@ -148,8 +180,7 @@ typedef struct {
 	UI4 state[4];
 } MASTER_Randomlib_xorshift128;
 
-MASTER_PREFER_EXTERN UI4
-MASTER_Randomlib_xorshift128_Next( MASTER_Randomlib_xorshift128 * const, UI4 * const );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI4, MASTER_Randomlib_xorshift128_Next, ( MASTER_Randomlib_xorshift128 * const, UI4 * const ) );
 
 #if MASTER_RANDOMLIB_XORSHIFT128_IMPLEMENT == 1
 
@@ -180,6 +211,225 @@ MASTER_DEFINE_FUNCTION2(
 /* #! Jump 1.000, 1.000.000, 1.000.000.000, 1E+12, 1E+15, 1E+18, 1E+21, 1E+24, 1E+27, 1E+30, 1E+33, 1E+36 !# */
 
 #endif /* #! xorshift128 !# */
+
+/* #! Mersenne Twister 19937 !# */
+
+#define MASTER_RANDOMLIB_MT19937_NUMBERS 624
+#define MASTER_RANDOMLIB_MT19937_OFFSET 397
+
+typedef struct {
+	UI4 state[MASTER_RANDOMLIB_MT19937_NUMBERS];
+	UI2 index; /* #! =MASTER_RANDOMLIB_MT19937_NUMBERS !# */
+} MASTER_Randomlib_MT19937;
+
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI4, MASTER_Randomlib_MT19937_Next, ( MASTER_Randomlib_MT19937 * const, UI4 * const ) );
+
+#if MASTER_RANDOMLIB_MT19937_IMPLEMENT == 1
+
+MASTER_PREFER_STATIC void
+MASTER_Randomlib_MT19937_Twist( MASTER_Randomlib_MT19937 * const mt19937c ) {
+	UI2 index = 0;
+	UI4 value;
+	UI4 xValue;
+#define MASTER_RANDOMLIB_MT19937_TWIST_ROUND( curindex, nextindex, offindex ) do { \
+		value = (mt19937c->state[curindex] & 0x80000000) | (mt19937c->state[nextindex] & 0x7FFFFFFF); \
+		xValue = value >> 1; \
+		if (value & 1) xValue ^= 0x9908B0DF; \
+		mt19937c->state[curindex] = mt19937c->state[offindex] ^ xValue; \
+	} while (0)
+#ifdef MASTER_RANDOMLIB_MT19937_PREFER_OPTIMIZED
+	for (; index < MASTER_RANDOMLIB_MT19937_NUMBERS - MASTER_RANDOMLIB_MT19937_OFFSET; index += 1) {
+		MASTER_RANDOMLIB_MT19937_TWIST_ROUND(index, index + 1, index + MASTER_RANDOMLIB_MT19937_OFFSET);
+	}
+	for (; index < MASTER_RANDOMLIB_MT19937_NUMBERS - 1; index += 1) {
+		MASTER_RANDOMLIB_MT19937_TWIST_ROUND(index, index + 1, index + (MASTER_RANDOMLIB_MT19937_OFFSET - MASTER_RANDOMLIB_MT19937_NUMBERS));
+	}
+	MASTER_RANDOMLIB_MT19937_TWIST_ROUND(MASTER_RANDOMLIB_MT19937_NUMBERS - 1, 0, MASTER_RANDOMLIB_MT19937_OFFSET - 1);
+#else
+	for (; index < MASTER_RANDOMLIB_MT19937_NUMBERS; index += 1) {
+		MASTER_RANDOMLIB_MT19937_TWIST_ROUND(index, (index + 1) % MASTER_RANDOMLIB_MT19937_NUMBERS, (index + MASTER_RANDOMLIB_MT19937_OFFSET) % MASTER_RANDOMLIB_MT19937_NUMBERS);
+	}
+#endif /* #! MASTER_RANDOMLIB_MT19937_PREFER_OPTIMIZED !# */
+	mt19937c->index = 0;
+#undef MASTER_RANDOMLIB_MT19937_TWIST_ROUND
+}
+
+UI4
+MASTER_Randomlib_MT19937_Next( MASTER_Randomlib_MT19937 * const mt19937c, UI4 * const output ) {
+	UI4 value;
+	if (mt19937c == nul) return 0;
+	if (mt19937c->index >= MASTER_RANDOMLIB_MT19937_NUMBERS)
+		MASTER_Randomlib_MT19937_Twist(mt19937c);
+	value = mt19937c->state[mt19937c->index];
+	mt19937c->index += 1;
+	value ^= value >> 11;
+	value ^= (value << 7) & 0x9D2C5680;
+	value ^= (value << 15) & 0xEFC60000;
+	value ^= value >> 18;
+	if (output != nul) *output = value;
+	return value;
+}
+
+#endif /* #! MT19937 !# */
+
+/* #! WELL !# */
+
+#define MASTER_RANDOMLIB_WELL_M0( value, word_bits ) 0
+#define MASTER_RANDOMLIB_WELL_M1( value, word_bits ) (value)
+#define MASTER_RANDOMLIB_WELL_M2( value, t_value, word_bits ) (((SI4)(t_value) >= 0) ? ((value) >> (SI4)(t_value)) : ((value) << MASTER_ABS((SI4)(t_value))))
+#define MASTER_RANDOMLIB_WELL_M3( value, t_value, word_bits ) ((value) ^ (((SI4)(t_value) >= 0) ? ((value) >> (SI4)(t_value)) : ((value) << -(SI4)(t_value))))
+#define MASTER_RANDOMLIB_WELL_M4( value, a_value, word_bits ) (((value) >> 1) ^ ((((value) >> ((word_bits) - 1)) & 1) == 1) ? (a_value) : (0))
+#define MASTER_RANDOMLIB_WELL_M5( value, t_value, b_value, word_bits ) ((value) ^ ((((SI4)(t_value) >= 0) ? ((value) << (SI4)(t_value)) : ((value) >> -(SI4)(t_value))) & (b_value)))
+#define MASTER_RANDOMLIB_WELL_M6( value, r_value, s_value, t_value, a_value, word_bits ) (((((value) << (r_value)) ^ ((value) >> ((word_bits) - (r_value)))) & (~(1 << (s_value)))) ^ (((((value) >> (t_value)) & 1) == 1) ? (a_value) : (0)))
+
+#define MASTER_RANDOMLIB_WELL_FALL_M0( arg_list ) MASTER_RANDOMLIB_WELL_M0 arg_list
+#define MASTER_RANDOMLIB_WELL_FALL_M1( arg_list ) MASTER_RANDOMLIB_WELL_M1 arg_list
+#define MASTER_RANDOMLIB_WELL_FALL_M2( arg_list ) MASTER_RANDOMLIB_WELL_M2 arg_list
+#define MASTER_RANDOMLIB_WELL_FALL_M3( arg_list ) MASTER_RANDOMLIB_WELL_M3 arg_list
+#define MASTER_RANDOMLIB_WELL_FALL_M4( arg_list ) MASTER_RANDOMLIB_WELL_M4 arg_list
+#define MASTER_RANDOMLIB_WELL_FALL_M5( arg_list ) MASTER_RANDOMLIB_WELL_M5 arg_list
+#define MASTER_RANDOMLIB_WELL_FALL_M6( arg_list ) MASTER_RANDOMLIB_WELL_M6 arg_list
+
+#define MASTER_RANDOMLIB_WELL_FALL_FALL_M0() MASTER_RANDOMLIB_WELL_FALL_M0
+#define MASTER_RANDOMLIB_WELL_FALL_FALL_M1() MASTER_RANDOMLIB_WELL_FALL_M1
+#define MASTER_RANDOMLIB_WELL_FALL_FALL_M2( t_value ) MASTER_RANDOMLIB_WELL_FALL_M2
+#define MASTER_RANDOMLIB_WELL_FALL_FALL_M3( t_value ) MASTER_RANDOMLIB_WELL_FALL_M3
+#define MASTER_RANDOMLIB_WELL_FALL_FALL_M4( a_value ) MASTER_RANDOMLIB_WELL_FALL_M4
+#define MASTER_RANDOMLIB_WELL_FALL_FALL_M5( t_value, b_value ) MASTER_RANDOMLIB_WELL_FALL_M5
+#define MASTER_RANDOMLIB_WELL_FALL_FALL_M6( r_value, s_value, t_value, a_value ) MASTER_RANDOMLIB_WELL_FALL_M6
+
+#define MASTER_RANDOMLIB_WELL_UNARG_M0 MASTER_UNARG_END0
+#define MASTER_RANDOMLIB_WELL_UNARG_M1 MASTER_UNARG_END0
+#define MASTER_RANDOMLIB_WELL_UNARG_M2 MASTER_UNARG_END1
+#define MASTER_RANDOMLIB_WELL_UNARG_M3 MASTER_UNARG_END1
+#define MASTER_RANDOMLIB_WELL_UNARG_M4 MASTER_UNARG_END1
+#define MASTER_RANDOMLIB_WELL_UNARG_M5 MASTER_UNARG_END2
+#define MASTER_RANDOMLIB_WELL_UNARG_M6 MASTER_UNARG_END4
+
+#define MASTER_RANDOMLIB_CREATE_WELL_PACKAGE( upper_name, lower_name, bit_count, word_bits, member1, member2, member3, b_constant, c_constant, func0, func1, func2, func3, func4, func5, func6, func7 ) \
+typedef struct { \
+	MASTER_ ## word_bits ## BIT_NUMBER state[bit_count / word_bits + !!(bit_count % word_bits)]; \
+	UI4 index; /* #! =0 !# */ \
+} MASTER_Randomlib_WELL ## upper_name; \
+\
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, MASTER_ ## word_bits ## BIT_NUMBER, MASTER_Randomlib_WELL ## upper_name ## _Next, ( MASTER_Randomlib_WELL ## upper_name * const, MASTER_ ## word_bits ## BIT_NUMBER * const ) ); \
+\
+MASTER_ ## word_bits ## BIT_NUMBER \
+MASTER_Randomlib_WELL ## upper_name ## _Next( MASTER_Randomlib_WELL ## upper_name * const well ## lower_name ## c, MASTER_ ## word_bits ## BIT_NUMBER * const output ) { \
+	UI4 z_state[5]; \
+	UI4 v_state[5]; \
+	UI4 index[5]; \
+	UI4 result; \
+	v_state[0] = well ## lower_name ## c->state[index[0] = well ## lower_name ## c->index]; \
+	v_state[1] = well ## lower_name ## c->state[index[1] = (well ## lower_name ## c->index + (member1)) % (bit_count / word_bits + !!(bit_count % word_bits))]; \
+	v_state[2] = well ## lower_name ## c->state[index[2] = (well ## lower_name ## c->index + (member2)) % (bit_count / word_bits + !!(bit_count % word_bits))]; \
+	v_state[3] = well ## lower_name ## c->state[index[3] = (well ## lower_name ## c->index + (member3)) % (bit_count / word_bits + !!(bit_count % word_bits))]; \
+	v_state[4] = well ## lower_name ## c->state[index[4] = (well ## lower_name ## c->index + (bit_count / word_bits + !!(bit_count % word_bits)) - 1) % (bit_count / word_bits + !!(bit_count % word_bits))]; \
+	if ((bit_count) % (word_bits) == 0) \
+		z_state[0] = v_state[4]; \
+	else \
+		z_state[0] = (v_state[4] & ((~0) >> MASTER_WRAP((word_bits) - ((bit_count) % (word_bits)), word_bits))) | (well ## lower_name ## c->state[(well ## lower_name ## c->index + (bit_count / word_bits + !!(bit_count % word_bits)) - 2) % (bit_count / word_bits + !!(bit_count % word_bits))] & (~((~0) >> MASTER_WRAP((word_bits) - ((bit_count) % (word_bits)), word_bits)))); \
+	z_state[1] = MASTER_RANDOMLIB_WELL_FALL_FALL_ ## func0( (v_state[0] MASTER_RANDOMLIB_WELL_UNARG_ ## func0, word_bits) ) ^ MASTER_RANDOMLIB_WELL_FALL_FALL_ ## func1( (v_state[1] MASTER_RANDOMLIB_WELL_UNARG_ ## func1, word_bits) ); \
+	z_state[2] = MASTER_RANDOMLIB_WELL_FALL_FALL_ ## func2( (v_state[2] MASTER_RANDOMLIB_WELL_UNARG_ ## func2, word_bits) ) ^ MASTER_RANDOMLIB_WELL_FALL_FALL_ ## func3( (v_state[3] MASTER_RANDOMLIB_WELL_UNARG_ ## func3, word_bits) ); \
+	z_state[3] = z_state[1] ^ z_state[2]; \
+	z_state[4] = MASTER_RANDOMLIB_WELL_FALL_FALL_ ## func4( (z_state[0] MASTER_RANDOMLIB_WELL_UNARG_ ## func4, word_bits) ) ^ MASTER_RANDOMLIB_WELL_FALL_FALL_ ## func5( (z_state[1] MASTER_RANDOMLIB_WELL_UNARG_ ## func5, word_bits) ) ^ MASTER_RANDOMLIB_WELL_FALL_FALL_ ## func6( (z_state[2] MASTER_RANDOMLIB_WELL_UNARG_ ## func6, word_bits) ) ^ MASTER_RANDOMLIB_WELL_FALL_FALL_ ## func7( (z_state[3] MASTER_RANDOMLIB_WELL_UNARG_ ## func7, word_bits) ); \
+	well ## lower_name ## c->state[index[0]] = z_state[3]; \
+	well ## lower_name ## c->state[index[4]] = z_state[4] & (((bit_count) % (word_bits) == 0) ? (~0) : ((~0) >> ((word_bits) - ((bit_count) % (word_bits))))); \
+	well ## lower_name ## c->index = index[4]; \
+	result = well ## lower_name ## c->state[well ## lower_name ## c->index]; \
+	if ((b_constant) != 0 && (c_constant) != 0) { \
+		result ^= (result << 7) & (b_constant); \
+		result ^= (result << 15) & (c_constant); \
+	} \
+	if (output != nul) \
+		*output = result; \
+	return result; \
+}
+
+#define MASTER_RANDOMLIB_CREATE_WELL_PACKAGE_NO_TAMPERING( upper_name, lower_name, bit_count, word_bits, member1, member2, member3, func0, func1, func2, func3, func4, func5, func6, func7 ) MASTER_RANDOMLIB_CREATE_WELL_PACKAGE(upper_name, lower_name, bit_count, word_bits, member1, member2, member3, 0, 0, func0, func1, func2, func3, func4, func5, func6, func7)
+
+#if MASTER_RANDOMLIB_WELL_FAMILY_IMPLEMENT == 1
+
+const UI4
+MASTER_Randomlib_WELL_AConstants[7] = {
+	0xDA442D24, 0xD3E43FFD, 0x8BDCB91E, 0x86A9D87E,
+	0xA8C296D1, 0x5D6B45CC, 0xB729FCEC
+};
+
+MASTER_RANDOMLIB_CREATE_WELL_PACKAGE_NO_TAMPERING( 512A, 512a, 512, 32,
+	13, 9, 5,
+	M3(-16), M3(-15), M3(11),  M0(),
+	M3(-2),  M3(-18), M3(-28), M5(-5, 0xDA442D24) )
+MASTER_RANDOMLIB_CREATE_WELL_PACKAGE_NO_TAMPERING( 521A, 521a, 521, 32,
+	13, 11, 10,
+	M3(-13), M3(-15), M1(), M2(-21),
+	M3(-13), M2(1),   M0(), M3(11) )
+MASTER_RANDOMLIB_CREATE_WELL_PACKAGE_NO_TAMPERING( 521B, 521b, 521, 32,
+	11, 10, 7,
+	M3(-21), M3(6),   M0(),   M3(-13),
+	M3(13),  M2(-10), M2(-5), M3(13) )
+MASTER_RANDOMLIB_CREATE_WELL_PACKAGE_NO_TAMPERING( 607A, 607a, 607, 32,
+	16, 15, 14,
+	M3(19), M3(11), M3(-14), M1(),
+	M3(18), M1(),   M0(),    M3(-5) )
+MASTER_RANDOMLIB_CREATE_WELL_PACKAGE_NO_TAMPERING( 607B, 607b, 607, 32,
+	16, 8, 13,
+	M3(-18), M3(-14), M0(),   M3(18),
+	M3(-24), M3(5),   M3(-1), M0() )
+MASTER_RANDOMLIB_CREATE_WELL_PACKAGE_NO_TAMPERING( 800A, 800a, 800, 32,
+	14, 18, 16,
+	M1(),   M3(-15), M3(10), M3(-11),
+	M3(16), M2(20),  M1(),   M3(-28) )
+MASTER_RANDOMLIB_CREATE_WELL_PACKAGE_NO_TAMPERING( 800B, 800b, 800, 32,
+	9, 4, 22,
+	M3(-29), M2(-14), M1(),                                    M2(19),
+	M1(),    M3(10),  M4(MASTER_Randomlib_WELL_AConstants[1]), M3(-25) )
+MASTER_RANDOMLIB_CREATE_WELL_PACKAGE_NO_TAMPERING( 1024A, 1024a, 1024, 32,
+	3, 24, 10,
+	M1(),    M3(8),  M3(-19), M3(-14),
+	M3(-11), M3(-7), M3(-13), M0() )
+MASTER_RANDOMLIB_CREATE_WELL_PACKAGE_NO_TAMPERING( 1024B, 1024b, 1024, 32,
+	22, 25, 26,
+	M3(-21), M3(17),  M4(MASTER_Randomlib_WELL_AConstants[2]), M3(15),
+	M3(-14), M3(-21), M1(),                                    M0() )
+MASTER_RANDOMLIB_CREATE_WELL_PACKAGE_NO_TAMPERING( 19937A, 19937a, 19937, 32,
+	70, 179, 449,
+	M3(-25), M3(27), M2(9),   M3(1),
+	M1(),    M3(-9), M3(-21), M3(21) )
+MASTER_RANDOMLIB_CREATE_WELL_PACKAGE_NO_TAMPERING( 19937B, 19937b, 19937, 32,
+	203, 613, 123,
+	M3(7),   M1(),    M3(12), M3(-10),
+	M3(-19), M2(-11), M3(4),  M3(-10) )
+MASTER_RANDOMLIB_CREATE_WELL_PACKAGE( 19937C, 19937c, 19937, 32,
+	70, 179, 449,
+	0xE46E1700, 0x9B868000,
+	M3(-25), M3(27), M2(9),   M3(1),
+	M1(),    M3(-9), M3(-21), M3(21) )
+MASTER_RANDOMLIB_CREATE_WELL_PACKAGE_NO_TAMPERING( 21701A, 21701a, 21701, 32,
+	151, 327, 84,
+	M1(),   M3(-26), M3(19),                                              M0(),
+	M3(27), M3(-11), M6(15, 10, 27, MASTER_Randomlib_WELL_AConstants[3]), M3(-16) )
+MASTER_RANDOMLIB_CREATE_WELL_PACKAGE_NO_TAMPERING( 23209A, 23209a, 23209, 32,
+	667, 43, 462,
+	M3(28), M1(),    M3(18),  M3(3),
+	M3(21), M3(-17), M3(-28), M3(-1) )
+MASTER_RANDOMLIB_CREATE_WELL_PACKAGE_NO_TAMPERING( 23209B, 23209b, 23209, 32,
+	610, 175, 662,
+	M4(MASTER_Randomlib_WELL_AConstants[4]), M1(), M6(15, 30, 15, MASTER_Randomlib_WELL_AConstants[5]), M3(-24),
+	M3(-26), M1(), M0(), M3(16) )
+MASTER_RANDOMLIB_CREATE_WELL_PACKAGE_NO_TAMPERING( 44497A, 44497a, 44497, 32,
+	23, 481, 229,
+	M3(-24), M3(30), M3(-10), M2(-26),
+	M1(),    M3(20), M6(9, 14, 5, MASTER_Randomlib_WELL_AConstants[6]), M1() )
+MASTER_RANDOMLIB_CREATE_WELL_PACKAGE( 44497B, 44497b, 44497, 32,
+	23, 481, 229,
+	0x93DD1400, 0xFA118000,
+	M3(-24), M3(30), M3(-10), M2(-26),
+	M1(),    M3(20), M6(9, 14, 5, MASTER_Randomlib_WELL_AConstants[6]), M1() )
+
+#endif /* #! WELL !# */
+
+MASTER_END_DECLARATIONS
 
 #ifdef MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS
 	const UI4 __MASTER_RANDOMLIB_INCLUDE_H_LAST_LINE__ = MASTER_LINE + 6;

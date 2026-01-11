@@ -11,6 +11,8 @@
 
 #include <master_enum.h>
 
+MASTER_BEGIN_DECLARATIONS
+
 #ifdef MASTER_CHECKSUM_EXTERN_ONLY
 #	define MASTER_CHECKSUM_ADLER32_IMPLEMENT 0
 #	define MASTER_CHECKSUM_API_IMPLEMENT 0
@@ -55,19 +57,13 @@ typedef struct {
 	UI4 checksum;
 } MASTER_Checksum_Adler32_Context;
 
-MASTER_PREFER_EXTERN MASTER_Checksum_Adler32_Context
-MASTER_Checksum_Adler32_Create( void );
-MASTER_PREFER_EXTERN void
-MASTER_Checksum_Adler32_Init( MASTER_Checksum_Adler32_Context * const );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, MASTER_Checksum_Adler32_Context, MASTER_Checksum_Adler32_Create, ( void ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, void, MASTER_Checksum_Adler32_Init, ( MASTER_Checksum_Adler32_Context * const ) );
 #define MASTER_Checksum_Adler32_Flush MASTER_Checksum_Adler32_Init
-MASTER_PREFER_EXTERN void
-MASTER_Checksum_Adler32_Update( MASTER_Checksum_Adler32_Context * const, const void *, MASTER_maxint );
-MASTER_PREFER_EXTERN UI4
-MASTER_Checksum_Adler32_Finish( MASTER_Checksum_Adler32_Context * const, UI1 * const );
-MASTER_PREFER_EXTERN UI4
-MASTER_Checksum_Adler32_Calculate( const void * const, const MASTER_maxint, UI1 * const );
-MASTER_PREFER_EXTERN UI1
-MASTER_Checksum_Adler32_Combine( MASTER_Checksum_Adler32_Context * const, const MASTER_Checksum_Adler32_Context * const, const MASTER_Checksum_Adler32_Context * const, const UI4 );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, void, MASTER_Checksum_Adler32_Update, ( MASTER_Checksum_Adler32_Context * const, const void *, MASTER_maxint ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI4, MASTER_Checksum_Adler32_Finish, ( MASTER_Checksum_Adler32_Context * const, UI1 * const ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI4, MASTER_Checksum_Adler32_Calculate, ( const void * const, const MASTER_maxint, UI1 * const ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI1, MASTER_Checksum_Adler32_Combine, ( MASTER_Checksum_Adler32_Context * const, const MASTER_Checksum_Adler32_Context * const, const MASTER_Checksum_Adler32_Context * const, const UI4 ) );
 
 #if MASTER_CHECKSUM_ADLER32_IMPLEMENT == 1
 
@@ -95,7 +91,7 @@ MASTER_Checksum_Adler32_Update( MASTER_Checksum_Adler32_Context * const adler32c
 	part1 = adler32c->checksum & 0xFFFF;
 	part2 = (adler32c->checksum >> 16) & 0xFFFF;
 	for (; index < len; index += 1) {
-		part1 = (part1 + ((UI1 *)bytes)[index]) % 65521;
+		part1 = (part1 + ((const UI1 *)bytes)[index]) % 65521;
 		part2 = (part1 + part2) % 65521;
 	}
 	adler32c->checksum = (part2 << 16) | part1;
@@ -142,22 +138,14 @@ typedef struct {
 	} context;
 } MASTER_Checksum_Context;
 
-MASTER_PREFER_EXTERN MASTER_Checksum_Context
-MASTER_Checksum_Create( const UI1 );
-MASTER_PREFER_EXTERN void
-MASTER_Checksum_Init( MASTER_Checksum_Context * const, const UI1 );
-MASTER_PREFER_EXTERN void
-MASTER_Checksum_Flush( MASTER_Checksum_Context * const );
-MASTER_PREFER_EXTERN void
-MASTER_Checksum_Update( MASTER_Checksum_Context * const, const void * const, const MASTER_maxint );
-MASTER_PREFER_EXTERN UI4
-MASTER_Checksum_Finish( MASTER_Checksum_Context * const, UI1 * const );
-MASTER_PREFER_EXTERN UI4
-MASTER_Checksum_Calculate( const UI1, const void * const, const MASTER_maxint, UI1 * const );
-MASTER_PREFER_EXTERN const char *
-MASTER_Checksum_GetAlgorithmName( const UI1 );
-MASTER_PREFER_EXTERN MASTER_maxint
-MASTER_Checksum_GetAlgorithmOutputSize( const UI1 );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, MASTER_Checksum_Context, MASTER_Checksum_Create, ( const UI1 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, void, MASTER_Checksum_Init, ( MASTER_Checksum_Context * const, const UI1 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, void, MASTER_Checksum_Flush, ( MASTER_Checksum_Context * const ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, void, MASTER_Checksum_Update, ( MASTER_Checksum_Context * const, const void * const, const MASTER_maxint ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI4, MASTER_Checksum_Finish, ( MASTER_Checksum_Context * const, UI1 * const ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI4, MASTER_Checksum_Calculate, ( const UI1, const void * const, const MASTER_maxint, UI1 * const ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, const char *, MASTER_Checksum_GetAlgorithmName, ( const UI1 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, MASTER_maxint, MASTER_Checksum_GetAlgorithmOutputSize, ( const UI1 ) );
 
 #if MASTER_CHECKSUM_API_IMPLEMENT == 1
 
@@ -172,7 +160,7 @@ MASTER_Checksum_Create( const UI1 id ) {
 		break;
 		
 		MASTER_CHECKSUM_XMACRO_FOR_DEFINING_ALGORITHMS( MASTER_CHECKSUM_API_CREATE_HANDLER_CREATE )
-	};
+	}
 	return checksum;
 }
 
@@ -186,7 +174,7 @@ MASTER_Checksum_Init( MASTER_Checksum_Context * const checksum, const UI1 id ) {
 		break;
 		
 		MASTER_CHECKSUM_XMACRO_FOR_DEFINING_ALGORITHMS( MASTER_CHECKSUM_API_CREATE_HANDLER_INIT )
-	};
+	}
 }
 
 void
@@ -198,7 +186,7 @@ MASTER_Checksum_Flush( MASTER_Checksum_Context * const checksum ) {
 		break;
 		
 		MASTER_CHECKSUM_XMACRO_FOR_DEFINING_ALGORITHMS( MASTER_CHECKSUM_API_CREATE_HANDLER_FLUSH )
-	};
+	}
 }
 
 void
@@ -210,7 +198,7 @@ MASTER_Checksum_Update( MASTER_Checksum_Context * const checksum, const void * c
 		break;
 		
 		MASTER_CHECKSUM_XMACRO_FOR_DEFINING_ALGORITHMS( MASTER_CHECKSUM_API_CREATE_HANDLER_UPDATE )
-	};
+	}
 }
 
 UI4
@@ -221,7 +209,7 @@ MASTER_Checksum_Finish( MASTER_Checksum_Context * const checksum, UI1 * const ou
 			return MASTER_Checksum_## algorithm_name ##_Finish(&(checksum->context.member), out);
 		
 		MASTER_CHECKSUM_XMACRO_FOR_DEFINING_ALGORITHMS( MASTER_CHECKSUM_API_CREATE_HANDLER_FINISH )
-	};
+	}
 	return MASTER_UI4_MAX;
 }
 
@@ -233,7 +221,7 @@ MASTER_Checksum_Calculate( const UI1 id, const void * const bytes, const MASTER_
 			return MASTER_Checksum_## algorithm_name ##_Calculate(bytes, len, out);
 		
 		MASTER_CHECKSUM_XMACRO_FOR_DEFINING_ALGORITHMS( MASTER_CHECKSUM_API_CREATE_HANDLER_CALCULATE )
-	};
+	}
 	return MASTER_UI4_MAX;
 }
 
@@ -259,6 +247,8 @@ MASTER_Checksum_GetAlgorithmOutputSize( const UI1 id ) {
 }
 
 #endif /* #! API !# */
+
+MASTER_END_DECLARATIONS
 
 #ifdef MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS
 	const UI4 __MASTER_CHECKSUM_INCLUDE_H_LAST_LINE__ = MASTER_LINE + 6;

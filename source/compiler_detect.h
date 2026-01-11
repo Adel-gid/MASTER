@@ -11,6 +11,8 @@
 
 #include <master_enum.h>
 
+MASTER_BEGIN_DECLARATIONS
+
 #ifdef __cplusplus
 #	define MASTER_LANGUAGE_NAME "C++"
 #else
@@ -195,6 +197,8 @@
 #else
 #	define MASTER_COMPILER_NAME "undefined"
 #endif /* #! __MASTER_INTEGER_INCLUDE_H__ !# */
+
+MASTER_END_DECLARATIONS
 
 #ifdef MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS
 	const UI4 __MASTER_COMPILER_DETECT_INCLUDE_H_LAST_LINE__ = MASTER_LINE + 6;

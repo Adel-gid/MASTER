@@ -9,7 +9,7 @@
 #ifndef __MASTER_CODE_STYLE_INCLUDE_H__
 #define __MASTER_CODE_STYLE_INCLUDE_H__
 
-#define MASTER_VERSION (((5) << 18) | ((1) << 14) | (2026))
+#define MASTER_VERSION (((11) << 18) | ((1) << 14) | (2026))
 
 /* #! MASTER Minimal Package !# */
 
@@ -19,6 +19,16 @@ typedef unsigned int UI4;
 typedef signed char SI1;
 typedef signed short SI2;
 typedef signed int SI4;
+
+typedef UI4 OUI; /* #! Unknown type but prefers unsigned int !# */
+typedef SI4 OSI; /* #! Unknown type but prefers signed int !# */
+typedef double UF; /* #! Unknown type but prefers float !# */
+typedef UI4 UT; /* #! Unknown type !# */
+
+#define MASTER_8BIT_NUMBER UI1
+#define MASTER_16BIT_NUMBER UI2
+#define MASTER_32BIT_NUMBER UI4
+#define MASTER_64BIT_NUMBER UI8
 
 /* #! MASTER Syntax !# */
 
@@ -38,6 +48,132 @@ typedef signed int SI4;
 
 /* #!! C99 !!# */
 #define MASTER_FUNC __func__
+
+/* #! compiler trash !# */
+
+#define MASTER_UNSUPPORTING 0
+#define MASTER_PARTIAL_SUPPORTING 5
+#define MASTER_SUPPORTING 10
+#define MASTER_SUPPORT_STATE( nivel ) (nivel)
+
+#ifndef MASTER_COMPILER_SETTINGS
+#	if !defined(MASTER_NO_COMPILER_SETTINGS_DEPENDENCY) && 0
+		/* #! TODO !# */
+		/* #! #include <compiler_settings.h> !# */
+#	else
+#		define MASTER_PREFER_CONST const
+#		ifdef __cplusplus
+#			define MASTER_PREFER_INLINE inline
+#		else
+#			if defined(__STDC_VERSION__) && __STDC_VERSION__ + 0 >= 199901L
+#				define MASTER_PREFER_INLINE inline
+#			else
+#				define MASTER_PREFER_INLINE
+#			endif /* #! C99+ !# */
+#		endif /* #! C++ !# */
+#		define MASTER_PREFER_STATIC static
+#		ifdef __cplusplus
+#			define MASTER_PREFER_EXTERN extern
+#		else
+#			define MASTER_PREFER_EXTERN
+#		endif /* #! C++ !# */
+#		define MASTER_PREFER_HOT
+#		define MASTER_PREFER_COLD
+#		define MASTER_PREFER_VISIBLE
+#		define MASTER_PREFER_HIDDEN
+#		if defined(__cplusplus) || (defined(__STDC_VERSION__) && __STDC_VERSION__ + 0 >= 202311L)
+#			define MASTER_PREFER_UNUSED [[maybe_unused]]
+#		else 
+#			define MASTER_PREFER_UNUSED
+#		endif /* #! C++ / C23+ !# */
+#		if defined(__cplusplus) || (defined(__STDC_VERSION__) && __STDC_VERSION__ + 0 >= 201710L)
+#			define MASTER_PREFER_DEPRECATED [[deprecated]]
+#		else 
+#			define MASTER_PREFER_DEPRECATED
+#		endif /* #! C++ / C17+ !# */
+#		define MASTE_PREFER_NONNULL
+#		define MASTER_COMPILER_SETTINGS 0
+#	endif /* #! Compiler / Standard !# */
+#endif /* #! MASTER_COMPILER_SETTINGS !# */
+
+#ifdef __cplusplus
+#	define MASTER_C_STANDARD 0
+#	if __cplusplus + 0 >= 202302L
+#		define MASTER_CPP_STANDARD 2023
+#		define MASTER_COMPILER_LANGUAGE "C++23"
+#	elif __cplusplus + 0 >= 202002L
+#		define MASTER_CPP_STANDARD 2020
+#		define MASTER_COMPILER_LANGUAGE "C++20"
+#	elif __cplusplus + 0 >= 201703L
+#		define MASTER_CPP_STANDARD 2017
+#		define MASTER_COMPILER_LANGUAGE "C++17"
+#	elif __cplusplus + 0 >= 201402L
+#		define MASTER_CPP_STANDARD 2014
+#		define MASTER_COMPILER_LANGUAGE "C++14"
+#	elif __cplusplus + 0 >= 201103L
+#		define MASTER_CPP_STANDARD 2011
+#		define MASTER_COMPILER_LANGUAGE "C++11"
+#	elif __cplusplus + 0 >= 199711L
+#		define MASTER_CPP_STANDARD 1997
+#		define MASTER_COMPILER_LANGUAGE "C++97"
+#	else
+#		define MASTER_CPP_STANDARD 1997
+#		define MASTER_COMPILER_LANGUAGE "C++97"
+#	endif /* #! __cplusplus !# */
+#elif defined(__STDC__)
+#	define MASTER_CPP_STANDARD 0
+#	if defined(__STDC_VERSION__)
+#		if __STDC_VERSION__ + 0 >= 202311L
+#			define MASTER_C_STANDARD 2023
+#			define MASTER_COMPILER_LANGUAGE "C23"
+#		elif __STDC_VERSION__ + 0 >= 201710L
+#			define MASTER_C_STANDARD 2017
+#			define MASTER_COMPILER_LANGUAGE "C17"
+#		elif __STDC_VERSION__ + 0 >= 201112L
+#			define MASTER_C_STANDARD 2011
+#			define MASTER_COMPILER_LANGUAGE "C11"
+#		elif __STDC_VERSION__ + 0 >= 199901L
+#			define MASTER_C_STANDARD 1999
+#			define MASTER_COMPILER_LANGUAGE "C99"
+#		elif __STDC_VERSION__ + 0 >= 199409L
+#			define MASTER_C_STANDARD 1994
+#			define MASTER_COMPILER_LANGUAGE "C94"
+#		else
+#			define MASTER_C_STANDARD 1989
+#			define MASTER_COMPILER_LANGUAGE "C90"
+#		endif /* #! __STDC_VERSION__ !# */
+#	else
+#		define MASTER_C_STANDARD 1989
+#		define MASTER_COMPILER_LANGUAGE "C89"
+#	endif /* #! __STDC_VERSION__ !# */
+#else
+#	define MASTER_C_STANDARD 1978
+#	define MASTER_COMPILER_LANGUAGE "K&R C (C78)"
+#endif /* #! __STDC__ !# */
+
+#define MASTER_PREFER_C89_SUPPORTED (MASTER_C_STANDARD >= 1989)
+#define MASTER_PREFER_C94_SUPPORTED (MASTER_C_STANDARD >= 1994)
+#define MASTER_PREFER_C99_SUPPORTED (MASTER_C_STANDARD >= 1999)
+#define MASTER_PREFER_C11_SUPPORTED (MASTER_C_STANDARD >= 2011)
+#define MASTER_PREFER_C17_SUPPORTED (MASTER_C_STANDARD >= 2017)
+#define MASTER_PREFER_C23_SUPPORTED (MASTER_C_STANDARD >= 2023)
+
+#define MASTER_PREFER_CPP98_SUPPORTED (MASTER_CPP_STANDARD >= 1997)
+#define MASTER_PREFER_CPP11_SUPPORTED (MASTER_CPP_STANDARD >= 2011)
+#define MASTER_PREFER_CPP14_SUPPORTED (MASTER_CPP_STANDARD >= 2014)
+#define MASTER_PREFER_CPP17_SUPPORTED (MASTER_CPP_STANDARD >= 2017)
+#define MASTER_PREFER_CPP20_SUPPORTED (MASTER_CPP_STANDARD >= 2020)
+#define MASTER_PREFER_CPP23_SUPPORTED (MASTER_CPP_STANDARD >= 2023)
+
+#ifdef __cplusplus
+#	define MASTER_BEGIN_DECLARATIONS extern "C" {
+#	define MASTER_END_DECLARATIONS }
+#else
+#	define MASTER_BEGIN_DECLARATIONS
+#	define MASTER_END_DECLARATIONS
+#endif /* #! C++ !# */
+
+MASTER_BEGIN_DECLARATIONS
 
 /* #! MASTER Generalization Of Macroses !# */
 
@@ -131,6 +267,11 @@ typedef signed int SI4;
 #if MASTER_64_AVAILABLE == 1
 #	define MASTER_UI8_TYPE unsigned long long int
 #	define MASTER_SI8_TYPE signed long long int
+	typedef MASTER_SI8_TYPE MASTER_signed_maxint;
+	typedef MASTER_UI8_TYPE MASTER_unsigned_maxint;
+#else
+	typedef SI4 MASTER_signed_maxint;
+	typedef UI4 MASTER_unsigned_maxint;
 #endif /* #! MASTER_64_AVAILABLE !# */
 
 #ifdef MASTER_UI8_TYPE
@@ -188,10 +329,6 @@ typedef signed int SI4;
 	typedef MASTER_SI128_TYPE SI128;
 #endif /* #! SI128 Type !# */
 
-typedef UI4 OUI;
-typedef SI4 OSI;
-typedef UI4 UT;
-
 #ifdef MASTER_YEAR_IN_BYTE
 #	define MASTER_TO_YEARS( year_value ) (UI1)((year_value) - 2038)
 #	define MASTER_GET_YEARS( year_value ) (2038 + (year_value))
@@ -246,7 +383,7 @@ typedef UI4 UT;
 #define MASTER_SI4_MIN (SI4)(MASTER_CONSTANT(1) << (MASTER_SI4_BITS - 1))
 #define MASTER_SI4_MAX (SI4)((UI4)MASTER_SI4_MIN - MASTER_SI4_POSTFIX_C(1))
 #ifdef MASTER_SI8_TYPE
-#	define MASTER_SI8_MIN (SI8)(MASTER_CONSTANT(1) << (MASTER_SI8_BITS - 1))
+#	define MASTER_SI8_MIN (SI8)((SI8)1 << (MASTER_SI8_BITS - 1))
 #	define MASTER_SI8_MAX (SI8)((UI8)MASTER_SI4_MIN - MASTER_SI8_POSTFIX_C(1))
 #endif /* #! SI8 !# */
 
@@ -266,115 +403,6 @@ typedef UI4 UT;
 #define MASTER_UT_BITS (sizeof(UT) << 3)
 
 #define MASTER_MAXINT_BITS (sizeof(MASTER_maxint) << 3)
-
-/* #! compiler trash !# */
-
-#define MASTER_UNSUPPORTING 0
-#define MASTER_PARTIAL_SUPPORTING 5
-#define MASTER_SUPPORTING 10
-#define MASTER_SUPPORT_STATE( nivel ) (nivel)
-
-#ifndef MASTER_COMPILER_SETTINGS
-#	if !defined(MASTER_NO_COMPILER_SETTINGS_DEPENDENCY) && 0
-		/* #! todo !# */
-		/* #! #include <compiler_settings.h> !# */
-#	else
-#		define MASTER_PREFER_CONST const
-#		ifdef __cplusplus
-#			define MASTER_PREFER_INLINE inline
-#		else
-#			if defined(__STDC_VERSION__) && __STDC_VERSION__ + 0 >= 199901L
-#				define MASTER_PREFER_INLINE inline
-#			else
-#				define MASTER_PREFER_INLINE
-#			endif /* #! C99+ !# */
-#		endif /* #! C++ !# */
-#		define MASTER_PREFER_STATIC static
-#		ifdef __cplusplus
-#			define MASTER_PREFER_EXTERN extern
-#		else
-#			define MASTER_PREFER_EXTERN
-#		endif /* #! C++ !# */
-#		define MASTER_PREFER_HOT
-#		define MASTER_PREFER_COLD
-#		define MASTER_PREFER_VISIBLE
-#		define MASTER_PREFER_HIDDEN
-#		if defined(__cplusplus) || (defined(__STDC_VERSION__) && __STDC_VERSION__ + 0 >= 202311L)
-#			define MASTER_PREFER_UNUSED [[maybe_unused]]
-#		else 
-#			define MASTER_PREFER_UNUSED
-#		endif /* #! C++ / C23+ !# */
-#		if defined(__cplusplus) || (defined(__STDC_VERSION__) && __STDC_VERSION__ + 0 >= 201710L)
-#			define MASTER_PREFER_DEPRECATED [[deprecated]]
-#		else 
-#			define MASTER_PREFER_DEPRECATED
-#		endif /* #! C++ / C17+ !# */
-#		define MASTER_COMPILER_SETTINGS 0
-#	endif /* #! Compiler / Standard !# */
-#endif /* #! MASTER_COMPILER_SETTINGS !# */
-#define MASTER_PREFER_EXTERN_STATIC MASTER_PREFER_STATIC
-
-#ifdef __cplusplus
-#	define MASTER_C_STANDARD 0
-#	if __cplusplus + 0 >= 202302L
-#		define MASTER_CPP_STANDARD 2023
-#	elif __cplusplus + 0 >= 202002L
-#		define MASTER_CPP_STANDARD 2020
-#	elif __cplusplus + 0 >= 201703L
-#		define MASTER_CPP_STANDARD 2017
-#	elif __cplusplus + 0 >= 201402L
-#		define MASTER_CPP_STANDARD 2014
-#	elif __cplusplus + 0 >= 201103L
-#		define MASTER_CPP_STANDARD 2011
-#	elif __cplusplus + 0 >= 199711L
-#		define MASTER_CPP_STANDARD 1997
-#	else
-#		define MASTER_CPP_STANDARD 1997
-#	endif /* #! __cplusplus !# */
-#elif defined(__STDC__)
-#	define MASTER_CPP_STANDARD 0
-#	if defined(__STDC_VERSION__)
-#		if __STDC_VERSION__ + 0 >= 202311L
-#			define MASTER_C_STANDARD 2023
-#		elif __STDC_VERSION__ + 0 >= 201710L
-#			define MASTER_C_STANDARD 2017
-#		elif __STDC_VERSION__ + 0 >= 201112L
-#			define MASTER_C_STANDARD 2011
-#		elif __STDC_VERSION__ + 0 >= 199901L
-#			define MASTER_C_STANDARD 1999
-#		elif __STDC_VERSION__ + 0 >= 199409L
-#			define MASTER_C_STANDARD 1994
-#		else
-#			define MASTER_C_STANDARD 1990
-#		endif /* #! __STDC_VERSION__ !# */
-#	else
-#		define MASTER_C_STANDARD 1990
-#	endif /* #! __STDC_VERSION__ !# */
-#else
-#	define MASTER_C_STANDARD 1978
-#endif /* #! __STDC__ !# */
-
-#define MASTER_PREFER_C89_SUPPORTED (MASTER_C_STANDARD >= 1990)
-#define MASTER_PREFER_C94_SUPPORTED (MASTER_C_STANDARD >= 1994)
-#define MASTER_PREFER_C99_SUPPORTED (MASTER_C_STANDARD >= 1999)
-#define MASTER_PREFER_C11_SUPPORTED (MASTER_C_STANDARD >= 2011)
-#define MASTER_PREFER_C17_SUPPORTED (MASTER_C_STANDARD >= 2017)
-#define MASTER_PREFER_C23_SUPPORTED (MASTER_C_STANDARD >= 2023)
-
-#define MASTER_PREFER_CPP98_SUPPORTED (MASTER_CPP_STANDARD >= 1997)
-#define MASTER_PREFER_CPP11_SUPPORTED (MASTER_CPP_STANDARD >= 2011)
-#define MASTER_PREFER_CPP14_SUPPORTED (MASTER_CPP_STANDARD >= 2014)
-#define MASTER_PREFER_CPP17_SUPPORTED (MASTER_CPP_STANDARD >= 2017)
-#define MASTER_PREFER_CPP20_SUPPORTED (MASTER_CPP_STANDARD >= 2020)
-#define MASTER_PREFER_CPP23_SUPPORTED (MASTER_CPP_STANDARD >= 2023)
-
-#ifdef __cplusplus
-#	define MASTER_BEGIN_DECLARATIONS extern "C" {
-#	define MASTER_END_DECLARATIONS }
-#else
-#	define MASTER_BEGIN_DECLARATIONS
-#	define MASTER_END_DECLARATIONS
-#endif /* #! C++ !# */
 
 /* #! MASTER Errors !# */
 
@@ -511,6 +539,24 @@ const char * const MASTER_error_codes[] = {
 #define MASTER_NOTHING ;
 #define MASTER_TO_BOOL( expression ) (!!(expression))
 #define MASTER_STATIC_ASSERT( expression ) (void)(sizeof(char [1 - 2 * !(expression)]))
+#define MASTER_UNARG_BEGIN0()
+#define MASTER_UNARG_BEGIN1( argument1 ) argument1,
+#define MASTER_UNARG_BEGIN2( argument1, argument2 ) argument1, argument2,
+#define MASTER_UNARG_BEGIN3( argument1, argument2, argument3 ) argument1, argument2, argument3,
+#define MASTER_UNARG_BEGIN4( argument1, argument2, argument3, argument4 ) argument1, argument2, argument3, argument4,
+#define MASTER_UNARG_BEGIN5( argument1, argument2, argument3, argument4, argument5 ) argument1, argument2, argument3, argument4, argument5,
+#define MASTER_UNARG_BEGIN6( argument1, argument2, argument3, argument4, argument5, argument6 ) argument1, argument2, argument3, argument4, argument5, argument6,
+#define MASTER_UNARG_BEGIN7( argument1, argument2, argument3, argument4, argument5, argument6, argument7 ) argument1, argument2, argument3, argument4, argument5, argument6, argument7,
+#define MASTER_UNARG_BEGIN8( argument1, argument2, argument3, argument4, argument5, argument6, argument7, argument8 ) argument1, argument2, argument3, argument4, argument5, argument6, argument7, argument8,
+#define MASTER_UNARG_END0()
+#define MASTER_UNARG_END1( argument1 ) , argument1
+#define MASTER_UNARG_END2( argument1, argument2 ) , argument1, argument2
+#define MASTER_UNARG_END3( argument1, argument2, argument3 ) , argument1, argument2, argument3
+#define MASTER_UNARG_END4( argument1, argument2, argument3, argument4 ) , argument1, argument2, argument3, argument4
+#define MASTER_UNARG_END5( argument1, argument2, argument3, argument4, argument5 ) , argument1, argument2, argument3, argument4, argument5
+#define MASTER_UNARG_END6( argument1, argument2, argument3, argument4, argument5, argument6 ) , argument1, argument2, argument3, argument4, argument5, argument6
+#define MASTER_UNARG_END7( argument1, argument2, argument3, argument4, argument5, argument6, argument7 ) , argument1, argument2, argument3, argument4, argument5, argument6, argument7
+#define MASTER_UNARG_END8( argument1, argument2, argument3, argument4, argument5, argument6, argument7, argument8 ) , argument1, argument2, argument3, argument4, argument5, argument6, argument7, argument8
 
 /* #! MASTER Checks !# */
 
@@ -546,6 +592,7 @@ const char * const MASTER_error_codes[] = {
 
 #define MASTER_KAIR_ARG( arg_type, argument ) argument
 #define MASTER_KAIR_DECL( arg_type, argument ) arg_type argument
+#define MASTER_KAIR_EXTERN_ARGS_LIST( arguments ) ()
 #define MASTER_KAIR_FORMAT0() ( void )
 #define MASTER_KAIR_FORMAT1( argument ) ( MASTER_KAIR_ARG argument ) MASTER_KAIR_DECL argument;
 #define MASTER_KAIR_FORMAT2( argument1, argument2 ) ( MASTER_KAIR_ARG argument1, MASTER_KAIR_ARG argument2 ) MASTER_KAIR_DECL argument1; MASTER_KAIR_DECL argument2;
@@ -557,6 +604,7 @@ const char * const MASTER_error_codes[] = {
 #define MASTER_KAIR_FORMAT8( argument1, argument2, argument3, argument4, argument5, argument6, argument7, argument8 ) ( MASTER_KAIR_ARG argument1, MASTER_KAIR_ARG argument2, MASTER_KAIR_ARG argument3, MASTER_KAIR_ARG argument4, MASTER_KAIR_ARG argument5, MASTER_KAIR_ARG argument6, MASTER_KAIR_ARG argument7, MASTER_KAIR_ARG argument8 ) MASTER_KAIR_DECL argument1; MASTER_KAIR_DECL argument2; MASTER_KAIR_DECL argument3; MASTER_KAIR_DECL argument4; MASTER_KAIR_DECL argument5; MASTER_KAIR_DECL argument6; MASTER_KAIR_DECL argument7; MASTER_KAIR_DECL argument8;
 
 #define MASTER_STD_DECL( arg_type, argument ) arg_type argument
+#define MASTER_STD_EXTERN_ARGS_LIST( arguments ) arguments
 #define MASTER_STD_FORMAT0() ( void )
 #define MASTER_STD_FORMAT1( argument ) ( MASTER_STD_DECL argument )
 #define MASTER_STD_FORMAT2( argument1, argument2 ) ( MASTER_STD_DECL argument1, MASTER_STD_DECL argument2 )
@@ -567,7 +615,14 @@ const char * const MASTER_error_codes[] = {
 #define MASTER_STD_FORMAT7( argument1, argument2, argument3, argument4, argument5, argument6, argument7 ) ( MASTER_STD_DECL argument1, MASTER_STD_DECL argument2, MASTER_STD_DECL argument3, MASTER_STD_DECL argument4, MASTER_STD_DECL argument5, MASTER_STD_DECL argument6, MASTER_STD_DECL argument7 )
 #define MASTER_STD_FORMAT8( argument1, argument2, argument3, argument4, argument5, argument6, argument7, argument8 ) ( MASTER_STD_DECL argument1, MASTER_STD_DECL argument2, MASTER_STD_DECL argument3, MASTER_STD_DECL argument4, MASTER_STD_DECL argument5, MASTER_STD_DECL argument6, MASTER_STD_DECL argument7, MASTER_STD_DECL argument8 )
 
-#ifdef __cplusplus
+#if (defined(__cplusplus) || defined(__STDC__)) && !defined(MASTER_TRADITIONAL_COMPILE)
+	/* #! Modern compilers need prototypes !# */
+#	ifdef MASTER_CHECK_IF_FUNCTION_IS_EXTERNED_BUT_NOT_IMPLEMENTED
+#		define MASTER_EXTERN_FUNCTION( flags, return_value_and_extras, function_name, arguments ) MASTER_PREFER_EXTERN return_value_and_extras function_name MASTER_STD_EXTERN_ARGS_LIST(arguments); \
+	return_value_and_extras (*MASTER_CONCAT_FALL(function_name, _Pointer))MASTER_STD_EXTERN_ARGS_LIST(arguments) = function_name
+#	else
+#		define MASTER_EXTERN_FUNCTION( flags, return_value_and_extras, function_name, arguments ) MASTER_PREFER_EXTERN return_value_and_extras function_name MASTER_STD_EXTERN_ARGS_LIST(arguments)
+#	endif /* #! Extension : Function is externed but not implemented !# */
 #	define MASTER_ARGLIST_FORMAT0() MASTER_STD_FORMAT0()
 #	define MASTER_ARGLIST_FORMAT1( argument ) MASTER_STD_FORMAT1(argument)
 #	define MASTER_ARGLIST_FORMAT2( argument1, argument2 ) MASTER_STD_FORMAT2( argument1, argument2 )
@@ -578,6 +633,13 @@ const char * const MASTER_error_codes[] = {
 #	define MASTER_ARGLIST_FORMAT7( argument1, argument2, argument3, argument4, argument5, argument6, argument7 ) MASTER_STD_FORMAT7( argument1, argument2, argument3, argument4, argument5, argument6, argument7 )
 #	define MASTER_ARGLIST_FORMAT8( argument1, argument2, argument3, argument4, argument5, argument6, argument7, argument8 ) MASTER_STD_FORMAT8( argument1, argument2, argument3, argument4, argument5, argument6, argument7, argument8 )
 #else
+	/* #! Traditional compilers need only declarations !# */
+#	ifdef MASTER_CHECK_IF_FUNCTION_IS_EXTERNED_BUT_NOT_IMPLEMENTED
+#		define MASTER_EXTERN_FUNCTION( flags, return_value_and_extras, function_name, arguments ) MASTER_PREFER_EXTERN return_value_and_extras function_name MASTER_KAIR_EXTERN_ARGS_LIST(arguments); \
+	return_value_and_extras (*MASTER_CONCAT_FALL(function_name, _Pointer))MASTER_KAIR_EXTERN_ARGS_LIST(arguments) = function_name
+#	else
+#		define MASTER_EXTERN_FUNCTION( flags, return_value_and_extras, function_name, arguments ) MASTER_PREFER_EXTERN return_value_and_extras function_name MASTER_KAIR_EXTERN_ARGS_LIST(arguments)
+#	endif /* #! Extension : Function is externed but not implemented !# */
 #	define MASTER_ARGLIST_FORMAT0() MASTER_KAIR_FORMAT0()
 #	define MASTER_ARGLIST_FORMAT1( argument ) MASTER_KAIR_FORMAT1(argument)
 #	define MASTER_ARGLIST_FORMAT2( argument1, argument2 ) MASTER_KAIR_FORMAT2( argument1, argument2 )
@@ -587,7 +649,7 @@ const char * const MASTER_error_codes[] = {
 #	define MASTER_ARGLIST_FORMAT6( argument1, argument2, argument3, argument4, argument5, argument6 ) MASTER_KAIR_FORMAT6( argument1, argument2, argument3, argument4, argument5, argument6 )
 #	define MASTER_ARGLIST_FORMAT7( argument1, argument2, argument3, argument4, argument5, argument6, argument7 ) MASTER_KAIR_FORMAT7( argument1, argument2, argument3, argument4, argument5, argument6, argument7 )
 #	define MASTER_ARGLIST_FORMAT8( argument1, argument2, argument3, argument4, argument5, argument6, argument7, argument8 ) MASTER_KAIR_FORMAT8( argument1, argument2, argument3, argument4, argument5, argument6, argument7, argument8 )
-#endif /* #! Detect Argument List Compability !# */
+#endif /* #! Detect Argument List Compability for C & C++ !# */
 
 #define MASTER_DEFINE_FUNCTION0( flags, description, function_name, return_value_and_extras ) return_value_and_extras function_name MASTER_ARGLIST_FORMAT0()
 #define MASTER_DEFINE_FUNCTION1( flags, description, function_name, return_value_and_extras, argument ) return_value_and_extras function_name MASTER_ARGLIST_FORMAT1(argument)
@@ -661,7 +723,7 @@ const char * const MASTER_error_codes[] = {
 	typedef UI4 MASTER_char;
 #	define MASTER_CHAR( character ) L##character
 #	define MASTER_STRING( string ) L##string
-#endif /* #! MASTER_USE_LONG_STRING !# */
+#endif /* #! Short / Long Strings !# */
 
 #define MASTER_STRINGIFY( string ) #string
 #define MASTER_STRINGIFY_FALL( string ) MASTER_STRINGIFY(string)
@@ -702,9 +764,15 @@ const char * const MASTER_error_codes[] = {
 #define MASTER_SQUARE( value ) ((value) * (value))
 #define MASTER_2BYTES_TO_INT( value1, value2 ) (((value1) << 8) | (value2))
 #define MASTER_4BYTES_TO_INT( value1, value2, value3, value4 ) (((value1) << 24) | ((value2) << 16) | ((value3) << 8) | (value4))
-/* #! Todo : sign extending !# */
+/* #! TODO : sign extending !# */
 #define MASTER_STATE_BITS( value, bit_maask, to_set ) (value) ^= ((-(to_set)) ^ (value)) & (bit_mask)
 #define MASTER_MERGE_BITS( value1, value2, bit_mask ) ((value1) ^ (((value1) ^ (value2)) & (bit_mask)))
+#define MASTER_ISINRANGE_CC( value, low_value, high_value ) ((low_value) <= (value) && (value) <= (high_value))
+#define MASTER_ISINRANGE_CO( value, low_value, high_value ) ((low_value) <= (value) && (value) < (high_value))
+#define MASTER_ISINRANGE_OC( value, low_value, high_value ) ((low_value) < (value) && (value) <= (high_value))
+#define MASTER_ISINRANGE_OO( value, low_value, high_value ) ((low_value) < (value) && (value) < (high_value))
+#define MASTER_ISINRANGE( value, low_value, high_value ) MASTER_ISINRANGE_CC(value, low_value, high_value)
+#define MASTER_WRAP( number, limit ) (((number) >= (limit)) ? (0) : (number))
 
 #ifndef MASTER_UNSAFE_HOWMANY
 #	define MASTER_DIV_CEIL2( value ) (((value) >> 1) + !!((value) & 1))
@@ -721,7 +789,7 @@ const char * const MASTER_error_codes[] = {
 #	define MASTER_DIV_CEIL16( value ) (((value) + 15) >> 4)
 #	define MASTER_DIV_CEIL_POW2( value, bit_count ) (((value) + ((1 << (bit_count)) - 1)) >> (bit_count))
 #	define MASTER_HOWMANY( value, subvalue ) (((value) + ((subvalue) - 1)) / (subvalue))
-#endif /* #! MASTER_UNSAFE_HOWMANY !# */
+#endif /* #! Safe / Unsafe Howmany !# */
 
 #define MASTER_HOWMANY2( value ) MASTER_DIV_CEIL2( value )
 #define MASTER_HOWMANY4( value ) MASTER_DIV_CEIL4( value )
@@ -778,352 +846,33 @@ const char * const MASTER_error_codes[] = {
 #	define MASTER_ISPOW16( value ) (MASTER_ISPOW2(value) && ((value) & 0x11111111UL))
 #endif /* #! 64 Bits !# */
 
-MASTER_DEFINE_FUNCTION1(
-	MASTER_NO_FLAGS,
-	MASTER_EMPTY_DESCRIPTION,
-	/* ! */ MASTER_SMEAR1 /* ! */,
-	MASTER_PREFER_INLINE UI1,
-	( UI1, value )
-) {
-	value |= value >> 4;
-	value |= value >> 2;
-	value |= value >> 1;
-	return value;
-}
+/* #! MASTER Overflow Macroses !# */
 
-MASTER_DEFINE_FUNCTION1(
-	MASTER_NO_FLAGS,
-	MASTER_EMPTY_DESCRIPTION,
-	/* ! */ MASTER_SMEAR2 /* ! */,
-	MASTER_PREFER_INLINE UI2,
-	( UI2, value )
-) {
-	value |= value >> 8;
-	value |= value >> 4;
-	value |= value >> 2;
-	value |= value >> 1;
-	return value;
-}
-
-MASTER_DEFINE_FUNCTION1(
-	MASTER_NO_FLAGS,
-	MASTER_EMPTY_DESCRIPTION,
-	/* ! */ MASTER_SMEAR4 /* ! */,
-	MASTER_PREFER_INLINE UI4,
-	( UI4, value )
-) {
-	value |= value >> 16;
-	value |= value >> 8;
-	value |= value >> 4;
-	value |= value >> 2;
-	value |= value >> 1;
-	return value;
-}
-
+#define MASTER_ADD_OVERFLOW_UI1( value1, value2, carry ) (carry) = (((value1) >= ((UI1)-1) - (value2)) ? (1) : (0))
+#define MASTER_ADD_OVERFLOW_UI2( value1, value2, carry ) (carry) = (((value1) >= ((UI2)-1) - (value2)) ? (1) : (0))
+#define MASTER_ADD_OVERFLOW_UI4( value1, value2, carry ) (carry) = (((value1) >= ((UI4)-1) - (value2)) ? (1) : (0))
 #if MASTER_64_AVAILABLE == 1
-MASTER_DEFINE_FUNCTION1(
-	MASTER_NO_FLAGS,
-	MASTER_EMPTY_DESCRIPTION,
-	/* ! */ MASTER_SMEAR8 /* ! */,
-	MASTER_PREFER_INLINE UI8,
-	( UI8, value )
-) {
-	value |= value >> 32;
-	value |= value >> 16;
-	value |= value >> 8;
-	value |= value >> 4;
-	value |= value >> 2;
-	value |= value >> 1;
-	return value;
-}
-
-#endif /* #! MASTER_64_AVAILABLE !# */
-
-#define __MASTER_BITLEN_MACROS_PROCESS( value, bitcount, bit_count, cast_type ) do { \
-		if ((value) >= ((cast_type)1 << (bit_count))) { \
-			(bitcount) += (bit_count); \
-			(value) >>= (bit_count); \
-		} \
-	} while (0)
-
-
-MASTER_DEFINE_FUNCTION1(
-	MASTER_NO_FLAGS,
-	MASTER_EMPTY_DESCRIPTION,
-	/* ! */ MASTER_BITLEN1 /* ! */,
-	MASTER_PREFER_INLINE UI1,
-	( UI1, value )
-) {
-	UI1 bitcount = 0;
-	__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 4, UI4);
-	__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 2, UI4);
-	__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 1, UI4);
-	if (value > 0) bitcount += 1;
-	return bitcount;
-}
-
-MASTER_DEFINE_FUNCTION1(
-	MASTER_NO_FLAGS,
-	MASTER_EMPTY_DESCRIPTION,
-	/* ! */ MASTER_BITLEN2 /* ! */,
-	MASTER_PREFER_INLINE UI2,
-	( UI2, value )
-) {
-	UI1 bitcount = 0;
-	__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 8, UI4);
-	__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 4, UI4);
-	__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 2, UI4);
-	__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 1, UI4);
-	if (value > 0) bitcount += 1;
-	return bitcount;
-}
-
-MASTER_DEFINE_FUNCTION1(
-	MASTER_NO_FLAGS,
-	MASTER_EMPTY_DESCRIPTION,
-	/* ! */ MASTER_BITLEN4 /* ! */,
-	MASTER_PREFER_INLINE UI4,
-	( UI4, value )
-) {
-	UI1 bitcount = 0;
-	__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 16, UI4);
-	__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 8, UI4);
-	__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 4, UI4);
-	__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 2, UI4);
-	__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 1, UI4);
-	if (value > 0) bitcount += 1;
-	return bitcount;
-}
-
-#if MASTER_64_AVAILABLE == 1
-MASTER_DEFINE_FUNCTION1(
-	MASTER_NO_FLAGS,
-	MASTER_EMPTY_DESCRIPTION,
-	/* ! */ MASTER_BITLEN8 /* ! */,
-	MASTER_PREFER_INLINE UI8,
-	( UI8, value )
-) {
-	UI1 bitcount = 0;
-	__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 32, UI8);
-	__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 16, UI4);
-	__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 8, UI4);
-	__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 4, UI4);
-	__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 2, UI4);
-	__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 1, UI4);
-	if (value > 0) bitcount += 1;
-	return bitcount;
-}
-
-#endif /* #! MASTER_64_AVAILABLE !# */
-
-#define MASTER_POW2FLOOR1( value ) ((MASTER_SMEAR1(value) >> 1) + 1)
-#define MASTER_POW2FLOOR2( value ) ((MASTER_SMEAR2(value) >> 1) + 1)
-#define MASTER_POW2FLOOR4( value ) ((MASTER_SMEAR4(value) >> 1) + 1)
-#define MASTER_POW2CEIL1( value ) (MASTER_SMEAR1(value - 1) + 1)
-#define MASTER_POW2CEIL2( value ) (MASTER_SMEAR2(value - 1) + 1)
-#define MASTER_POW2CEIL4( value ) (MASTER_SMEAR4(value - 1) + 1)
-#define MASTER_LOG2FLOOR1( value ) (MASTER_BITLEN1(value) - 1)
-#define MASTER_LOG2FLOOR2( value ) (MASTER_BITLEN2(value) - 1)
-#define MASTER_LOG2FLOOR4( value ) (MASTER_BITLEN4(value) - 1)
-#define MASTER_LOG2CEIL1( value ) (MASTER_BITLEN1(value) - MASTER_ISPOW2(value))
-#define MASTER_LOG2CEIL2( value ) (MASTER_BITLEN2(value) - MASTER_ISPOW2(value))
-#define MASTER_LOG2CEIL4( value ) (MASTER_BITLEN4(value) - MASTER_ISPOW2(value))
-
-#if MASTER_64_AVAILABLE == 1
-#	define MASTER_POW2FLOOR8( value ) ((MASTER_SMEAR8(value) >> 1) + 1)
-#	define MASTER_POW2CEIL8( value ) (MASTER_SMEAR8(value - 1) + 1)
-#	define MASTER_LOG2FLOOR8( value ) (MASTER_BITLEN8(value) - 1)
-#	define MASTER_LOG2CEIL8( value ) (MASTER_BITLEN8(value) - MASTER_ISPOW2(value))
-#endif /* #! MASTER_64_AVAILABLE !# */
-
-#ifdef MASTER_ROUND_FUNCS_INSTEAD_OF_MACROS
-#	define MASTER_POW2ROUND1( value ) (((value) < (MASTER_POW2FLOOR1(value) | (MASTER_POW2FLOOR1(value) >> 1))) ? (MASTER_POW2FLOOR1(value)) : (MASTER_POW2CEIL1(value)))
-#	define MASTER_POW2ROUND2( value ) (((value) < (MASTER_POW2FLOOR2(value) | (MASTER_POW2FLOOR2(value) >> 1))) ? (MASTER_POW2FLOOR2(value)) : (MASTER_POW2CEIL2(value)))
-#	define MASTER_POW2ROUND4( value ) (((value) < (MASTER_POW2FLOOR4(value) | (MASTER_POW2FLOOR4(value) >> 1))) ? (MASTER_POW2FLOOR4(value)) : (MASTER_POW2CEIL4(value)))
-#	define MASTER_LOG2ROUND1( value ) (((value) < (MASTER_POW2FLOOR1(value) | (MASTER_POW2FLOOR1(value) >> 1))) ? (MASTER_LOG2FLOOR1(value)) : (MASTER_LOG2CEIL1(value)))
-#	define MASTER_LOG2ROUND2( value ) (((value) < (MASTER_POW2FLOOR2(value) | (MASTER_POW2FLOOR2(value) >> 1))) ? (MASTER_LOG2FLOOR2(value)) : (MASTER_LOG2CEIL2(value)))
-#	define MASTER_LOG2ROUND4( value ) (((value) < (MASTER_POW2FLOOR4(value) | (MASTER_POW2FLOOR4(value) >> 1))) ? (MASTER_LOG2FLOOR4(value)) : (MASTER_LOG2CEIL4(value)))
-#	if MASTER_64_AVAILABLE == 1
-#		define MASTER_POW2ROUND8( value ) (((value) < (MASTER_POW2FLOOR8(value) | (MASTER_POW2FLOOR8(value) >> 1))) ? (MASTER_POW2FLOOR8(value)) : (MASTER_POW2CEIL8(value)))
-#		define MASTER_LOG2ROUND8( value ) (((value) < (MASTER_POW2FLOOR8(value) | (MASTER_POW2FLOOR8(value) >> 1))) ? (MASTER_LOG2FLOOR8(value)) : (MASTER_LOG2CEIL8(value)))
-#	endif /* #! MASTER_64_AVAILABLE !# */
-#else
-#	define __MASTER_POW2ROUNDX_GENERATE_MACRO( suffix ) \
-		MASTER_DEFINE_FUNCTION1( \
-			MASTER_NO_FLAGS, \
-			MASTER_EMPTY_DESCRIPTION, \
-			/* ! */ MASTER_POW2ROUND ## suffix /* ! */, \
-			MASTER_PREFER_INLINE UI ## suffix, \
-			( UI ## suffix, value ) \
-		) { \
-			UI ## suffix floored = MASTER_POW2FLOOR ## suffix(value); \
-			floored |= floored >> 1; \
-			if (value < floored) return floored & (floored << 1); \
-			return MASTER_POW2CEIL ## suffix(value); \
-		}
-#	define __MASTER_LOG2ROUNDX_GENERATE_MACRO( suffix, numsuff ) \
-		MASTER_DEFINE_FUNCTION1( \
-			MASTER_NO_FLAGS, \
-			MASTER_EMPTY_DESCRIPTION, \
-			/* ! */ MASTER_LOG2ROUND ## suffix /* ! */, \
-			MASTER_PREFER_INLINE UI ## suffix, \
-			( UI ## suffix, value ) \
-		) { \
-			const UI1 bits = MASTER_LOG2FLOOR ## suffix(value); \
-			UI ## suffix floored = 1 ## numsuff << bits; \
-			if (value <= 1) return value - 1; \
-			floored |= floored >> 1; \
-			return bits + (value >= floored); \
-		}
-		__MASTER_POW2ROUNDX_GENERATE_MACRO( 1 )
-		__MASTER_POW2ROUNDX_GENERATE_MACRO( 2 )
-		__MASTER_POW2ROUNDX_GENERATE_MACRO( 4 )
-		__MASTER_LOG2ROUNDX_GENERATE_MACRO( 1, U )
-		__MASTER_LOG2ROUNDX_GENERATE_MACRO( 2, U )
-		__MASTER_LOG2ROUNDX_GENERATE_MACRO( 4, U )
-#		if MASTER_64_AVAILABLE == 1
-			__MASTER_POW2ROUNDX_GENERATE_MACRO( 8 )
-			__MASTER_LOG2ROUNDX_GENERATE_MACRO( 8, L )
-#		endif /* #! MASTER_64_AVAILABLE !# */
-#	undef __MASTER_POW2ROUNDX_GENERATE_MACRO
-#	undef __MASTER_LOG2ROUNDX_GENERATE_MACRO
-#endif /* #! MASTER_ROUND_FUNCS_INSTEAD_OF_MACROS !# */
-
-MASTER_DEFINE_FUNCTION1(
-	MASTER_NO_FLAGS,
-	MASTER_EMPTY_DESCRIPTION,
-	/* ! */ MASTER_LOG2MATHROUND1 /* ! */,
-	MASTER_PREFER_INLINE UI1,
-	( UI1, value )
-) {
-	if (value >= 0xB6) return 8;
-	if (value >= 0x5B) return 7;
-	if (value >= 0x2E) return 6;
-	if (value >= 0x17) return 5;
-	if (value >= 0xC) return 4;
-	if (value >= 0x6) return 3;
-	if (value >= 0x3) return 2;
-	return value - 1;
-}
-
-MASTER_DEFINE_FUNCTION1(
-	MASTER_NO_FLAGS,
-	MASTER_EMPTY_DESCRIPTION,
-	/* ! */ MASTER_LOG2MATHROUND2 /* ! */,
-	MASTER_PREFER_INLINE UI1,
-	( UI2, value )
-) {
-	if (value >= 0xB505) return 16;
-	if (value >= 0x5A83) return 15;
-	if (value >= 0x2D42) return 14;
-	if (value >= 0x16A1) return 13;
-	if (value >= 0xB51) return 12;
-	if (value >= 0x5A9) return 11;
-	if (value >= 0x2D5) return 10;
-	if (value >= 0x16B) return 9;
-	return MASTER_LOG2MATHROUND1(value);
-}
-
-MASTER_DEFINE_FUNCTION1(
-	MASTER_NO_FLAGS,
-	MASTER_EMPTY_DESCRIPTION,
-	/* ! */ MASTER_LOG2MATHROUND4 /* ! */,
-	MASTER_PREFER_INLINE UI1,
-	( UI4, value )
-) {
-	if (value >= 0xB504F334) return 32;
-	if (value >= 0x5A82799A) return 31;
-	if (value >= 0x2D413CCD) return 30;
-	if (value >= 0x16A09E67) return 29;
-	if (value >= 0xB504F34) return 28;
-	if (value >= 0x5A8279A) return 27;
-	if (value >= 0x2D413CD) return 26;
-	if (value >= 0x16A09E7) return 25;
-	if (value >= 0xB504F4) return 24;
-	if (value >= 0x5A827A) return 23;
-	if (value >= 0x2D413D) return 22;
-	if (value >= 0x16A09F) return 21;
-	if (value >= 0xB5050) return 20;
-	if (value >= 0x5A828) return 19;
-	if (value >= 0x2D414) return 18;
-	if (value >= 0x16A0A) return 17;
-	return MASTER_LOG2MATHROUND2(value);
-}
-
-#if MASTER_64_AVAILABLE == 1
-MASTER_DEFINE_FUNCTION1(
-	MASTER_NO_FLAGS,
-	MASTER_EMPTY_DESCRIPTION,
-	/* ! */ MASTER_LOG2MATHROUND8 /* ! */,
-	MASTER_PREFER_INLINE UI1,
-	( UI8, value )
-) {
-	if (value >= 0xB504F333F9DDE401) return 64;
-	if (value >= 0x5A827999FCEEF201) return 63;
-	if (value >= 0x2D413CCCFE777901) return 62;
-	if (value >= 0x16A09E667F3BBC81) return 61;
-	if (value >= 0xB504F333F9DDE41) return 60;
-	if (value >= 0x5A827999FCEEF21) return 59;
-	if (value >= 0x2D413CCCFE77791) return 58;
-	if (value >= 0x16A09E667F3BBC9) return 57;
-	if (value >= 0xB504F333F9DDE5) return 56;
-	if (value >= 0x5A827999FCEEF3) return 55;
-	if (value >= 0x2D413CCCFE777A) return 54;
-	if (value >= 0x16A09E667F3BBD) return 53;
-	if (value >= 0xB504F333F9DDF) return 52;
-	if (value >= 0x5A827999FCEF0) return 51;
-	if (value >= 0x2D413CCCFE778) return 50;
-	if (value >= 0x16A09E667F3BC) return 49;
-	if (value >= 0xB504F333F9DE) return 48;
-	if (value >= 0x5A827999FCEF) return 47;
-	if (value >= 0x2D413CCCFE78) return 46;
-	if (value >= 0x16A09E667F3C) return 45;
-	if (value >= 0xB504F333F9E) return 44;
-	if (value >= 0x5A827999FCF) return 43;
-	if (value >= 0x2D413CCCFE8) return 42;
-	if (value >= 0x16A09E667F4) return 41;
-	if (value >= 0xB504F333FA) return 40;
-	if (value >= 0x5A827999FD) return 39;
-	if (value >= 0x2D413CCCFF) return 38;
-	if (value >= 0x16A09E6680) return 37;
-	if (value >= 0xB504F3340) return 36;
-	if (value >= 0x5A82799A0) return 35;
-	if (value >= 0x2D413CCD0) return 34;
-	if (value >= 0x16A09E668) return 33;
-	return MASTER_LOG2MATHROUND4(value);
-}
-
-#endif /* #! MASTER_64_AVAILABLE !# */
-
-#define MASTER_POW2MATHROUND1( value ) (1 << MASTER_LOG2MATHROUND1(value))
-#define MASTER_POW2MATHROUND2( value ) (1 << MASTER_LOG2MATHROUND2(value))
-#define MASTER_POW2MATHROUND4( value ) (1 << MASTER_LOG2MATHROUND4(value))
-#if MASTER_64_AVAILABLE == 1
-#	define MASTER_POW2MATHROUND8( value ) (1L << MASTER_LOG2MATHROUND8(value))
-#endif /* #! MASTER_64_AVAILABLE !# */
-
-#define MASTER_ADD_OVERFLOW_UI1( a, b, carry ) (carry) = ((a >= ((UI1)-1) - b) ? (1) : (0))
-#define MASTER_ADD_OVERFLOW_UI2( a, b, carry ) (carry) = ((a >= ((UI2)-1) - b) ? (1) : (0))
-#define MASTER_ADD_OVERFLOW_UI4( a, b, carry ) (carry) = ((a >= ((UI4)-1) - b) ? (1) : (0))
+#	define MASTER_ADD_OVERFLOW_UI8( value1, value2, carry ) (carry) = (((value1) >= ((UI8)-1) - (value2)) ? (1) : (0))
+#endif /* #! 64 Bits !# */
 
 /* #! MASTER Shifts !# */
 
-#define MASTER_RLLN( a, k, n ) (((a) << (k)) | ((a) >> ((n) - (k))))
-#define MASTER_RLRN( a, k, n ) (((a) >> (k)) | ((a) << ((n) - (k))))
-#define MASTER_RLL1( a, k ) MASTER_RLLN(a, k, 8)
-#define MASTER_RLL2( a, k ) MASTER_RLLN(a, k, 16)
-#define MASTER_RLL4( a, k ) MASTER_RLLN(a, k, 32)
-#define MASTER_RLL8( a, k ) MASTER_RLLN(a, k, 64)
-#define MASTER_RLR1( a, k ) MASTER_RLRN(a, k, 8)
-#define MASTER_RLR2( a, k ) MASTER_RLRN(a, k, 16)
-#define MASTER_RLR4( a, k ) MASTER_RLRN(a, k, 32)
-#define MASTER_RLR8( a, k ) MASTER_RLRN(a, k, 64)
+#define MASTER_RLLN( value, shift, bit_count ) (((value) << (shift)) | ((value) >> ((bit_count) - (shift))))
+#define MASTER_RLRN( value, shift, bit_count ) (((value) >> (shift)) | ((value) << ((bit_count) - (shift))))
+#define MASTER_RLL1( value, shift ) MASTER_RLLN(value, shift, 8)
+#define MASTER_RLL2( value, shift ) MASTER_RLLN(value, shift, 16)
+#define MASTER_RLL4( value, shift ) MASTER_RLLN(value, shift, 32)
+#define MASTER_RLL8( value, shift ) MASTER_RLLN(value, shift, 64)
+#define MASTER_RLR1( value, shift ) MASTER_RLRN(value, shift, 8)
+#define MASTER_RLR2( value, shift ) MASTER_RLRN(value, shift, 16)
+#define MASTER_RLR4( value, shift ) MASTER_RLRN(value, shift, 32)
+#define MASTER_RLR8( value, shift ) MASTER_RLRN(value, shift, 64)
 /* #! add (((value) < 0) ? (-1 - ((-1 - (value)) >> (shift))) : ((value) >> (shift))) ? !# */
-#define MASTER_SRAGEN( x, k ) (((x) < 0) ? (~((~(x)) >> (k))) : ((x) >> (k)))
-#define MASTER_SRA1( x, k ) (((x) >> (k)) | (((x) & 0x80) ? (~(0xFF  >> (k))) : 0))
-#define MASTER_SRA2( x, k ) (((x) >> (k)) | (((x) & 0x8000) ? (~(0xFFFF  >> (k))) : 0))
-#define MASTER_SRA4( x, k ) (((x) >> (k)) | (((x) & 0x80000000) ? (~(0xFFFFFFFF  >> (k))) : 0))
-#define MASTER_SRA8( x, k ) (((x) >> (k)) | (((x) & 0x8000000000000000) ? (~(0xFFFFFFFFFFFFFFFF  >> (k))) : 0))
+#define MASTER_SRAGEN( value, shift ) (((value) < 0) ? (~((~(value)) >> (shift))) : ((value) >> (shift)))
+#define MASTER_SRA1( value, shift ) (((value) >> (shift)) | (((value) & 0x80) ? (~(0xFF  >> (shift))) : 0))
+#define MASTER_SRA2( value, shift ) (((value) >> (shift)) | (((value) & 0x8000) ? (~(0xFFFF  >> (shift))) : 0))
+#define MASTER_SRA4( value, shift ) (((value) >> (shift)) | (((value) & 0x80000000) ? (~(0xFFFFFFFF  >> (shift))) : 0))
+#define MASTER_SRA8( value, shift ) (((value) >> (shift)) | (((value) & 0x8000000000000000) ? (~(0xFFFFFFFFFFFFFFFF  >> (shift))) : 0))
 
 /* #! MASTER Endian !# */
 
@@ -1546,17 +1295,17 @@ MASTER_DEFINE_FUNCTION1(
 #endif /* #! Endianness !# */
 
 #define __MASTER_MACROS_DEFINE_ALL_TYPES( define_macros ) \
-define_macros( SI1, c ); \
-define_macros( UI1, uc ); \
-define_macros( SI2, s ); \
-define_macros( UI2, us ); \
-define_macros( SI4, i ); \
-define_macros( UI4, ui ); \
-define_macros( SI8, li ); \
-define_macros( UI8, uli ); \
-define_macros( float, f ); \
-define_macros( double, d ); \
-define_macros( long double, ld ); \
+	define_macros( SI1, c ); \
+	define_macros( UI1, uc ); \
+	define_macros( SI2, s ); \
+	define_macros( UI2, us ); \
+	define_macros( SI4, i ); \
+	define_macros( UI4, ui ); \
+	define_macros( SI8, li ); \
+	define_macros( UI8, uli ); \
+	define_macros( float, f ); \
+	define_macros( double, d ); \
+	define_macros( long double, ld );
 
 /* #! MASTER Saturation Functions !# */
 
@@ -1566,6 +1315,33 @@ define_macros( long double, ld ); \
 #define MASTER_SaturateUI1( value ) (UI1)MASTER_CLAMP(value, MASTER_UI1_MIN, MASTER_UI1_MAX)
 #define MASTER_SaturateUI2( value ) (UI2)MASTER_CLAMP(value, MASTER_UI2_MIN, MASTER_UI2_MAX)
 #define MASTER_SaturateUI4( value ) (UI4)MASTER_CLAMP(value, MASTER_UI4_MIN, MASTER_UI4_MAX)
+
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, SI1, MASTER_AddSaturateSI1, ( const SI1, const SI1 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, SI2, MASTER_AddSaturateSI2, ( const SI2, const SI2 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, SI4, MASTER_AddSaturateSI4, ( const SI4, const SI4 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, SI1, MASTER_SubSaturateSI1, ( const SI1, const SI1 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, SI2, MASTER_SubSaturateSI2, ( const SI2, const SI2 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, SI4, MASTER_SubSaturateSI4, ( const SI4, const SI4 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, SI1, MASTER_MulSaturateSI1, ( const SI1, const SI1 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, SI2, MASTER_MulSaturateSI2, ( const SI2, const SI2 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, SI4, MASTER_MulSaturateSI4, ( const SI4, const SI4 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI1, MASTER_AddSaturateUI1, ( const UI1, const UI1 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI2, MASTER_AddSaturateUI2, ( const UI2, const UI2 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI4, MASTER_AddSaturateUI4, ( const UI4, const UI4 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI1, MASTER_SubSaturateUI1, ( const UI1, const UI1 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI2, MASTER_SubSaturateUI2, ( const UI2, const UI2 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI4, MASTER_SubSaturateUI4, ( const UI4, const UI4 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI1, MASTER_MulSaturateUI1, ( const UI1, const UI1 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI2, MASTER_MulSaturateUI2, ( const UI2, const UI2 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI4, MASTER_MulSaturateUI4, ( const UI4, const UI4 ) );
+#if MASTER_64_AVAILABLE == 1
+	MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, SI8, MASTER_AddSaturateSI8, ( const SI8, const SI8 ) );
+	MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, SI8, MASTER_SubSaturateSI8, ( const SI8, const SI8 ) );
+	MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, SI8, MASTER_MulSaturateSI8, ( const SI8, const SI8 ) );
+	MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI8, MASTER_AddSaturateUI8, ( const UI8, const UI8 ) );
+	MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI8, MASTER_SubSaturateUI8, ( const UI8, const UI8 ) );
+	MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI8, MASTER_MulSaturateUI8, ( const UI8, const UI8 ) );
+#endif /* #! 64 Bits !# */
 
 #define __MASTER_MACROS_DEFINE_AddSaturateSIx( variable_type ) \
 	MASTER_DEFINE_FUNCTION2( \
@@ -1661,12 +1437,6 @@ __MASTER_MACROS_DEFINE_MulSaturateSIx( SI2 )
 __MASTER_MACROS_DEFINE_AddSaturateSIx( SI4 )
 __MASTER_MACROS_DEFINE_SubSaturateSIx( SI4 )
 __MASTER_MACROS_DEFINE_MulSaturateSIx( SI4 )
-#if MASTER_64_AVAILABLE == 1
-	__MASTER_MACROS_DEFINE_AddSaturateSIx( SI8 )
-	__MASTER_MACROS_DEFINE_SubSaturateSIx( SI8 )
-	__MASTER_MACROS_DEFINE_MulSaturateSIx( SI8 )
-#endif /* #! MASTER_64_AVAILABLE !# */
-
 __MASTER_MACROS_DEFINE_AddSaturateUIx( UI1 )
 __MASTER_MACROS_DEFINE_SubSaturateUIx( UI1 )
 __MASTER_MACROS_DEFINE_MulSaturateUIx( UI1 )
@@ -1677,10 +1447,13 @@ __MASTER_MACROS_DEFINE_AddSaturateUIx( UI4 )
 __MASTER_MACROS_DEFINE_SubSaturateUIx( UI4 )
 __MASTER_MACROS_DEFINE_MulSaturateUIx( UI4 )
 #if MASTER_64_AVAILABLE == 1
+	__MASTER_MACROS_DEFINE_AddSaturateSIx( SI8 )
+	__MASTER_MACROS_DEFINE_SubSaturateSIx( SI8 )
+	__MASTER_MACROS_DEFINE_MulSaturateSIx( SI8 )
 	__MASTER_MACROS_DEFINE_AddSaturateUIx( UI8 )
 	__MASTER_MACROS_DEFINE_SubSaturateUIx( UI8 )
 	__MASTER_MACROS_DEFINE_MulSaturateUIx( UI8 )
-#endif /* #! MASTER_64_AVAILABLE !# */
+#endif /* #! 64 Bits !# */
 
 #undef __MASTER_MACROS_DEFINE_AddSaturateUIx
 #undef __MASTER_MACROS_DEFINE_AddSaturateSIx
@@ -1795,6 +1568,8 @@ __MASTER_MACROS_DEFINE_MulSaturateUIx( UI4 )
 #define MASTER_MARKER_NAIVE
 #define MASTER_MARKER_THREADHATE
 #define MASTER_MARKER_FOREIGNER
+
+MASTER_END_DECLARATIONS
 
 #ifdef MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS
 	const UI4 __MASTER_CODE_STYLE_INCLUDE_H_LAST_LINE__ = MASTER_LINE + 6;

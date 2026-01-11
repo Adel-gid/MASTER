@@ -11,6 +11,8 @@
 
 #include <master_enum.h>
 
+MASTER_BEGIN_DECLARATIONS
+
 #if defined(_AIX_) || defined(__TOS_AIX__)
 #	if defined(_AIX3) || defined(_AIX32)
 #		define MASTER_OPERATING_SYSTEM_NAME "AIX 3.2"
@@ -52,6 +54,8 @@
 #else
 #	define MASTER_OPERATING_SYSTEM_NAME "undefined"
 #endif /* #! Operating System !# */
+
+MASTER_END_DECLARATIONS
 
 #ifdef MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS
 	const UI4 __MASTER_OPERATING_SYSTEM_DETECT_INCLUDE_H_LAST_LINE__ = MASTER_LINE + 6;

@@ -11,6 +11,8 @@
 
 #include <master_enum.h>
 
+MASTER_BEGIN_DECLARATIONS
+
 #if defined(MASTER_ARCHITECTURE_USE_CUSTOM)
 #	if !defined(MASTER_ARCHITECTURE_NAME)
 #		warning "Custom architecture needs name, printed as ascii string in macros \"MASTER_ARCHITECTURE_NAME\" (optional)"
@@ -51,15 +53,15 @@
 #		define MASTER_ARCHITECTURE_NAME "ARM 3"
 #	elif defined(__ARM_ARCH_4T__) || defined(__TARGET_ARM_4T)
 #		define MASTER_ARCHITECTURE_NAME "ARM 4T"
-#	elif defined(__ARM_ARCH_5__) || defined(__ARM_ARCH_5E__) || _M_ARM == 5
+#	elif defined(__ARM_ARCH_5__) || defined(__ARM_ARCH_5E__) || _M_ARM + 0 == 5
 #		define MASTER_ARCHITECTURE_NAME "ARM 5"
 #	elif defined(__ARM_ARCH_5T__) || defined(__ARM_ARCH_5TE__) || defined(__ARM_ARCH_5TEJ__)
 #		define MASTER_ARCHITECTURE_NAME "ARM 5T"
-#	elif defined(__ARM_ARCH_6__) || defined(__ARM_ARCH_6J__) || defined(__ARM_ARCH_6K__) || defined(__ARM_ARCH_6Z__) || defined(__ARM_ARCH_6ZK__) || _M_ARM == 6
+#	elif defined(__ARM_ARCH_6__) || defined(__ARM_ARCH_6J__) || defined(__ARM_ARCH_6K__) || defined(__ARM_ARCH_6Z__) || defined(__ARM_ARCH_6ZK__) || _M_ARM + 0 == 6
 #		define MASTER_ARCHITECTURE_NAME "ARM 6"
 #	elif defined(__ARM_ARCH_6T2__)
 #		define MASTER_ARCHITECTURE_NAME "ARM 6T2"
-#	elif defined(__ARM_ARCH_7__) || defined(__ARM_ARCH_7A__) || defined(__ARM_ARCH_7R__) || defined(__ARM_ARCH_7M__) || defined(__ARM_ARCH_7S__) || _M_ARM == 7
+#	elif defined(__ARM_ARCH_7__) || defined(__ARM_ARCH_7A__) || defined(__ARM_ARCH_7R__) || defined(__ARM_ARCH_7M__) || defined(__ARM_ARCH_7S__) || _M_ARM + 0 == 7
 #		define MASTER_ARCHITECTURE_NAME "ARM 7"
 #	else
 #		define MASTER_ARCHITECTURE_NAME "ARM"
@@ -134,13 +136,13 @@
 #	define MASTER_ARCHITECTURE_UNALIGN_FRIENDLY 
 	*/
 #elif defined(__i386__) || defined(__i386) || defined(i386) || defined(_M_IX86) || defined(_M_I386) || defined(_M_I86) || defined(__IA32__) || defined(__X86__) || defined(_X86_) || defined(__THW_INTEL__) || defined(__I86__) || defined(__INTEL__) || defined(__386)
-#	if _M_IX86 == 300 && __I86__ == 3
+#	if (defined(_M_IX86) && _M_IX86 + 0 == 300) || (defined(__I86__) && __I86__ + 0 == 3)
 #		define MASTER_ARCHITECTURE_NAME "Intel 80386"
-#	elif _M_IX86 == 400 && __I86__ == 4
+#	elif (defined(_M_IX86) && _M_IX86 + 0 == 400) || (defined(__I86__) && __I86__ + 0 == 4)
 #		define MASTER_ARCHITECTURE_NAME "Intel 80486"
-#	elif _M_IX86 == 500 && __I86__ == 5
+#	elif (defined(_M_IX86) && _M_IX86 + 0 == 500) || (defined(__I86__) && __I86__ + 0 == 5)
 #		define MASTER_ARCHITECTURE_NAME "Intel Pentium"
-#	elif _M_IX86 == 600 && __I86__ == 6
+#	elif (defined(_M_IX86) && _M_IX86 + 0 == 600) || (defined(__I86__) && __I86__ + 0 == 6)
 #		define MASTER_ARCHITECTURE_NAME "Intel Pentium Pro/II"
 #	else
 #		define MASTER_ARCHITECTURE_NAME "Intel x86"
@@ -178,17 +180,17 @@
 #	define MASTER_ARCHITECTURE_CPU_WIDTH 32
 #	define MASTER_ARCHITECTURE_INSTRUCTIONS_TYPE "CISC"
 #elif defined(__mips__) || defined(mips) || defined(__mips) || defined(__MIPS__)
-#	if (defined(_MIPS_ISA_MIPS1) || __mips == 1) && !defined(_R3000)
+#	if (defined(_MIPS_ISA_MIPS1) || __mips + 0 == 1) && !defined(_R3000)
 #		define MASTER_ARCHITECTURE_NAME "MIPS R2000"
-#	elif (defined(_MIPS_ISA_MIPS1) || __mips == 1) && defined(_R3000)
+#	elif (defined(_MIPS_ISA_MIPS1) || __mips + 0 == 1) && defined(_R3000)
 #		define MASTER_ARCHITECTURE_NAME "MIPS R3000"
 #	elif defined(_R4000)
 #		define MASTER_ARCHITECTURE_NAME "MIPS R4000"
-#	elif defined(_MIPS_ISA_MIPS3) || __mips == 3 || defined(__MIPS_ISA3__)
+#	elif defined(_MIPS_ISA_MIPS3) || __mips + 0 == 3 || defined(__MIPS_ISA3__)
 #		define MASTER_ARCHITECTURE_NAME "MIPS R4400"
-#	elif defined(_MIPS_ISA_MIPS2) || __mips == 2 || defined(__MIPS_ISA2__)
+#	elif defined(_MIPS_ISA_MIPS2) || __mips + 0 == 2 || defined(__MIPS_ISA2__)
 #		define MASTER_ARCHITECTURE_NAME "MIPS R6000"
-#	elif defined(_MIPS_ISA_MIPS4) || __mips == 4 || defined(__MIPS_ISA4__)
+#	elif defined(_MIPS_ISA_MIPS4) || __mips + 0 == 4 || defined(__MIPS_ISA4__)
 #		define MASTER_ARCHITECTURE_NAME "MIPS R8000 / R10000"
 #	else
 #		define MASTER_ARCHITECTURE_NAME "MIPS"
@@ -212,11 +214,11 @@
 #		define MASTER_ARCHITECTURE_NAME "PowerPC 440"
 #	elif defined(_ARCH_450)
 #		define MASTER_ARCHITECTURE_NAME "PowerPC 450"
-#	elif defined(_ARCH_601) || defined(__ppc601) || _M_PPC == 601
+#	elif defined(_ARCH_601) || defined(__ppc601) || _M_PPC + 0 == 601
 #		define MASTER_ARCHITECTURE_NAME "PowerPC 601"
-#	elif defined(_ARCH_603) || defined(__ppc603) || _M_PPC == 603
+#	elif defined(_ARCH_603) || defined(__ppc603) || _M_PPC + 0 == 603
 #		define MASTER_ARCHITECTURE_NAME "PowerPC 603"
-#	elif defined(_ARCH_604) || defined(__ppc604) || _M_PPC == 604
+#	elif defined(_ARCH_604) || defined(__ppc604) || _M_PPC + 0 == 604
 #		define MASTER_ARCHITECTURE_NAME "PowerPC 604"
 #	elif defined(_ARCH_620)
 #		define MASTER_ARCHITECTURE_NAME "PowerPC 620"
@@ -403,6 +405,8 @@
 #if !defined(MASTER_ARCHITECTURE_UNALIGN_FRIENDLY)
 #	define MASTER_ARCHITECTURE_UNALIGN_FRIENDLY 0
 #endif /* #! ARCHITECTURE UNALIGN FRIENDLY !# */
+
+MASTER_END_DECLARATIONS
 
 #ifdef MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS
 	const UI4 __MASTER_ARCHITECTURE_DETECT_INCLUDE_H_LAST_LINE__ = MASTER_LINE + 6;

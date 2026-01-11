@@ -11,6 +11,8 @@
 
 #include <master_enum.h>
 
+MASTER_BEGIN_DECLARATIONS
+
 #ifdef MASTER_DISTANCES_EXTERN_ONLY
 #	define MASTER_DISTANCES_HAMMING_IMPLEMENT 0
 #	define MASTER_DISTANCES_BITHAMMING_IMPLEMENT 0
@@ -70,8 +72,8 @@
 
 /* #! Hamming !# */
 
-MASTER_PREFER_EXTERN UI4 MASTER_Distance_HammingRaw( const UI1 * const, const UI4, const UI1 * const, const UI4 );
-MASTER_PREFER_EXTERN MASTER_PREFER_INLINE UI4 MASTER_Distance_Hamming( const char * const, const char * const );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI4, MASTER_Distance_HammingRaw, ( const UI1 * const, const UI4, const UI1 * const, const UI4 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, MASTER_PREFER_INLINE UI4, MASTER_Distance_Hamming, ( const char * const, const char * const ) );
 
 #if MASTER_DISTANCES_HAMMING_IMPLEMENT == 1
 
@@ -104,7 +106,7 @@ MASTER_DEFINE_FUNCTION2(
 	( const char * const, string1 ),
 	( const char * const, string2 )
 ) {
-	return MASTER_Distance_HammingRaw((UI1 *)string1, MASTER_CPRLEN(string1), (UI1 *)string2, MASTER_CPRLEN(string2));
+	return MASTER_Distance_HammingRaw((const UI1 *)string1, MASTER_CPRLEN(string1), (const UI1 *)string2, MASTER_CPRLEN(string2));
 }
 
 #endif /* #! Hamming !# */
@@ -121,8 +123,8 @@ MASTER_CountOnes( UI4 number ) {
 
 /* #! Bit Hamming !# */
 
-MASTER_PREFER_EXTERN UI4 MASTER_Distance_BitHammingRaw( const UI1 * const, const UI4, const UI1 * const, const UI4 );
-MASTER_PREFER_EXTERN MASTER_PREFER_INLINE UI4 MASTER_Distance_BitHamming( const char * const, const char * const );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI4, MASTER_Distance_BitHammingRaw, ( const UI1 * const, const UI4, const UI1 * const, const UI4 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, MASTER_PREFER_INLINE UI4, MASTER_Distance_BitHamming, ( const char * const, const char * const ) );
 
 #if MASTER_DISTANCES_BITHAMMING_IMPLEMENT == 1
 
@@ -154,16 +156,15 @@ MASTER_DEFINE_FUNCTION2(
 	( const char * const, string1 ),
 	( const char * const, string2 )
 ) {
-	return MASTER_Distance_BitHammingRaw((UI1 *)string1, MASTER_CPRLEN(string1), (UI1 *)string2, MASTER_CPRLEN(string2));
+	return MASTER_Distance_BitHammingRaw((const UI1 *)string1, MASTER_CPRLEN(string1), (const UI1 *)string2, MASTER_CPRLEN(string2));
 }
 
 #endif /* #! Bit Hamming !# */
 
 /* #! Levenshtein !# */
 
-MASTER_PREFER_EXTERN_STATIC UI4 MASTER_Distance_Levenshtein_( const UI1 * const, const UI4, const UI1 * const, const UI4 );
-MASTER_PREFER_EXTERN UI4 MASTER_Distance_LevenshteinRaw( const UI1 * const, const UI4, const UI1 * const, const UI4 );
-MASTER_PREFER_EXTERN MASTER_PREFER_INLINE UI4 MASTER_Distance_Levenshtein( const char * const, const char * const );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI4,  MASTER_Distance_LevenshteinRaw, ( const UI1 * const, const UI4, const UI1 * const, const UI4 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, MASTER_PREFER_INLINE UI4, MASTER_Distance_Levenshtein, ( const char * const, const char * const ) );
 
 #if MASTER_DISTANCES_LEVENSHTEIN_IMPLEMENT == 1
 
@@ -171,7 +172,7 @@ MASTER_DEFINE_FUNCTION4(
 	MASTER_NO_FLAGS,
 	MASTER_EMPTY_DESCRIPTION,
 	/* ! */ MASTER_Distance_Levenshtein_ /* ! */,
-	MASTER_PREFER_EXTERN_STATIC UI4,
+	MASTER_PREFER_STATIC UI4,
 	( const UI1 * const, bytes1 ),
 	( const UI4, length1 ),
 	( const UI1 * const, bytes2 ),
@@ -237,10 +238,12 @@ MASTER_DEFINE_FUNCTION2(
 	( const char * const, string1 ),
 	( const char * const, string2 )
 ) {
-	return MASTER_Distance_LevenshteinRaw((UI1 *)string1, MASTER_CPRLEN(string1), (UI1 *)string2, MASTER_CPRLEN(string2));
+	return MASTER_Distance_LevenshteinRaw((const UI1 *)string1, MASTER_CPRLEN(string1), (const UI1 *)string2, MASTER_CPRLEN(string2));
 }
 
 #endif /* #! Levenshtein !# */
+
+MASTER_END_DECLARATIONS
 
 #ifdef MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS
 	const UI4 __MASTER_DISTANCES_INCLUDE_H_LAST_LINE__ = MASTER_LINE + 6;

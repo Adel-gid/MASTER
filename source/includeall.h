@@ -9,8 +9,11 @@
 #ifndef __MASTER_INCLUDE_ALL_INCLUDE_H__
 #define __MASTER_INCLUDE_ALL_INCLUDE_H__
 
-/* #! Metadata & Important !# */
 #include <master_enum.h>
+
+MASTER_BEGIN_DECLARATIONS
+
+/* #! Metadata & Important !# */
 #include <architecture_detect.h>
 #include <operating_system_detect.h>
 #include <compiler_detect.h>
@@ -36,8 +39,9 @@
 #include <hashlib.h>
 #include <checksum.h>
 
+MASTER_END_DECLARATIONS
+
 #ifdef MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS
-	MASTER_PREFER_EXTERN const UI4 __MASTER_INCLUDEALL_INCLUDE_H_LAST_LINE__;
 	#define __MASTER_FULL_LIBRARY_SUM_OF_LINES__ (__MASTER_INCLUDEALL_INCLUDE_H_LAST_LINE__ + \
 												 __MASTER_CODE_STYLE_INCLUDE_H_LAST_LINE__ + \
 												 __MASTER_ARCHITECTURE_DETECT_INCLUDE_H_LAST_LINE__ + \

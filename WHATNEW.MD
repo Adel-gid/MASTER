@@ -1,3 +1,24 @@
+What added and changed on 11.01.2026 ?
+ ! API change :
+ ! * MASTER_SMEAR[1 / 2 / 4 / 8] -> MASTER_Bit_Smear[1 / 2 / 4 / 8] ;
+ ! * MASTER_BITLEN[1 / 2 / 4 / 8] -> MASTER_Bit_Bitlen[1 / 2 / 4 / 8] ;
+ ! * MASTER_POW2FLOOR[1 / 2 / 4 / 8] -> MASTER_BIT_POW2FLOOR[1 / 2 / 4 / 8] ;
+ ! * MASTER_POW2CEIL[1 / 2 / 4 / 8] -> MASTER_BIT_POW2CEIL[1 / 2 / 4 / 8] ;
+ ! * MASTER_POW2ROUND[1 / 2 / 4 / 8] -> MASTER_BIT_POW2ROUND[1 / 2 / 4 / 8] ;
+ ! * MASTER_POW2MATHROUND[1 / 2 / 4 / 8] -> MASTER_BIT_POW2MATHROUND[1 / 2 / 4 / 8] ;
+ ! * MASTER_LOG2FLOOR[1 / 2 / 4 / 8] -> MASTER_BIT_LOG2FLOOR[1 / 2 / 4 / 8] ;
+ ! * MASTER_LOG2CEIL[1 / 2 / 4 / 8] -> MASTER_BIT_LOG2CEIL[1 / 2 / 4 / 8] ;
+ ! * MASTER_LOG2ROUND[1 / 2 / 4 / 8] -> MASTER_BIT_LOG2ROUND[1 / 2 / 4 / 8] ;
+ ! * MASTER_LOG2MATHROUND[1 / 2 / 4 / 8] -> MASTER_BIT_LOG2MATHROUND[1 / 2 / 4 / 8] ;
+ ! * All functions and macroses above moved from "master_enum.h" to "bitlib.h" ;
+ * fixed compiling with using tradional compiler ;
+ * added macroses to "master_enum.h", especially MASTER_EXTERN_FUNCTION ;
+ * added start and end markers for declarations of C functions and variables to all files ;
+ * now the links to files in README.MD point to the file and when clicked, you can go to this library file ;
+ * now library compiles without warnings with -Wcast-qual, -Wmissing-declarations and -Wmissing-prototypes (gcc/clang) ;
+ * added MT19937 and WELL family (512a, 521a/b, 607a/b, 800a/b, 1024a/b, 19937a/b/c, 21701a, 23209a/b, 44497a/b + constructor for custom WELL algorithms) PRNG in "randomlib.h" ;
+ * added ".gitattributes" specifying the C language for .h files to avoid confusion with C++ files when analyzed with Linguist.
+
 What added and changed on 05.01.2026 ?
  ! API change :
  ! * MASTER_[RLL / RLR][8 / 16 / 32 / 64] -> MASTER_[RLL / RLR][1 / 2 / 4 / 8] ;

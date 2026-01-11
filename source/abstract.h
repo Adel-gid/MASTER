@@ -11,6 +11,8 @@
 
 #include <master_enum.h>
 
+MASTER_BEGIN_DECLARATIONS
+
 /* #! Bit Stream !# */
 
 typedef struct {
@@ -20,14 +22,10 @@ typedef struct {
 	UI1 value_bits;
 } MASTER_BitStream;
 
-MASTER_PREFER_EXTERN UI1
-MASTER_BitStream_Grant( MASTER_BitStream * const, const UI1 );
-MASTER_PREFER_EXTERN UI4
-MASTER_BitStream_Peek( MASTER_BitStream * const, const UI1 );
-MASTER_PREFER_EXTERN void
-MASTER_BitStream_Flush( MASTER_BitStream * const, const UI1 );
-MASTER_PREFER_EXTERN void
-MASTER_BitStream_ByteAlign( MASTER_BitStream * const );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI1, MASTER_BitStream_Grant, ( MASTER_BitStream * const, const UI1 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI4, MASTER_BitStream_Peek, ( MASTER_BitStream * const, const UI1 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, void, MASTER_BitStream_Flush, ( MASTER_BitStream * const, const UI1 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, void, MASTER_BitStream_ByteAlign, ( MASTER_BitStream * const ) );
 
 UI1
 MASTER_BitStream_Grant( MASTER_BitStream * const stream, const UI1 bits ) {
@@ -71,24 +69,15 @@ typedef struct {
 	UI4 buffer_position;
 } MASTER_ByteStack;
 
-MASTER_PREFER_EXTERN void
-MASTER_ByteStack_Init( MASTER_ByteStack * const, const UI4 );
-MASTER_PREFER_EXTERN MASTER_ByteStack
-MASTER_ByteStack_Create( const UI4 );
-MASTER_PREFER_EXTERN void
-MASTER_ByteStack_Flush( MASTER_ByteStack * const );
-MASTER_PREFER_EXTERN void
-MASTER_ByteStack_Free( MASTER_ByteStack * const );
-MASTER_PREFER_EXTERN UI1
-MASTER_ByteStack_AddByte( MASTER_ByteStack * const, const UI1 );
-MASTER_PREFER_EXTERN UI1
-MASTER_ByteStack_PopByte( MASTER_ByteStack * const );
-MASTER_PREFER_EXTERN UI1
-MASTER_ByteStack_PopBytes( MASTER_ByteStack * const, const UI4 );
-MASTER_PREFER_EXTERN UI1
-MASTER_ByteStack_PeekByte( MASTER_ByteStack * const, const UI4 );
-MASTER_PREFER_EXTERN UI1
-MASTER_ByteStack_IsEmpty( MASTER_ByteStack * const );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, void, MASTER_ByteStack_Init, ( MASTER_ByteStack * const, const UI4 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, MASTER_ByteStack, MASTER_ByteStack_Create, ( const UI4 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, void, MASTER_ByteStack_Flush, ( MASTER_ByteStack * const ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, void, MASTER_ByteStack_Free, ( MASTER_ByteStack * const ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI1, MASTER_ByteStack_AddByte, ( MASTER_ByteStack * const, const UI1 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI1, MASTER_ByteStack_PopByte, ( MASTER_ByteStack * const ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI1, MASTER_ByteStack_PopBytes, ( MASTER_ByteStack * const, const UI4 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI1, MASTER_ByteStack_PeekByte, ( MASTER_ByteStack * const, const UI4 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI1, MASTER_ByteStack_IsEmpty, ( MASTER_ByteStack * const ) );
 
 void
 MASTER_ByteStack_Init( MASTER_ByteStack * const bstack, const UI4 capacity ) {
@@ -168,22 +157,14 @@ typedef struct {
 	UI1 monotone_type;
 } MASTER_MonotonicStack;
 
-MASTER_PREFER_EXTERN void
-MASTER_MonotonicStack_Init( MASTER_MonotonicStack * const, const UI4, const UI4, const UI1 );
-MASTER_PREFER_EXTERN MASTER_MonotonicStack
-MASTER_MonotonicStack_Create( const UI4, const UI4, const UI1 );
-MASTER_PREFER_EXTERN void
-MASTER_MonotonicStack_Flush( MASTER_MonotonicStack * const );
-MASTER_PREFER_EXTERN void
-MASTER_MonotonicStack_Free( MASTER_MonotonicStack * const );
-MASTER_PREFER_EXTERN UI1
-MASTER_MonotonicStack_Pop( MASTER_MonotonicStack * const );
-MASTER_PREFER_EXTERN UI1
-MASTER_MonotonicStack_Insert( MASTER_MonotonicStack * const, const void * );
-MASTER_PREFER_EXTERN UI1
-MASTER_MonotonicStack_Peek( MASTER_MonotonicStack * const, const UI4, void * const );
-MASTER_PREFER_EXTERN UI1
-MASTER_MonotonicStack_IsEmpty( MASTER_MonotonicStack * const );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, void, MASTER_MonotonicStack_Init, ( MASTER_MonotonicStack * const, const UI4, const UI4, const UI1 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, MASTER_MonotonicStack, MASTER_MonotonicStack_Create, ( const UI4, const UI4, const UI1 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, void, MASTER_MonotonicStack_Flush, ( MASTER_MonotonicStack * const ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, void, MASTER_MonotonicStack_Free, ( MASTER_MonotonicStack * const ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI1, MASTER_MonotonicStack_Pop, ( MASTER_MonotonicStack * const ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI1, MASTER_MonotonicStack_Insert, ( MASTER_MonotonicStack * const, const void * ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI1, MASTER_MonotonicStack_Peek, ( MASTER_MonotonicStack * const, const UI4, void * const ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI1, MASTER_MonotonicStack_IsEmpty, ( MASTER_MonotonicStack * const ) );
 
 void
 MASTER_MonotonicStack_Init( MASTER_MonotonicStack * const mstack, const UI4 capacity, const UI4 element_size, const UI1 monotone_type ) {
@@ -227,14 +208,14 @@ MASTER_MonotonicStack_Insert( MASTER_MonotonicStack * const mstack, const void *
 	if (mstack == nul) return MASTER_ERROR;
 	/* #! Unoptimized !# */
 	while (mstack->buffer_position > 0 && 
-		   MASTER_MEMCMP((UI1 *)mstack->buffer + (mstack->buffer_position - 1) * mstack->buffer_element_size, (UI1 *)value, mstack->buffer_element_size) *
+		   MASTER_MEMCMP((UI1 *)mstack->buffer + (mstack->buffer_position - 1) * mstack->buffer_element_size, (const UI1 *)value, mstack->buffer_element_size) *
 		   ((mstack->monotone_type == MASTER_MONOTONICSTACK_INCREASING) ? (-1) : (+1)) <= 0)
 		mstack->buffer_position -= 1;
 	if (mstack->buffer_position >= mstack->buffer_capacity) {
 		mstack->buffer_capacity <<= 1;
 		mstack->buffer = (UT *)MASTER_REALLOC(mstack->buffer, mstack->buffer_capacity * mstack->buffer_element_size);
 	}
-	MASTER_MEMCPY((UI1 *)mstack->buffer + mstack->buffer_position * mstack->buffer_element_size, (UI1 *)value, mstack->buffer_element_size);
+	MASTER_MEMCPY((UI1 *)mstack->buffer + mstack->buffer_position * mstack->buffer_element_size, (const UI1 *)value, mstack->buffer_element_size);
 	mstack->buffer_position += 1;
 	return MASTER_NO_ERROR;
 }
@@ -260,24 +241,15 @@ typedef struct {
 	UI4 source;
 } MASTER_RingBuffer;
 
-MASTER_PREFER_EXTERN void
-MASTER_RingBuffer_Flush( MASTER_RingBuffer * const );
-MASTER_PREFER_EXTERN void
-MASTER_RingBuffer_Init( MASTER_RingBuffer * const, UI1 * const, const UI4 );
-MASTER_PREFER_EXTERN MASTER_RingBuffer
-MASTER_RingBuffer_Create( UI1 * const, const UI4 );
-MASTER_PREFER_EXTERN void
-MASTER_RingBuffer_AddByte( MASTER_RingBuffer * const, const UI1 );
-MASTER_PREFER_EXTERN void
-MASTER_RingBuffer_AddBytes( MASTER_RingBuffer * const, const UI1 * bytes, UI4 );
-MASTER_PREFER_EXTERN void
-MASTER_RingBuffer_FlushByte( MASTER_RingBuffer * const );
-MASTER_PREFER_EXTERN void
-MASTER_RingBuffer_FlushBytes( MASTER_RingBuffer * const, const UI4 );
-MASTER_PREFER_EXTERN void
-MASTER_RingBuffer_CopyBytes( MASTER_RingBuffer * const, UI1 *, UI4, UI4 );
-MASTER_PREFER_EXTERN void
-MASTER_RingBuf_CopyAndUpdateBytes( MASTER_RingBuffer * const, UI1 *, const UI4, UI4 );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, void, MASTER_RingBuffer_Flush, ( MASTER_RingBuffer * const ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, void, MASTER_RingBuffer_Init, ( MASTER_RingBuffer * const, UI1 * const, const UI4 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, MASTER_RingBuffer, MASTER_RingBuffer_Create, ( UI1 * const, const UI4 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, void, MASTER_RingBuffer_AddByte, ( MASTER_RingBuffer * const, const UI1 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, void, MASTER_RingBuffer_AddBytes, ( MASTER_RingBuffer * const, const UI1 * bytes, UI4 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, void, MASTER_RingBuffer_FlushByte, ( MASTER_RingBuffer * const ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, void, MASTER_RingBuffer_FlushBytes, ( MASTER_RingBuffer * const, const UI4 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, void, MASTER_RingBuffer_CopyBytes, ( MASTER_RingBuffer * const, UI1 *, UI4, UI4 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, void, MASTER_RingBuf_CopyAndUpdateBytes, ( MASTER_RingBuffer * const, UI1 *, const UI4, UI4 ) );
 
 void
 MASTER_RingBuffer_Flush( MASTER_RingBuffer * const ringbuf ) {
@@ -381,6 +353,8 @@ MASTER_RingBuf_CopyAndUpdateBytes( MASTER_RingBuffer * const ringbuf, UI1 * outp
 	MASTER_RingBuffer_CopyBytes(ringbuf, output, offset, length);
 	MASTER_RingBuffer_AddBytes(ringbuf, output, length);
 }
+
+MASTER_END_DECLARATIONS
 
 #ifdef MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS
 	const UI4 __MASTER_ABSTRACT_INCLUDE_H_LAST_LINE__ = MASTER_LINE + 6;
