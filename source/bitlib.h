@@ -1,13 +1,15 @@
 
-/*
+/* #!
  * Copyright (c) 2026 Adel'gid Aragami
  *
  * Licensed under the BSD 2-Clause License.
  * See the LICENSE file in the project root for more details.
- */
+ *
+ * Source : https://github.com/Adel-gid/MASTER
+ !# */
 
-#ifndef __MASTER_BITLIB_INCLUDE_H__
-#define __MASTER_BITLIB_INCLUDE_H__
+#ifndef MASTER_zRIVATE_BITLIB_INCLUDE_H
+#define MASTER_zRIVATE_BITLIB_INCLUDE_H
 
 #include <master_enum.h>
 
@@ -245,7 +247,7 @@ MASTER_DEFINE_FUNCTION1(
 	}
 #endif /* #! MASTER_64_AVAILABLE !# */
 
-#define __MASTER_BITLEN_MACROS_PROCESS( value, bitcount, bit_count, cast_type ) do { \
+#define MASTER_zRIVATE_BITLEN_MACROS_PROCESS( value, bitcount, bit_count, cast_type ) do { \
 		if ((value) >= ((cast_type)1 << (bit_count))) { \
 			(bitcount) += (bit_count); \
 			(value) >>= (bit_count); \
@@ -260,9 +262,9 @@ MASTER_DEFINE_FUNCTION1(
 	( UI1, value )
 ) {
 	UI1 bitcount = 0;
-	__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 4, UI4);
-	__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 2, UI4);
-	__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 1, UI4);
+	MASTER_zRIVATE_BITLEN_MACROS_PROCESS(value, bitcount, 4, UI4);
+	MASTER_zRIVATE_BITLEN_MACROS_PROCESS(value, bitcount, 2, UI4);
+	MASTER_zRIVATE_BITLEN_MACROS_PROCESS(value, bitcount, 1, UI4);
 	if (value > 0) bitcount += 1;
 	return bitcount;
 }
@@ -275,10 +277,10 @@ MASTER_DEFINE_FUNCTION1(
 	( UI2, value )
 ) {
 	UI1 bitcount = 0;
-	__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 8, UI4);
-	__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 4, UI4);
-	__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 2, UI4);
-	__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 1, UI4);
+	MASTER_zRIVATE_BITLEN_MACROS_PROCESS(value, bitcount, 8, UI4);
+	MASTER_zRIVATE_BITLEN_MACROS_PROCESS(value, bitcount, 4, UI4);
+	MASTER_zRIVATE_BITLEN_MACROS_PROCESS(value, bitcount, 2, UI4);
+	MASTER_zRIVATE_BITLEN_MACROS_PROCESS(value, bitcount, 1, UI4);
 	if (value > 0) bitcount += 1;
 	return bitcount;
 }
@@ -291,11 +293,11 @@ MASTER_DEFINE_FUNCTION1(
 	( UI4, value )
 ) {
 	UI1 bitcount = 0;
-	__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 16, UI4);
-	__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 8, UI4);
-	__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 4, UI4);
-	__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 2, UI4);
-	__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 1, UI4);
+	MASTER_zRIVATE_BITLEN_MACROS_PROCESS(value, bitcount, 16, UI4);
+	MASTER_zRIVATE_BITLEN_MACROS_PROCESS(value, bitcount, 8, UI4);
+	MASTER_zRIVATE_BITLEN_MACROS_PROCESS(value, bitcount, 4, UI4);
+	MASTER_zRIVATE_BITLEN_MACROS_PROCESS(value, bitcount, 2, UI4);
+	MASTER_zRIVATE_BITLEN_MACROS_PROCESS(value, bitcount, 1, UI4);
 	if (value > 0) bitcount += 1;
 	return bitcount;
 }
@@ -309,12 +311,12 @@ MASTER_DEFINE_FUNCTION1(
 		( UI8, value )
 	) {
 		UI1 bitcount = 0;
-		__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 32, UI8);
-		__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 16, UI4);
-		__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 8, UI4);
-		__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 4, UI4);
-		__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 2, UI4);
-		__MASTER_BITLEN_MACROS_PROCESS(value, bitcount, 1, UI4);
+		MASTER_zRIVATE_BITLEN_MACROS_PROCESS(value, bitcount, 32, UI8);
+		MASTER_zRIVATE_BITLEN_MACROS_PROCESS(value, bitcount, 16, UI4);
+		MASTER_zRIVATE_BITLEN_MACROS_PROCESS(value, bitcount, 8, UI4);
+		MASTER_zRIVATE_BITLEN_MACROS_PROCESS(value, bitcount, 4, UI4);
+		MASTER_zRIVATE_BITLEN_MACROS_PROCESS(value, bitcount, 2, UI4);
+		MASTER_zRIVATE_BITLEN_MACROS_PROCESS(value, bitcount, 1, UI4);
 		if (value > 0) bitcount += 1;
 		return bitcount;
 	}
@@ -352,7 +354,7 @@ MASTER_DEFINE_FUNCTION1(
 #		define MASTER_BIT_LOG2ROUND8( value ) (((value) < (MASTER_BIT_POW2FLOOR8(value) | (MASTER_BIT_POW2FLOOR8(value) >> 1))) ? (MASTER_BIT_LOG2FLOOR8(value)) : (MASTER_BIT_LOG2CEIL8(value)))
 #	endif /* #! MASTER_64_AVAILABLE !# */
 #else
-#	define __MASTER_BIT_POW2ROUNDX_GENERATE_MACRO( suffix ) \
+#	define MASTER_zRIVATE_BIT_POW2ROUNDX_GENERATE_MACRO( suffix ) \
 		MASTER_DEFINE_FUNCTION1( \
 			MASTER_NO_FLAGS, \
 			MASTER_EMPTY_DESCRIPTION, \
@@ -365,7 +367,7 @@ MASTER_DEFINE_FUNCTION1(
 			if (value < floored) return floored & (floored << 1); \
 			return MASTER_BIT_POW2CEIL ## suffix(value); \
 		}
-#	define __MASTER_BIT_LOG2ROUNDX_GENERATE_MACRO( suffix, numsuff ) \
+#	define MASTER_zRIVATE_BIT_LOG2ROUNDX_GENERATE_MACRO( suffix, numsuff ) \
 		MASTER_DEFINE_FUNCTION1( \
 			MASTER_NO_FLAGS, \
 			MASTER_EMPTY_DESCRIPTION, \
@@ -379,18 +381,18 @@ MASTER_DEFINE_FUNCTION1(
 			floored |= floored >> 1; \
 			return bits + (value >= floored); \
 		}
-		__MASTER_BIT_POW2ROUNDX_GENERATE_MACRO( 1 )
-		__MASTER_BIT_POW2ROUNDX_GENERATE_MACRO( 2 )
-		__MASTER_BIT_POW2ROUNDX_GENERATE_MACRO( 4 )
-		__MASTER_BIT_LOG2ROUNDX_GENERATE_MACRO( 1, U )
-		__MASTER_BIT_LOG2ROUNDX_GENERATE_MACRO( 2, U )
-		__MASTER_BIT_LOG2ROUNDX_GENERATE_MACRO( 4, U )
+		MASTER_zRIVATE_BIT_POW2ROUNDX_GENERATE_MACRO( 1 )
+		MASTER_zRIVATE_BIT_POW2ROUNDX_GENERATE_MACRO( 2 )
+		MASTER_zRIVATE_BIT_POW2ROUNDX_GENERATE_MACRO( 4 )
+		MASTER_zRIVATE_BIT_LOG2ROUNDX_GENERATE_MACRO( 1, U )
+		MASTER_zRIVATE_BIT_LOG2ROUNDX_GENERATE_MACRO( 2, U )
+		MASTER_zRIVATE_BIT_LOG2ROUNDX_GENERATE_MACRO( 4, U )
 #		if MASTER_64_AVAILABLE == 1
-			__MASTER_BIT_POW2ROUNDX_GENERATE_MACRO( 8 )
-			__MASTER_BIT_LOG2ROUNDX_GENERATE_MACRO( 8, L )
+			MASTER_zRIVATE_BIT_POW2ROUNDX_GENERATE_MACRO( 8 )
+			MASTER_zRIVATE_BIT_LOG2ROUNDX_GENERATE_MACRO( 8, L )
 #		endif /* #! MASTER_64_AVAILABLE !# */
-#	undef __MASTER_BIT_POW2ROUNDX_GENERATE_MACRO
-#	undef __MASTER_BIT_LOG2ROUNDX_GENERATE_MACRO
+#	undef MASTER_zRIVATE_BIT_POW2ROUNDX_GENERATE_MACRO
+#	undef MASTER_zRIVATE_BIT_LOG2ROUNDX_GENERATE_MACRO
 #endif /* #! MASTER_ROUND_FUNCS_INSTEAD_OF_MACROS !# */
 
 MASTER_DEFINE_FUNCTION1(
@@ -505,12 +507,17 @@ MASTER_DEFINE_FUNCTION1(
 #	define MASTER_BIT_POW2MATHROUND8( value ) (1L << MASTER_BIT_LOG2MATHROUND8(value))
 #endif /* #! MASTER_64_AVAILABLE !# */
 
+#define MASTER_BIT_GETBIT( value, bit_index ) (((value) >> (bit_index)) & 1)
+#define MASTER_BIT_SETBIT( value, bit_index, bit_value ) (((value) & (~(1 << (bit_index)))) | ((bit_value) << (bit_index)))
+#define MASTER_BIT_HASZEROBYTE( value ) ((((value) - 0x01010101) & (~(value)) & 0x80808080) > 0)
+#define MASTER_BIT_HASBYTE( value, byte_value ) MASTER_BIT_HASZEROBYTE(value ^ ((~(UI4)0) / 0xFF * (byte_value)))
+
 MASTER_END_DECLARATIONS
 
 #ifdef MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS
-	const UI4 __MASTER_BITLIB_INCLUDE_H_LAST_LINE__ = MASTER_LINE + 6;
+	const UI4 MASTER_zRIVATE_BITLIB_INCLUDE_H_LAST_LINE = MASTER_LINE + 6;
 #endif /* #! MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS !# */
 
-#endif /* #! __MASTER_BITLIB_INCLUDE_H__ !# */
+#endif /* #! MASTER_zRIVATE_BITLIB_INCLUDE_H !# */
 
 /* #! be master !# */

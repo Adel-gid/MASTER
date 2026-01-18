@@ -1,13 +1,15 @@
 
-/*
+/* #!
  * Copyright (c) 2026 Adel'gid Aragami
  *
  * Licensed under the BSD 2-Clause License.
  * See the LICENSE file in the project root for more details.
- */
+ *
+ * Source : https://github.com/Adel-gid/MASTER
+ !# */
 
-#ifndef __MASTER_ALGOLIB_INCLUDE_H__
-#define __MASTER_ALGOLIB_INCLUDE_H__
+#ifndef MASTER_zRIVATE_ALGOLIB_INCLUDE_H
+#define MASTER_zRIVATE_ALGOLIB_INCLUDE_H
 
 #include <master_enum.h>
 #include <abstract.h>
@@ -17,10 +19,27 @@ MASTER_BEGIN_DECLARATIONS
 
 MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI1, MASTER_Algolib_CheckBrackets, ( const char * const ) );
 MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI1, MASTER_Algolib_IsPrime, ( const SI4 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, OSI, MASTER_Algolib_RoundSqrt, ( const OSI ) );
 MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI1, MASTER_Algolib_CalculateSpan, ( const UI4 * const, UI4 * const, const UI4 ) );
 MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, MASTER_maxint, MASTER_Algolib_DJB2, ( const UI1 *, MASTER_maxint ) );
 MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, MASTER_maxint, MASTER_Algolib_SDBM, ( const UI1 *, MASTER_maxint ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI4, MASTER_Algolib_MurmurHash1, ( const void * const MASTER_PREFER_RESTRICT, const MASTER_maxint, const UI4 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI4, MASTER_Algolib_MurmurHash1_Aligned, ( const void * const MASTER_PREFER_RESTRICT, const MASTER_maxint, const UI4 ) );
+#if MASTER_64_AVAILABLE
+	MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI8, MASTER_Algolib_MurmurHash64A, ( const void * const MASTER_PREFER_RESTRICT, const MASTER_maxint, const UI8 ) );
+	MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI8, MASTER_Algolib_MurmurHash64B, ( const void * const MASTER_PREFER_RESTRICT, const MASTER_maxint, const UI8 ) );
+#endif /* #! 64 Bits !# */
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI4, MASTER_Algolib_MurmurHash2, ( const void * const MASTER_PREFER_RESTRICT, const MASTER_maxint, const UI4 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI4, MASTER_Algolib_MurmurHash2A, ( const void * const MASTER_PREFER_RESTRICT, const MASTER_maxint, const UI4 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI4, MASTER_Algolib_MurmurHash2_Aligned,( const void * const MASTER_PREFER_RESTRICT, const MASTER_maxint, const UI4 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, void, MASTER_Algolib_MurmurHash3x32o4, ( const void * const MASTER_PREFER_RESTRICT, const MASTER_maxint, const UI4, void * const MASTER_PREFER_RESTRICT ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, void, MASTER_Algolib_MurmurHash3x32o16, ( const void * const MASTER_PREFER_RESTRICT, const MASTER_maxint, const UI4, void * const MASTER_PREFER_RESTRICT ) );
+#if MASTER_64_AVAILABLE == 1
+	MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, void, MASTER_Algolib_MurmurHash3x64o16, ( const void * const MASTER_PREFER_RESTRICT, const MASTER_maxint, const UI4, void * const MASTER_PREFER_RESTRICT ) );
+#endif /* #! 64 Bits !# */
+typedef struct MASTER_Algolib_ListNode MASTER_Algolib_ListNode;
 typedef struct MASTER_Algolib_TreeNode MASTER_Algolib_TreeNode;
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, MASTER_Algolib_ListNode *, MASTER_Algolib_AddTwoNodeNumbers, ( MASTER_Algolib_ListNode *, MASTER_Algolib_ListNode * ) );
 MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, double, MASTER_Algolib_FindMedianInTwoSortedArrays, ( const SI4 * const, const SI4, const SI4 * const, const SI4 ) );
 MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI1, MASTER_Algolib_IsPalindrome, ( const SI4 ) );
 MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI1, MASTER_Algolib_IsValidParentheses, ( const char * const ) );
@@ -41,24 +60,63 @@ MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, SI4, MASTER_Algolib_NumberJewelsInStone
 MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, MASTER_Algolib_TreeNode *, MASTER_Algolib_SubtreeWithAllDeepest, ( MASTER_Algolib_TreeNode * ) );
 MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, SI4, MASTER_Algolib_RepeatedNTimes, ( const SI4 * const, const UI4 ) );
 MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, SI4, MASTER_Algolib_MaxLevelSum, ( MASTER_Algolib_TreeNode * ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI4, MASTER_Algolib_MinimumTimeToVisitAllPoints, ( const SI4**, const UI4 ) );
 MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, SI4, MASTER_Algolib_MaximumProduct, ( MASTER_Algolib_TreeNode * ) );
 MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI4, MASTER_Algolib_SumOfFourDivisors, ( const UI4 *, const UI4 ) );
 MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, SI4, MASTER_Algolib_NumberOfWaysToPaintN3Grid, ( const UI4 ) );
 MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, SI4, MASTER_Algolib_MaximumDotProduct, ( const SI4 * const, const UI4, const SI4 * const, const UI4 ) );
 MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, SI4, MASTER_Algolib_TotalMoney, ( const SI4 value ) );
 MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, SI4, MASTER_Algolib_MinimumXorSum, ( const UI4 *, const UI4 *, const UI4 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, SI4, MASTER_Algolib_LargestMagicSquare, ( const SI4**, const SI4, const SI4 * ) );
 MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, SI4, MASTER_Algolib_MaximumMatrixSum, ( const SI4 * const * const, const UI4 ) );
 MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, MASTER_signed_maxint, MASTER_Algolib_CountQuadruplets, ( const SI4 *, const UI4 ) );
 MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, SI4**, MASTER_Algolib_MergeArrays, ( const SI4**, const UI4, const SI4**, const UI4, SI4 *, SI4** ) );
 MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, SI4, MASTER_Algolib_KnightMaximumMoves, ( const SI4, const SI4, const SI4** const, const UI4 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, MASTER_signed_maxint, MASTER_Algolib_LargestSquareArea, ( SI4**, SI4**, const UI4 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, double, MASTER_Algolib_SeparateSquares, ( const SI4**, const UI4 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, MASTER_signed_maxint, MASTER_Algolib_MinimumCost, ( const SI4 * const, const SI4 * const, const UI4, const SI4 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, SI4 *, MASTER_Algolib_BestTower, ( const SI4**, const UI4, const SI4 *, const SI4 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, SI4, MASTER_Algolib_MinimumOperations, ( const SI4 *, const SI4 *, const UI4 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, SI4, MASTER_Algolib_AlternatingXor, ( const SI4 * const, const UI4, const SI4, const SI4 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, SI4 *, MASTER_Algolib_MinimumFlips, ( UI4, SI4**, UI4, char *, char *, SI4 * ) );
+
+struct MASTER_Algolib_ListNode {
+	SI4 value;
+	MASTER_Algolib_ListNode * next_node;
+};
 
 struct MASTER_Algolib_TreeNode {
-	SI4 val;
+	SI4 value;
 	struct MASTER_Algolib_TreeNode * left;
 	struct MASTER_Algolib_TreeNode * right;
 };
 
 /* #! Tasks from LeetCode !# */
+
+/* #! 2. Add Two Numbers !# */ MASTER_Algolib_ListNode *
+MASTER_Algolib_AddTwoNodeNumbers( MASTER_Algolib_ListNode * l1, MASTER_Algolib_ListNode * l2 ) {
+	MASTER_Algolib_ListNode result = { 0, nul };
+	MASTER_Algolib_ListNode * iterat = &result;
+	MASTER_Algolib_ListNode * new_node;
+	SI1 carry = 0;
+	SI1 sum_value;
+	while (l1 != nul || l2 != nul || carry > 0) {
+		sum_value = carry;
+		if (l1 != nul) {
+			sum_value += l1->value;
+			l1 = l1->next_node;
+		}
+		if (l2 != nul) {
+			sum_value += l2->value;
+			l2 = l2->next_node;
+		}
+		new_node = (MASTER_Algolib_ListNode *)MASTER_CALLOC(1, sizeof(MASTER_Algolib_ListNode));
+		new_node->value = sum_value % 10;
+		iterat = (iterat->next_node = new_node);
+		carry = sum_value >= 10;
+	}
+	return result.next_node;
+}
 
 /* #! 4. Median of Two Sorted Arrays !# */ double
 MASTER_Algolib_FindMedianInTwoSortedArrays( const SI4 * const nums1, const SI4 nums1Size, const SI4 * const nums2, const SI4 nums2Size ) {
@@ -117,7 +175,7 @@ MASTER_Algolib_IsValidParentheses( const char * const string ) {
 		} else {
 			if (stack_ptr == 0) goto failure;
 			stack_ptr -= 1;
-			if (string[index] - stack[stack_ptr] != 1 && 
+			if (string[index] - stack[stack_ptr] != 1 &&
 				string[index] - stack[stack_ptr] != 2) {
 				free(stack);
 				return 0;
@@ -227,7 +285,7 @@ MASTER_PREFER_STATIC void
 MASTER_Algolib_BinaryTreePaths_DFS( MASTER_Algolib_TreeNode * root, SI4 * array, UI4 array_pointer, char*** output, UI4 * capacity, UI4 * pointer ) {
 	UI4 index = 0;
 	char * outpointer;
-	array[array_pointer] = root->val;
+	array[array_pointer] = root->value;
 	if (root->left == nul && root->right == nul) {
 		if (*pointer >= *capacity) {
 			*capacity <<= 1;
@@ -598,7 +656,7 @@ MASTER_Algolib_MaxLevelSum( MASTER_Algolib_TreeNode * root ) {
 	SI4 levelBest = 1;
 	SI4 front = 0;
 	SI4 rear = 0;
-	SI4 maxSum = root->val;
+	SI4 maxSum = root->value;
 	SI4 curSum;
 	SI4 levelSize;
 	SI4 index;
@@ -610,7 +668,7 @@ MASTER_Algolib_MaxLevelSum( MASTER_Algolib_TreeNode * root ) {
 		for (index = 0; index < levelSize; index += 1) {
 			node = queue[front];
 			front += 1;
-			curSum += node->val;
+			curSum += node->value;
 			if (node->left != nul) {
 				queue[rear] = node->left;
 				rear += 1;
@@ -629,9 +687,23 @@ MASTER_Algolib_MaxLevelSum( MASTER_Algolib_TreeNode * root ) {
 	return levelBest;
 }
 
+/* #! 1266. Minimum Time Visiting All Points !# */ UI4
+MASTER_Algolib_MinimumTimeToVisitAllPoints( const SI4** points, const UI4 pointsSize ) {
+	UI4 index = 1;
+	UI4 total_time = 0;
+	SI4 deltaX;
+	SI4 deltaY;
+	for (; index < pointsSize; index += 1) {
+		deltaX = MASTER_ABS(points[index - 1][0] - points[index][0]);
+		deltaY = MASTER_ABS(points[index - 1][1] - points[index][1]);
+		total_time += MASTER_MAX(deltaX, deltaY);
+	}
+	return total_time;
+}
+
 MASTER_PREFER_STATIC SI4
 maxProduct_DFS( MASTER_Algolib_TreeNode * root, SI4 * const subTreeSums, UI4 * const index ) {
-	SI4 totalSum = root->val;
+	SI4 totalSum = root->value;
 	if (root->left != nul)
 		totalSum += maxProduct_DFS(root->left, subTreeSums, index);
 	if (root->right != nul)
@@ -768,6 +840,51 @@ MASTER_Algolib_MinimumXorSum( const UI4 * const nums1, const UI4 * const nums2, 
 	}
 	return dp[fullMask - 1];
 }
+
+/* #! 1895. Largest Magic Square !# */ SI4
+MASTER_Algolib_LargestMagicSquare( const SI4** grid, const SI4 gridSize, const SI4 * gridColSize ) {
+    const SI4 cols = *gridColSize;
+    const SI4 rows = gridSize;
+    SI4 * prefixRows = (SI4 *)MASTER_CALLOC((cols + 1) * (rows + 1), sizeof(SI4));
+    SI4 * prefixCols = (SI4 *)MASTER_CALLOC((cols + 1) * (rows + 1), sizeof(SI4));
+    SI4 * prefixDiagUp = (SI4 *)MASTER_CALLOC((cols + 1) * (rows + 1), sizeof(SI4));
+    SI4 * prefixDiagDown = (SI4 *)MASTER_CALLOC((cols + 1) * (rows + 1), sizeof(SI4));
+    SI4 index = 1;
+    SI4 jndex;
+    SI4 kndex;
+    SI4 lndex;
+    SI4 answer = 0;
+    SI4 sumValue;
+    UI1 compare;
+    for (; index <= rows; index += 1) {
+        for (jndex = 1; jndex <= cols; jndex += 1) {
+            prefixRows[index * cols + jndex] += grid[index - 1][jndex - 1] + prefixRows[index * cols + jndex - 1];
+            prefixCols[index * cols + jndex] += grid[index - 1][jndex - 1] + prefixCols[(index - 1) * cols + jndex];
+            prefixDiagUp[index * cols + jndex] += grid[index - 1][jndex - 1] + prefixDiagUp[(index - 1) * cols + jndex + 1];
+            prefixDiagDown[index * cols + jndex] += grid[index - 1][jndex - 1] + prefixDiagDown[(index - 1) * cols + jndex - 1];
+        }
+    }
+    for (index = 1; index <= rows; index += 1) {
+        for (jndex = 1; jndex <= cols; jndex += 1) {
+            for (kndex = MASTER_MIN(rows - index, cols - jndex); kndex > answer; kndex -= 1) {
+                sumValue = prefixDiagDown[(index + kndex) * cols + jndex + kndex] - prefixDiagDown[(index - 1) * cols + jndex - 1];
+                compare = sumValue == prefixDiagUp[(index + kndex) * cols + jndex] - prefixDiagUp[(index - 1) * cols + jndex + kndex + 1];
+                for (lndex = 0; lndex <= kndex && compare == 1; lndex += 1) {
+                    compare &= sumValue == prefixRows[(index + lndex) * cols + jndex + kndex] - prefixRows[(index + lndex) * cols + jndex - 1] && 
+                               sumValue == prefixCols[(index + kndex) * cols + jndex + lndex] - prefixCols[(index - 1) * cols + jndex + lndex];
+                }
+                if (compare == 1)
+                    answer = kndex;
+            }
+        }
+    }
+    MASTER_FREE(prefixRows);
+    MASTER_FREE(prefixCols);
+    MASTER_FREE(prefixDiagUp);
+    MASTER_FREE(prefixDiagDown);
+    return answer + 1;
+}
+
 
 /* #! 1975. Maximum Matrix Sum !# */ SI4
 MASTER_Algolib_MaximumMatrixSum( const SI4 * const * const matrix, const UI4 matrixSize ) {
@@ -935,6 +1052,252 @@ MASTER_Algolib_KnightMaximumMoves( const SI4 knightX, const SI4 knightY, const S
 	return answer;
 }
 
+typedef struct {
+	SI4 x1;
+	SI4 y1;
+	SI4 x2;
+	SI4 y2;
+} MASTER_Algolib_LargestSquareArea_Rectangle;
+
+MASTER_PREFER_STATIC SI4
+MASTER_Algolib_LargestSquareArea_RectangleCompare( const void * const data1, const void * const data2 ) {
+	return ((const MASTER_Algolib_LargestSquareArea_Rectangle *)data1)->x1 - ((const MASTER_Algolib_LargestSquareArea_Rectangle *)data2)->x1;
+}
+
+/* #! 3047. Find the Largest Area of Square Inside Two Rectangles !# */ MASTER_signed_maxint
+MASTER_Algolib_LargestSquareArea( SI4** bottomLeft, SI4** topRight, const UI4 length ) {
+	MASTER_Algolib_LargestSquareArea_Rectangle rectangle1;
+	MASTER_Algolib_LargestSquareArea_Rectangle rectangle2;
+	MASTER_Algolib_LargestSquareArea_Rectangle * rectangles = (MASTER_Algolib_LargestSquareArea_Rectangle *)MASTER_CALLOC(length, sizeof(MASTER_Algolib_LargestSquareArea_Rectangle));
+	SI4 maxSide = 0;
+	SI4 width;
+	SI4 height;
+	UI4 index = 0;
+	UI4 jndex;
+	for (; index < length; index += 1) {
+		rectangles[index].x1 = bottomLeft[index][0];
+		rectangles[index].y1 = bottomLeft[index][1];
+		rectangles[index].x2 = topRight[index][0];
+		rectangles[index].y2 = topRight[index][1];
+	}
+	qsort(rectangles, length, sizeof(MASTER_Algolib_LargestSquareArea_Rectangle), MASTER_Algolib_LargestSquareArea_RectangleCompare);
+	for (index = 0; index < length; index += 1) {
+		rectangle1 = rectangles[index];
+		for (jndex = index + 1; jndex < length; jndex += 1) {
+			rectangle2 = rectangles[jndex];
+			if (rectangle2.x1 >= rectangle1.x2) break;
+			width = MASTER_MIN(rectangle1.x2, rectangle2.x2) - MASTER_MAX(rectangle1.x1, rectangle2.x1);
+			height = MASTER_MIN(rectangle1.y2, rectangle2.y2) - MASTER_MAX(rectangle1.y1, rectangle2.y1);
+			if (width > 0 && height > 0)
+				MASTER_IMAX(maxSide, MASTER_MIN(width, height));
+		}
+	}
+	MASTER_FREE(rectangles);
+	return (MASTER_signed_maxint)maxSide * (MASTER_signed_maxint)maxSide;
+}
+
+typedef struct {
+	SI4 y;
+	SI4 l;
+} MASTER_Algolib_SeparateSquares_Corner;
+
+MASTER_PREFER_STATIC SI4
+MASTER_Algolib_SeparateSquares_CornerComparator( const void * const data1, const void * const data2 ) {
+	const MASTER_Algolib_SeparateSquares_Corner * const corner1 = (const MASTER_Algolib_SeparateSquares_Corner *)data1;
+	const MASTER_Algolib_SeparateSquares_Corner * const corner2 = (const MASTER_Algolib_SeparateSquares_Corner *)data2;
+	return corner1->y - corner2->y;
+}
+
+/* #! 3453. Separate Squares I !# */ double
+MASTER_Algolib_SeparateSquares( const SI4** squares, const UI4 squaresSize ) {
+	UI4 index = 0;
+	double total = 0;
+	double half;
+	double currentRate = 0;
+	double areaBelow = 0;
+	double segArea;
+	double prevY;
+	double height;
+	MASTER_Algolib_SeparateSquares_Corner * corners = (MASTER_Algolib_SeparateSquares_Corner *)MASTER_CALLOC(squaresSize << 1, sizeof(MASTER_Algolib_SeparateSquares_Corner));
+	for (; index < squaresSize; index += 1) {
+		corners[index << 1].y = squares[index][1];
+		corners[index << 1].l = squares[index][2];
+		corners[(index << 1) | 1].y = squares[index][1] + squares[index][2];
+		corners[(index << 1) | 1].l = -squares[index][2];
+		total += (double)squares[index][2] * squares[index][2];
+	}
+	qsort(corners, squaresSize << 1, sizeof(MASTER_Algolib_SeparateSquares_Corner), MASTER_Algolib_SeparateSquares_CornerComparator);
+	half = total / 2.0;
+	prevY = corners[0].y;
+	for (index = 0; index < squaresSize << 1; index += 1) {
+		height = corners[index].y - prevY;
+		if (height > 0) {
+			segArea = currentRate * height;
+			if (segArea + areaBelow >= half) {
+				MASTER_FREE(corners);
+				return prevY + (half - areaBelow) / currentRate;
+			}
+			areaBelow += segArea;
+		}
+		currentRate += corners[index].l;
+		prevY = corners[index].y;
+	}
+	MASTER_PREFER_UNREACHABLE;
+	return 0.0 / 0.0;
+}
+
+/* #! 3500. Minimum Cost to Divide Array Into Subarrays !# */ MASTER_signed_maxint
+MASTER_Algolib_MinimumCost( const SI4 * const nums, const SI4 * const cost, const UI4 length, const SI4 k ) {
+    MASTER_signed_maxint * deque = (MASTER_signed_maxint *)MASTER_CALLOC(length + 2, sizeof(MASTER_signed_maxint));
+    MASTER_signed_maxint * prefixNums = (MASTER_signed_maxint *)MASTER_CALLOC(length + 1, sizeof(MASTER_signed_maxint));
+    MASTER_signed_maxint * prefixCosts = (MASTER_signed_maxint *)MASTER_CALLOC(length + 1, sizeof(MASTER_signed_maxint));
+    MASTER_signed_maxint curValue;
+    UI4 index = 1;
+    UI4 jndex;
+    for (; index <= length; index += 1) {
+        prefixNums[index] = prefixNums[index - 1] + nums[index - 1];
+        prefixCosts[index] = prefixCosts[index - 1] + cost[index - 1];
+    }
+    for (index = length; index > 0; index -= 1)
+        deque[index] = (MASTER_signed_maxint)(prefixNums[length] + k) * (MASTER_signed_maxint)(prefixCosts[length] - prefixCosts[index - 1]);
+    for (index = length - 1; index > 0; index -= 1) {
+        curValue = deque[index + 1] + (MASTER_signed_maxint)(prefixCosts[length] - prefixCosts[index]) * k;
+        for (jndex = index; jndex > 0; jndex -= 1) {
+            deque[jndex] = MASTER_MIN(deque[jndex], (MASTER_signed_maxint)(prefixNums[index] + k) * (MASTER_signed_maxint)(prefixCosts[index] - prefixCosts[jndex - 1]) + curValue);
+        }
+    }
+    curValue = deque[1];
+    MASTER_FREE(deque);
+    MASTER_FREE(prefixNums);
+    MASTER_FREE(prefixCosts);
+    return curValue;
+}
+
+/* #! 3809. Best Reachable Tower !# */ SI4 *
+MASTER_Algolib_BestTower( const SI4** towers, const UI4 towersSize, const SI4 * center, const SI4 radius ) {
+	SI4 * bestCoord = (SI4 *)MASTER_CALLOC(2, sizeof(SI4));
+	SI4 bestQuality = -1;
+	UI4 index = 0;
+	SI4 distance;
+	bestCoord[0] = bestCoord[1] = -1;
+	for (; index < towersSize; index += 1) {
+		distance = abs(towers[index][0] - center[0]) + abs(towers[index][1] - center[1]);
+		if (distance <= radius) {
+			if (towers[index][2] > bestQuality) {
+				bestQuality = towers[index][2];
+				memcpy(bestCoord, towers[index], 2 * sizeof(UI4));
+			} otherwise (towers[index][2] == bestQuality)
+				if (towers[index][0] < bestCoord[0] || (towers[index][0] == bestCoord[0] && towers[index][1] < bestCoord[1])) {
+					memcpy(bestCoord, towers[index], 2 * sizeof(UI4));
+			}
+		}
+	}
+	return bestCoord;
+}
+
+/* #! 3810. Minimum Operations to Reach Target Array !# */ SI4
+MASTER_Algolib_MinimumOperations( const SI4 * nums, const SI4 * target, const UI4 length ) {
+	SI1 * differentValues = (SI1 *)MASTER_CALLOC(100001, sizeof(SI1));
+	UI4 index = 0;
+	UI4 counter = 0;
+	for (; index < length; index += 1) {
+		if (nums[index] != target[index]) {
+			if (differentValues[nums[index]] == 0)
+				counter += 1;
+			differentValues[nums[index]] = 1;
+		}
+	}
+	MASTER_FREE(differentValues);
+	return counter;
+}
+
+/* #! 3811. Number of Alternating XOR Partitions !# */ SI4
+MASTER_Algolib_AlternatingXor( const SI4 * const nums, const UI4 numsSize, const SI4 target1, const SI4 target2 ) {
+	UI4 count1[131072];
+	UI4 count2[131072];
+	UI4 ways1 = 0;
+	UI4 ways2 = 0;
+	UI4 curX = 0;
+	UI4 index = 0;
+	MASTER_MEMSET(count1, 0, 131072 * sizeof(UI4));
+	MASTER_MEMSET(count2, 0, 131072 * sizeof(UI4));
+	count2[0] = 1;
+	for (; index < numsSize; index += 1) {
+		curX ^= nums[index];
+		ways2 = count1[curX ^ target2];
+		ways1 = count2[curX ^ target1];
+		count1[curX] = (count1[curX] + ways1) % 1000000007;
+		count2[curX] = (count2[curX] + ways2) % 1000000007;
+	}
+	return (ways1 + ways2) % 1000000007;
+}
+
+typedef struct {
+	UI4 node;
+	UI4 index;
+} MASTER_Algolib_MinimumFlips_NodeState;
+
+MASTER_PREFER_STATIC UI1
+MASTER_Algolib_MinimumFlips_DFS( SI4 * const answer, UI4 * const answerSize, const char * const difference, const MASTER_Algolib_MinimumFlips_NodeState * const * state, const UI4 * const stateSizes, const UI4 nodeU, const UI4 nodeP ) {
+	UI1 change = 0;
+	UI4 index = 0;
+	for (; index < stateSizes[nodeU]; index += 1) {
+		if (state[nodeU][index].node == nodeP) continue;
+		if (MASTER_Algolib_MinimumFlips_DFS(answer, answerSize, difference, state, stateSizes, state[nodeU][index].node, nodeU)) {
+			change ^= 1;
+			answer[*answerSize] = state[nodeU][index].index;
+			*answerSize += 1;
+		}
+	}
+	return difference[nodeU] ^ change;
+}
+
+MASTER_PREFER_STATIC SI4
+MASTER_Algolib_MinimumFlips_Comparator( const void * const data1, const void * const data2 ) {
+	return *(const SI4 *)data1 - *(const SI4 *)data2;
+}
+
+/* #! 3812. Minimum Edge Toggles on a Tree !# */ SI4 *
+MASTER_Algolib_MinimumFlips( UI4 n, SI4** edges, UI4 edgesSize, char * start, char * target, SI4 * returnSize ) {
+	MASTER_Algolib_MinimumFlips_NodeState** state = (MASTER_Algolib_MinimumFlips_NodeState**)MASTER_CALLOC(n << 1, sizeof(MASTER_Algolib_MinimumFlips_NodeState *));
+	UI4 * stateSizes = (UI4 *)MASTER_CALLOC(n << 1, sizeof(UI4 *));
+	SI4 * answer = (SI4 *)calloc(n, sizeof(SI4));
+	UI4 answerSize = 0;
+	UI4 index = 0;
+	UI4 node1;
+	UI4 node2;
+	memset(state, 0, (n << 1) * sizeof(MASTER_Algolib_MinimumFlips_NodeState *));
+	memset(stateSizes, 0, (n << 1) * sizeof(UI4 *));
+	for (; start[index] != '\0'; index += 1)
+		start[index] = start[index] != target[index];
+	for (index = 0; index < edgesSize; index += 1) {
+		node1 = edges[index][0];
+		node2 = edges[index][1];
+		if ((stateSizes[node1] & 0x1F) == 0)
+			state[node1] = (MASTER_Algolib_MinimumFlips_NodeState *)MASTER_REALLOC(state[node1], (stateSizes[node1] + 32) * sizeof(MASTER_Algolib_MinimumFlips_NodeState));
+		state[node1][stateSizes[node1]].node = node2;
+		state[node1][stateSizes[node1]].index = index;
+		stateSizes[node1] += 1;
+		if ((stateSizes[node2] & 0x1F) == 0)
+			state[node2] = (MASTER_Algolib_MinimumFlips_NodeState *)MASTER_REALLOC(state[node2], (stateSizes[node2] + 32) * sizeof(MASTER_Algolib_MinimumFlips_NodeState));
+		state[node2][stateSizes[node2]].node = node1;
+		state[node2][stateSizes[node2]].index = index;
+		stateSizes[node2] += 1;
+	}
+	if (MASTER_Algolib_MinimumFlips_DFS(answer, &answerSize, start, (const MASTER_Algolib_MinimumFlips_NodeState * const *)state, stateSizes, 0, -1)) {
+		answer[0] = -1;
+		*returnSize = 1;
+	} else {
+		qsort(answer, answerSize, sizeof(SI4), MASTER_Algolib_MinimumFlips_Comparator);
+		*returnSize = answerSize;
+	}
+	for (index = 0; index < n; index += 1)
+		MASTER_FREE(state[index]);
+	MASTER_FREE(state);
+	MASTER_FREE(stateSizes);
+	return answer;
+}
+
 /* #! Check Algorithms !# */
 
 UI1
@@ -980,6 +1343,15 @@ MASTER_Algolib_IsPrime( const SI4 value ) {
 
 /* #! Some Algorithms !# */
 
+OSI
+MASTER_Algolib_RoundSqrt( const OSI value ) {
+	OSI estimate = value;
+	if (value < 0) return -1;
+	while (estimate > value / estimate)
+		estimate = (estimate + value / estimate) >> 1;
+	return estimate + (MASTER_SQUARE(estimate + 1) - value < value - MASTER_SQUARE(estimate));
+}
+
 UI1
 MASTER_Algolib_CalculateSpan( const UI4 * const array, UI4 * const output, const UI4 length ) {
 	UI4 * mstack;
@@ -1000,6 +1372,8 @@ MASTER_Algolib_CalculateSpan( const UI4 * const array, UI4 * const output, const
 	MASTER_FREE(mstack);
 	return MASTER_NO_ERROR;
 }
+
+/* #! OneShot Hash Functions !# */
 
 MASTER_maxint
 MASTER_Algolib_DJB2( const UI1 * bytes, MASTER_maxint length ) {
@@ -1022,6 +1396,625 @@ MASTER_Algolib_SDBM( const UI1 * bytes, MASTER_maxint length ) {
 	}
 	return hash_value;
 }
+/* #! TODO : FSM !# */
+UI4
+MASTER_Algolib_MurmurHash1( const void * const MASTER_PREFER_RESTRICT bytes, const MASTER_maxint length, const UI4 seed_value ) {
+	UI4 hash_value = seed_value ^ (length * 0xC6A4A793);
+	const UI1 * ui1_data = (const UI1 *)bytes;
+	MASTER_maxint estimated = length;
+	if (bytes == nul) return 0;
+	while (estimated >= 4) {
+		hash_value += MASTER_TOLE4(*(const UI4 *)ui1_data);
+		hash_value *= 0xC6A4A793;
+		hash_value ^= hash_value >> 16;
+		ui1_data += 4;
+		estimated -= 4;
+	}
+	if (estimated >= 3)
+		hash_value += ui1_data[2] << 16;
+	if (estimated >= 2)
+		hash_value += ui1_data[1] << 8;
+	if (estimated >= 1) {
+		hash_value += ui1_data[0];
+		hash_value *= 0xC6A4A793;
+		hash_value ^= hash_value >> 16;
+	}
+	hash_value *= 0xC6A4A793;
+	hash_value ^= hash_value >> 10;
+	hash_value *= 0xC6A4A793;
+	hash_value ^= hash_value >> 17;
+	return hash_value;
+}
+
+UI4
+MASTER_Algolib_MurmurHash1_Aligned( const void * const MASTER_PREFER_RESTRICT bytes, const MASTER_maxint length, const UI4 seed_value ) {
+	union {
+		const void * MASTER_PREFER_RESTRICT bytes;
+		MASTER_maxint value;
+	} bytesUnion;
+	UI4 hash_value = seed_value ^ (length * 0xC6A4A793);
+	UI1 align;
+	const UI1 * ui1_data = (const UI1 *)bytes;
+	MASTER_maxint estimated = length;
+	if (bytes == nul) return 0;
+	bytesUnion.bytes = bytes;
+	align = bytesUnion.value & 3;
+	if (align > 0 && length >= 4) {
+		const UI1 shiftLeft = (4 - align) << 3;
+		const UI1 shiftRight = align << 3;
+		UI4 helder;
+		UI4 temp_value = 0;
+		UI1 pack;
+		if (align <= 1)
+			temp_value |= ui1_data[2] << 16;
+		if (align <= 2)
+			temp_value |= ui1_data[1] << 8;
+		if (align <= 3)
+			temp_value |= ui1_data[0];
+		temp_value <<= align << 3;
+		ui1_data += 4 - align;
+		estimated -= 4 - align;
+		while (estimated >= 4) {
+			helder = MASTER_TOLE4(*(const UI4 *)ui1_data);
+			temp_value = (temp_value >> shiftRight) | (helder << shiftLeft);
+			hash_value += temp_value;
+			hash_value *= 0xC6A4A793;
+			hash_value ^= hash_value >> 16;
+			temp_value = helder;
+			ui1_data += 4;
+			estimated -= 4;
+		}
+		pack = MASTER_MIN(estimated, align);
+		helder = 0;
+		if (pack >= 3)
+			helder |= ui1_data[2] << 16;
+		if (pack >= 2)
+			helder |= ui1_data[1] << 8;
+		if (pack >= 1)
+			helder |= ui1_data[0];
+		hash_value += (temp_value >> shiftRight) | (helder << shiftLeft);
+		hash_value *= 0xC6A4A793;
+		hash_value ^= hash_value >> 16;
+		ui1_data += pack;
+		estimated -= pack;
+	} else
+		while (estimated >= 4) {
+			hash_value += MASTER_TOLE4(*(const UI4 *)ui1_data);
+			hash_value *= 0xC6A4A793;
+			hash_value ^= hash_value >> 16;
+			ui1_data += 4;
+			estimated -= 4;
+		}
+	if (estimated >= 3)
+		hash_value += ui1_data[2] << 16;
+	if (estimated >= 2)
+		hash_value += ui1_data[1] << 8;
+	if (estimated >= 1) {
+		hash_value += ui1_data[0];
+		hash_value *= 0xC6A4A793;
+		hash_value ^= hash_value >> 16;
+	}
+	hash_value *= 0xC6A4A793;
+	hash_value ^= hash_value >> 10;
+	hash_value *= 0xC6A4A793;
+	hash_value ^= hash_value >> 17;
+	return hash_value;
+}
+
+#if MASTER_64_AVAILABLE
+/* #! TODO : FSM !# */
+UI8
+MASTER_Algolib_MurmurHash64A( const void * const MASTER_PREFER_RESTRICT bytes, const MASTER_maxint length, const UI8 seed_value ) {
+	UI8 hash_value = (length * 0xC6A4A7935BD1E995) ^ seed_value;
+	UI8 helder;
+	const UI1 * ui1_data = (const UI1 *)bytes;
+	MASTER_maxint estimated = length;
+	if (bytes == nul) return 0;
+	while (estimated >= 8) {
+		helder = MASTER_TOLE8(*(const UI8 *)ui1_data);
+		helder *= 0xC6A4A7935BD1E995;
+		helder ^= helder >> 47;
+		helder *= 0xC6A4A7935BD1E995;
+		hash_value ^= helder;
+		hash_value *= 0xC6A4A7935BD1E995;
+		ui1_data += 8;
+		estimated -= 8;
+	}
+	if (estimated >= 7)
+		hash_value ^= ((UI8)ui1_data[6]) << 48;
+	if (estimated >= 6)
+		hash_value ^= ((UI8)ui1_data[5]) << 40;
+	if (estimated >= 5)
+		hash_value ^= ((UI8)ui1_data[4]) << 32;
+	if (estimated >= 4)
+		hash_value ^= ((UI8)ui1_data[3]) << 24;
+	if (estimated >= 3)
+		hash_value ^= ((UI8)ui1_data[2]) << 16;
+	if (estimated >= 2)
+		hash_value ^= ((UI8)ui1_data[1]) << 8;
+	if (estimated >= 1) {
+		hash_value ^= ((UI8)ui1_data[0]);
+		hash_value *= 0xC6A4A7935BD1E995;
+	}
+	hash_value ^= hash_value >> 47;
+	hash_value *= 0xC6A4A7935BD1E995;
+	hash_value ^= hash_value >> 47;
+	return hash_value;
+}
+
+/* #! TODO : FSM !# */
+UI8
+MASTER_Algolib_MurmurHash64B( const void * const MASTER_PREFER_RESTRICT bytes, const MASTER_maxint length, const UI8 seed_value ) {
+	UI4 hash_value_1 = (SI4)seed_value ^ (SI4)length;
+	UI4 hash_value_2 = seed_value >> 32;
+	UI4 helder_1;
+	UI4 helder_2;
+	const UI1 * ui1_data = (const UI1 *)bytes;
+	MASTER_maxint estimated = length;
+	if (bytes == nul) return 0;
+	while (estimated >= 8) {
+		helder_1 = MASTER_TOLE4(((const UI4 *)ui1_data)[0]);
+		helder_2 = MASTER_TOLE4(((const UI4 *)ui1_data)[1]);
+		helder_1 *= 0x5BD1E995;
+		helder_2 *= 0x5BD1E995;
+		helder_1 ^= helder_1 >> 24;
+		helder_2 ^= helder_2 >> 24;
+		helder_1 *= 0x5BD1E995;
+		helder_2 *= 0x5BD1E995;
+		hash_value_1 *= 0x5BD1E995;
+		hash_value_2 *= 0x5BD1E995;
+		hash_value_1 ^= helder_1;
+		hash_value_2 ^= helder_2;
+		ui1_data += 8;
+		estimated -= 8;
+	}
+	if (estimated >= 4) {
+		helder_1 = MASTER_TOLE4(*(const UI4 *)ui1_data);
+		helder_1 *= 0x5BD1E995;
+		helder_1 ^= helder_1 >> 24;
+		helder_1 *= 0x5BD1E995;
+		hash_value_1 *= 0x5BD1E995;
+		hash_value_1 ^= helder_1;
+		ui1_data += 4;
+		estimated &= 3;
+	}
+	if (estimated >= 3)
+		hash_value_2 ^= ui1_data[2] << 16;
+	if (estimated >= 2)
+		hash_value_2 ^= ui1_data[1] << 8;
+	if (estimated >= 1) {
+		hash_value_2 ^= ui1_data[0];
+		hash_value_2 *= 0x5BD1E995;
+	}
+	hash_value_1 ^= hash_value_2 >> 18;
+	hash_value_1 *= 0x5BD1E995;
+	hash_value_2 ^= hash_value_1 >> 22;
+	hash_value_2 *= 0x5BD1E995;
+	hash_value_1 ^= hash_value_2 >> 17;
+	hash_value_1 *= 0x5BD1E995;
+	hash_value_2 ^= hash_value_1 >> 19;
+	hash_value_2 *= 0x5BD1E995;
+	return ((UI8)hash_value_1 << 32) | hash_value_2;
+}
+#endif /* #! 64 Bits !# */
+
+#define MASTER_ALGOLIB_MURMURHASH2A_MIX( hash_value, helder ) do { \
+		(helder) *= 0x5BD1E995; \
+		(helder) ^= (helder) >> 24; \
+		(helder) *= 0x5BD1E995; \
+		(hash_value) *= 0x5BD1E995; \
+		(hash_value) ^= (helder); \
+	} while (0)
+
+UI4
+MASTER_Algolib_MurmurHash2( const void * const MASTER_PREFER_RESTRICT bytes, const MASTER_maxint length, const UI4 seed_value ) {
+	UI4 hash_value = length ^ seed_value;
+	const UI1 * ui1_data = (const UI1 *)bytes;
+	MASTER_maxint estimated = length;
+	UI4 helder;
+	while (estimated >= 4) {
+		helder = MASTER_TOLE4(*(const UI4 *)ui1_data);
+		MASTER_ALGOLIB_MURMURHASH2A_MIX(hash_value, helder);
+		ui1_data += 4;
+		estimated -= 4;
+	}
+	if (estimated >= 3)
+		hash_value ^= ui1_data[2] << 16;
+	if (estimated >= 2)
+		hash_value ^= ui1_data[1] << 8;
+	if (estimated >= 1) {
+		hash_value ^= ui1_data[0];
+		hash_value *= 0x5BD1E995;
+	}
+	hash_value ^= hash_value >> 13;
+	hash_value *= 0x5BD1E995;
+	hash_value ^= hash_value >> 15;
+	return hash_value;
+}
+
+UI4
+MASTER_Algolib_MurmurHash2A( const void * const MASTER_PREFER_RESTRICT bytes, const MASTER_maxint length, const UI4 seed_value ) {
+	UI4 hash_value = seed_value;
+	const UI1 * ui1_data = (const UI1 *)bytes;
+	MASTER_maxint estimated = length;
+	union {
+		UI4 unsign;
+		SI4 sign;
+	} helder;
+	if (bytes == nul) return 0;
+	while (estimated >= 4) {
+		helder.unsign = MASTER_TOLE4(*(const UI4 *)ui1_data);
+		MASTER_ALGOLIB_MURMURHASH2A_MIX(hash_value, helder.unsign);
+		ui1_data += 4;
+		estimated -= 4;
+	}
+	helder.unsign = 0;
+	if (estimated >= 3)
+		helder.unsign |= ui1_data[2] << 16;
+	if (estimated >= 2)
+		helder.unsign |= ui1_data[1] << 8;
+	if (estimated >= 1)
+		helder.unsign |= ui1_data[0];
+	MASTER_ALGOLIB_MURMURHASH2A_MIX(hash_value, helder.unsign);
+	helder.sign = (SI4)length;
+	MASTER_ALGOLIB_MURMURHASH2A_MIX(hash_value, helder.sign);
+	hash_value ^= hash_value >> 13;
+	hash_value *= 0x5BD1E995;
+	hash_value ^= hash_value >> 15;
+	return hash_value;
+}
+
+UI4
+MASTER_Algolib_MurmurHash2_Aligned( const void * const MASTER_PREFER_RESTRICT bytes, const MASTER_maxint length, const UI4 seed_value ) {
+	union {
+		const void * MASTER_PREFER_RESTRICT bytes;
+		MASTER_maxint value;
+	} bytesUnion;
+	UI4 hash_value = length ^ seed_value;
+	UI4 helder;
+	UI1 align;
+	const UI1 * ui1_data = (const UI1 *)bytes;
+	MASTER_maxint estimated = length;
+	if (bytes == nul) return 0;
+	bytesUnion.bytes = bytes;
+	align = bytesUnion.value & 3;
+	if (align > 0 && length >= 4) {
+		const UI1 shiftLeft = (4 - align) << 3;
+		const UI1 shiftRight = align << 3;
+		UI4 temp_value = 0;
+		if (align <= 1)
+			temp_value |= ui1_data[2] << 16;
+		if (align <= 2)
+			temp_value |= ui1_data[1] << 8;
+		if (align <= 3)
+			temp_value |= ui1_data[0];
+		temp_value <<= align << 3;
+		ui1_data += 4 - align;
+		estimated -= 4 - align;
+		while (estimated >= 4) {
+			helder = MASTER_TOLE4(*(const UI4 *)ui1_data);
+			temp_value = (temp_value >> shiftRight) | (helder << shiftLeft);
+			MASTER_ALGOLIB_MURMURHASH2A_MIX(hash_value, temp_value);
+			temp_value = helder;
+			ui1_data += 4;
+			estimated -= 4;
+		}
+		helder = 0;
+		if (estimated >= align) {
+			if (align >= 3)
+				helder |= ui1_data[2] << 16;
+			if (align >= 2)
+				helder |= ui1_data[1] << 8;
+			if (align >= 1)
+				helder |= ui1_data[0];
+			
+			helder = (temp_value >> shiftRight) | (helder << shiftLeft);
+			MASTER_ALGOLIB_MURMURHASH2A_MIX(hash_value, helder);
+			
+			ui1_data += align;
+			estimated -= align;
+			
+			if (estimated >= 3)
+				hash_value ^= ui1_data[2] << 16;
+			if (estimated >= 2)
+				hash_value ^= ui1_data[1] << 8;
+			if (estimated >= 1) {
+				hash_value ^= ui1_data[0];
+				hash_value *= 0x5BD1E995;
+			}
+		} else {
+			if (estimated >= 3)
+				helder |= ui1_data[2] << 16;
+			if (estimated >= 2)
+				helder |= ui1_data[1] << 8;
+			if (estimated >= 1)
+				helder |= ui1_data[0];
+			hash_value ^= (temp_value >> shiftRight) | (helder << shiftLeft);
+			hash_value *= 0x5BD1E995;
+		}
+	} else {
+		while (estimated >= 4) {
+			helder = MASTER_TOLE4(*(const UI4 *)ui1_data);
+			MASTER_ALGOLIB_MURMURHASH2A_MIX(hash_value, helder);
+			ui1_data += 4;
+			estimated -= 4;
+		}
+		if (estimated >= 3)
+			hash_value ^= ui1_data[2] << 16;
+		if (estimated >= 2)
+			hash_value ^= ui1_data[1] << 8;
+		if (estimated >= 1) {
+			hash_value ^= ui1_data[0];
+			hash_value *= 0x5BD1E995;
+		}
+	}
+	hash_value ^= hash_value >> 13;
+	hash_value *= 0x5BD1E995;
+	hash_value ^= hash_value >> 15;
+	return hash_value;
+}
+
+#define MASTER_ALGOLIB_MURMURHASH3_MIX32( hash_value ) do { \
+		(hash_value) ^= (hash_value) >> 16; \
+		(hash_value) *= 0x85EBCA6B; \
+		(hash_value) ^= (hash_value) >> 13; \
+		(hash_value) *= 0xC2B2AE35; \
+		(hash_value) ^= (hash_value) >> 16; \
+	} while (0)
+
+#define MASTER_ALGOLIB_MURMURHASH3_MIX64( hash_value ) do { \
+		(hash_value) ^= (hash_value) >> 33; \
+		(hash_value) *= 0xFF51AFD7ED558CCD; \
+		(hash_value) ^= (hash_value) >> 33; \
+		(hash_value) *= 0xC4CEB9FE1A85EC53; \
+		(hash_value) ^= (hash_value) >> 33; \
+	} while (0)
+
+/* #! TODO : FSM !# */
+void
+MASTER_Algolib_MurmurHash3x32o4( const void * const MASTER_PREFER_RESTRICT bytes, const MASTER_maxint length, const UI4 seed_value, void * const MASTER_PREFER_RESTRICT output ) {
+	UI4 hash_value = seed_value;
+	UI4 helder;
+	const UI1 * ui1_data = (const UI1 *)bytes;
+	MASTER_maxint estimated = length;
+	if (bytes == nul || output == nul) return;
+	while (estimated >= 4) {
+		helder = MASTER_TOLE4(*(const UI4 *)ui1_data);
+		helder *= 0xCC9E2D51;
+		helder = MASTER_RLL4(helder, 15);
+		helder *= 0x1B873593;
+		hash_value ^= helder;
+		hash_value = MASTER_RLL4(hash_value, 13);
+		hash_value = hash_value * 5 + 0xE6546B64;
+		ui1_data += 4;
+		estimated -= 4;
+	}
+	helder = 0;
+	if (estimated >= 3)
+		helder |= ui1_data[2] << 16;
+	if (estimated >= 2)
+		helder |= ui1_data[1] << 8;
+	if (estimated >= 1) {
+		helder |= ui1_data[0];
+		helder *= 0xCC9E2D51;
+		helder = MASTER_RLL4(helder, 15);
+		helder *= 0x1B873593;
+		hash_value ^= helder;
+	}
+	hash_value ^= length;
+	MASTER_ALGOLIB_MURMURHASH3_MIX32(hash_value);
+	*(UI4 *)output = hash_value;
+}
+
+/* #! TODO : FSM !# */
+void
+MASTER_Algolib_MurmurHash3x32o16( const void * const MASTER_PREFER_RESTRICT bytes, const MASTER_maxint length, const UI4 seed_value, void * const MASTER_PREFER_RESTRICT output ) {
+	UI4 hash_values[4];
+	UI4 helders[4];
+	const UI1 * ui1_data = (const UI1 *)bytes;
+	MASTER_maxint estimated = length;
+	if (bytes == nul || output == nul) return;
+	hash_values[0] = hash_values[1] = hash_values[2] = hash_values[3] = seed_value;
+	while (estimated >= 16) {
+		helders[0] = MASTER_TOLE4(*(const UI4 *)ui1_data);
+		helders[1] = MASTER_TOLE4(*(const UI4 *)(ui1_data + 4));
+		helders[2] = MASTER_TOLE4(*(const UI4 *)(ui1_data + 8));
+		helders[3] = MASTER_TOLE4(*(const UI4 *)(ui1_data + 12));
+		helders[0] *= 0x239B961B;
+		helders[0] = MASTER_RLL4(helders[0], 15);
+		helders[0] *= 0xAB0E9789;
+		hash_values[0] ^= helders[0];
+		hash_values[0] = MASTER_RLL4(hash_values[0], 19);
+		hash_values[0] += hash_values[1];
+		hash_values[0] = hash_values[0] * 5 + 0x561CCD1B;
+		helders[1] *= 0xAB0E9789;
+		helders[1] = MASTER_RLL4(helders[1], 16);
+		helders[1] *= 0x38B34AE5;
+		hash_values[1] ^= helders[1];
+		hash_values[1] = MASTER_RLL4(hash_values[1], 17);
+		hash_values[1] += hash_values[2];
+		hash_values[1] = hash_values[1] * 5 + 0x0BCAA747;
+		helders[2] *= 0x38B34AE5;
+		helders[2] = MASTER_RLL4(helders[2], 17);
+		helders[2] *= 0xA1E38B93;
+		hash_values[2] ^= helders[2];
+		hash_values[2] = MASTER_RLL4(hash_values[2], 15);
+		hash_values[2] += hash_values[3];
+		hash_values[2] = hash_values[2] * 5 + 0x96CD1C35;
+		helders[3] *= 0xA1E38B93;
+		helders[3] = MASTER_RLL4(helders[3], 18);
+		helders[3] *= 0x239B961B;
+		hash_values[3] ^= helders[3];
+		hash_values[3] = MASTER_RLL4(hash_values[3], 13);
+		hash_values[3] += hash_values[0];
+		hash_values[3] = hash_values[3] * 5 + 0x32AC3B17;
+		ui1_data += 16;
+		estimated -= 16;
+	}
+	MASTER_MEMSET(helders, 0, 4 * sizeof(UI4));
+	if (estimated >= 15)
+		helders[3] |= ui1_data[14] << 16;
+	if (estimated >= 14)
+		helders[3] |= ui1_data[13] << 8;
+	if (estimated >= 13) {
+		helders[3] |= ui1_data[12];
+		helders[3] *= 0xA1E38B93;
+		helders[3] = MASTER_RLL4(helders[3], 18);
+		helders[3] *= 0x239B961B;
+		hash_values[3] ^= helders[3];
+	}
+	if (estimated >= 9) {
+		if (estimated >= 12)
+			helders[2] = MASTER_TOLE4(*(const UI4 *)(ui1_data + 8));
+		else {
+			if (estimated >= 11)
+				helders[2] |= ui1_data[10] << 16;
+			if (estimated >= 10)
+				helders[2] |= ui1_data[9] << 8;
+			helders[2] |= ui1_data[8];
+		}
+		helders[2] *= 0x38B34AE5;
+		helders[2] = MASTER_RLL4(helders[2], 17);
+		helders[2] *= 0xA1E38B93;
+		hash_values[2] ^= helders[2];
+	}
+	if (estimated >= 5) {
+		if (estimated >= 8)
+			helders[1] = MASTER_TOLE4(*(const UI4 *)(ui1_data + 4));
+		else {
+			if (estimated >= 7)
+				helders[1] |= ui1_data[6] << 16;
+			if (estimated >= 6)
+				helders[1] |= ui1_data[5] << 8;
+			helders[1] |= ui1_data[4];
+		}
+		helders[1] *= 0xAB0E9789;
+		helders[1] = MASTER_RLL4(helders[1], 16);
+		helders[1] *= 0x38B34AE5;
+		hash_values[1] ^= helders[1];
+	}
+	if (estimated >= 1) {
+		if (estimated >= 4)
+			helders[0] = MASTER_TOLE4(*(const UI4 *)ui1_data);
+		else {
+			if (estimated >= 3)
+				helders[0] |= ui1_data[2] << 16;
+			if (estimated >= 2)
+				helders[0] |= ui1_data[1] << 8;
+			helders[0] |= ui1_data[0];
+		}
+		helders[0] *= 0x239B961B;
+		helders[0] = MASTER_RLL4(helders[0], 15);
+		helders[0] *= 0xAB0E9789;
+		hash_values[0] ^= helders[0];
+	}
+	hash_values[0] ^= length;
+	hash_values[1] ^= length;
+	hash_values[2] ^= length;
+	hash_values[3] ^= length;
+	hash_values[0] += hash_values[1] + hash_values[2] + hash_values[3];
+	hash_values[1] += hash_values[0];
+	hash_values[2] += hash_values[0];
+	hash_values[3] += hash_values[0];
+	MASTER_ALGOLIB_MURMURHASH3_MIX32(hash_values[0]);
+	MASTER_ALGOLIB_MURMURHASH3_MIX32(hash_values[1]);
+	MASTER_ALGOLIB_MURMURHASH3_MIX32(hash_values[2]);
+	MASTER_ALGOLIB_MURMURHASH3_MIX32(hash_values[3]);
+	hash_values[0] += hash_values[1] + hash_values[2] + hash_values[3];
+	hash_values[1] += hash_values[0];
+	hash_values[2] += hash_values[0];
+	hash_values[3] += hash_values[0];
+	((UI4 *)output)[0] = hash_values[0];
+	((UI4 *)output)[1] = hash_values[1];
+	((UI4 *)output)[2] = hash_values[2];
+	((UI4 *)output)[3] = hash_values[3];
+}
+
+#if MASTER_64_AVAILABLE == 1
+/* #! TODO : FSM !# */
+void
+MASTER_Algolib_MurmurHash3x64o16( const void * const MASTER_PREFER_RESTRICT bytes, const MASTER_maxint length, const UI4 seed_value, void * const MASTER_PREFER_RESTRICT output ) {
+	UI8 hash_values[2];
+	UI8 helders[2];
+	const UI1 * ui1_data = (const UI1 *)bytes;
+	MASTER_maxint estimated = length;
+	if (bytes == nul || output == nul) return;
+	hash_values[0] = hash_values[1] = seed_value;
+	while (estimated >= 16) {
+		helders[0] = MASTER_TOLE8(*(const UI8 *)ui1_data);
+		helders[1] = MASTER_TOLE8(*(const UI8 *)(ui1_data + 8));
+		helders[0] *= 0x87C37B91114253D5;
+		helders[0] = MASTER_RLL8(helders[0], 31);
+		helders[0] *= 0x4CF5AD432745937F;
+		hash_values[0] ^= helders[0];
+		hash_values[0] = MASTER_RLL8(hash_values[0], 27);
+		hash_values[0] += hash_values[1];
+		hash_values[0] = hash_values[0] * 5 + 0x52DCE729;
+		helders[1] *= 0x4CF5AD432745937F;
+		helders[1] = MASTER_RLL8(helders[1], 33);
+		helders[1] *= 0x87C37B91114253D5;
+		hash_values[1] ^= helders[1];
+		hash_values[1] = MASTER_RLL8(hash_values[1], 31);
+		hash_values[1] += hash_values[0];
+		hash_values[1] = hash_values[1] * 5 + 0x38495AB5;
+		ui1_data += 16;
+		estimated -= 16;
+	}
+	MASTER_MEMSET(helders, 0, 2 * sizeof(UI8));
+	if (estimated >= 15)
+		helders[1] |= (UI8)ui1_data[14] << 48;
+	if (estimated >= 14)
+		helders[1] |= (UI8)ui1_data[13] << 40;
+	if (estimated >= 13)
+		helders[1] |= (UI8)ui1_data[12] << 32;
+	if (estimated >= 12)
+		helders[1] |= (UI8)ui1_data[11] << 24;
+	if (estimated >= 11)
+		helders[1] |= (UI8)ui1_data[10] << 16;
+	if (estimated >= 10)
+		helders[1] |= (UI8)ui1_data[9] << 8;
+	if (estimated >= 9) {
+		helders[1] |= (UI8)ui1_data[8];
+		helders[1] *= 0x4CF5AD432745937F;
+		helders[1] = MASTER_RLL8(helders[1], 33);
+		helders[1] *= 0x87C37B91114253D5;
+		hash_values[1] ^= helders[1];
+	}
+	if (estimated >= 1) {
+		if (estimated >= 8)
+			helders[0] = MASTER_TOLE8(*(const UI8 *)ui1_data);
+		else {
+			if (estimated >= 7)
+				helders[0] |= (UI8)ui1_data[6] << 48;
+			if (estimated >= 6)
+				helders[0] |= (UI8)ui1_data[5] << 40;
+			if (estimated >= 5)
+				helders[0] |= (UI8)ui1_data[4] << 32;
+			if (estimated >= 4)
+				helders[0] |= (UI8)ui1_data[3] << 24;
+			if (estimated >= 3)
+				helders[0] |= (UI8)ui1_data[2] << 16;
+			if (estimated >= 2)
+				helders[0] |= (UI8)ui1_data[1] << 8;
+			helders[0] |= (UI8)ui1_data[0];
+		}
+		helders[0] *= 0x87C37B91114253D5;
+		helders[0] = MASTER_RLL8(helders[0], 31);
+		helders[0] *= 0x4CF5AD432745937F;
+		hash_values[0] ^= helders[0];
+	}
+	hash_values[0] ^= (UI4)length;
+	hash_values[1] ^= (UI4)length;
+	hash_values[0] += hash_values[1];
+	hash_values[1] += hash_values[0];
+	MASTER_ALGOLIB_MURMURHASH3_MIX64(hash_values[0]);
+	MASTER_ALGOLIB_MURMURHASH3_MIX64(hash_values[1]);
+	hash_values[0] += hash_values[1];
+	hash_values[1] += hash_values[0];
+	((UI8 *)output)[0] = hash_values[0];
+	((UI8 *)output)[1] = hash_values[1];
+}
+#endif /* #! 64 Bits !# */
 
 /* #! Dancing Links !# */
 
@@ -1375,12 +2368,13 @@ MASTER_Algolib_DancingLinks_RemoveRow( MASTER_Algolib_DancingLinks * const danci
 	return MASTER_NO_ERROR;
 }
 
+
 MASTER_END_DECLARATIONS
 
 #ifdef MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS
-	const UI4 __MASTER_ALGOLIB_INCLUDE_H_LAST_LINE__ = MASTER_LINE + 6;
+	const UI4 MASTER_zRIVATE_ALGOLIB_INCLUDE_H_LAST_LINE = MASTER_LINE + 6;
 #endif /* #! MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS !# */
 
-#endif /* #! __MASTER_ALGOLIB_INCLUDE_H__ !# */
+#endif /* #! MASTER_zRIVATE_ALGOLIB_INCLUDE_H !# */
 
 /* #! be master !# */

@@ -1,3 +1,31 @@
+What added and changed on 19.01.2026 ?
+ ! API change :
+ ! Now using "MASTER_zRIVATE" namespace for all private macroses and function instead of "__MASTER_...__" ;
+ ! __MASTER_FULL_LIBRARY_SUM_OF_LINES__ -> MASTER_FULL_LIBRARY_SUM_OF_LINES ;
+ ! __MASTER_<libname>_INCLUDE_H__ -> MASTER_zRIVATE_<libname>_INCLUDE_H ;
+ ! __MASTER_<libname>_INCLUDE_H_LAST_LINE__ -> MASTER_zRIVATE_<libname>_INCLUDE_H_LAST_LINE ;
+ ! MASTER_<...>[LE / BE / NUXI / PDPE][16 / 32 / 64] -> MASTER_<...>[LE / BE / NUXI / PDPE][2 / 4 / 8] ;
+ * added more compiler features available in "master_enum.h" ;
+ * added logic to get compiler features for every compiler in "compiler_detect.h" ;
+ * added configuration file for GCC - "compilers/gcc_config.h" ;
+ * removed possible problems "empty macros in expression" ;
+ * added "restrict" macroses to "hashlib.h" and "checksum.h" for more speed ;
+ * strongly optimized all functions in "hashlib.h" ;
+ * optimized Adler32 checksum in "checksum.h" ;
+ * added CP210 encoding table to "charmaplib.h" ;
+ * added some macroses to "bitlib.h" ;
+ * created file "masmath.h" which contains mathematical function implementation ;
+ * added include "masmath.h" to "includeall.h" ;
+ * added DCT-I, DCT-II, DCT-III, DCT-IV and DHT to "masmath.h" ;
+ * added some functions to "algolib.h" ;
+ * added more macroses to best define android and BeOS version in "operating_system_detect.h" ;
+ * added more macroses to detect operating system in "operating_system_detect.h" ;
+ * updated license comment in every file ;
+ * added bimap structure to "abstract.h" ;
+ * added middle squares, Lehmer and LCG PRNG algorithms to "randomlib.h" ;
+ * added more macroses check to check SSE2 availability in "simd_detect.h" ;
+ * added MurmurHash2A algorithm to "hashlib.h" and MurmurHash1/2/3 family OneShot to "algolib.h".
+
 What added and changed on 11.01.2026 ?
  ! API change :
  ! * MASTER_SMEAR[1 / 2 / 4 / 8] -> MASTER_Bit_Smear[1 / 2 / 4 / 8] ;

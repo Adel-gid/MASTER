@@ -1,15 +1,18 @@
 
-/*
+/* #!
  * Copyright (c) 2026 Adel'gid Aragami
  *
  * Licensed under the BSD 2-Clause License.
  * See the LICENSE file in the project root for more details.
- */
+ *
+ * Source : https://github.com/Adel-gid/MASTER
+ !# */
 
-#ifndef __MASTER_DISTANCES_INCLUDE_H__
-#define __MASTER_DISTANCES_INCLUDE_H__
+#ifndef MASTER_zRIVATE_DISTANCES_INCLUDE_H
+#define MASTER_zRIVATE_DISTANCES_INCLUDE_H
 
 #include <master_enum.h>
+#include <bitlib.h>
 
 MASTER_BEGIN_DECLARATIONS
 
@@ -111,16 +114,6 @@ MASTER_DEFINE_FUNCTION2(
 
 #endif /* #! Hamming !# */
 
-MASTER_PREFER_STATIC MASTER_PREFER_INLINE UI1
-MASTER_CountOnes( UI4 number ) {
-	UI1 res = 0;
-	while (number > 0) {
-		if (number & 1) res += 1;
-		number >>= 1;
-	}
-	return res;
-}
-
 /* #! Bit Hamming !# */
 
 MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI4, MASTER_Distance_BitHammingRaw, ( const UI1 * const, const UI4, const UI1 * const, const UI4 ) );
@@ -144,7 +137,7 @@ MASTER_DEFINE_FUNCTION4(
 	if (bytes2 == nul || length2 == 0) return length1;
 	if (length1 != length2) return -1;
 	for (; index < length1; index += 1)
-		score += MASTER_CountOnes(bytes1[index] ^ bytes2[index]);
+		score += MASTER_Bit_CountOnes4(bytes1[index] ^ bytes2[index]);
 	return score;
 }
 
@@ -246,9 +239,9 @@ MASTER_DEFINE_FUNCTION2(
 MASTER_END_DECLARATIONS
 
 #ifdef MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS
-	const UI4 __MASTER_DISTANCES_INCLUDE_H_LAST_LINE__ = MASTER_LINE + 6;
+	const UI4 MASTER_zRIVATE_DISTANCES_INCLUDE_H_LAST_LINE = MASTER_LINE + 6;
 #endif /* #! MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS !# */
 
-#endif /* #! __MASTER_DISTANCES_INCLUDE_H__ !# */
+#endif /* #! MASTER_zRIVATE_DISTANCES_INCLUDE_H !# */
 
 /* #! be master~ !# */

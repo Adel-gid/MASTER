@@ -1,13 +1,15 @@
 
-/*
+/* #!
  * Copyright (c) 2026 Adel'gid Aragami
  *
  * Licensed under the BSD 2-Clause License.
  * See the LICENSE file in the project root for more details.
- */
+ *
+ * Source : https://github.com/Adel-gid/MASTER
+ !# */
 
-#ifndef __MASTER_INCLUDE_ALL_INCLUDE_H__
-#define __MASTER_INCLUDE_ALL_INCLUDE_H__
+#ifndef MASTER_zRIVATE_INCLUDE_ALL_INCLUDE_H
+#define MASTER_zRIVATE_INCLUDE_ALL_INCLUDE_H
 
 #include <master_enum.h>
 
@@ -28,6 +30,9 @@ MASTER_BEGIN_DECLARATIONS
 #include <distances.h>
 #include <bitlib.h>
 
+/* #! Science !# */
+#include <masmath.h>
+
 /* #! Encodings !# */
 #include <charmaplib.h>
 
@@ -39,26 +44,33 @@ MASTER_BEGIN_DECLARATIONS
 #include <hashlib.h>
 #include <checksum.h>
 
+/* #! For metadata only !# */
+#include <compilers/gcc_config.h>
+
 MASTER_END_DECLARATIONS
 
 #ifdef MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS
-	#define __MASTER_FULL_LIBRARY_SUM_OF_LINES__ (__MASTER_INCLUDEALL_INCLUDE_H_LAST_LINE__ + \
-												 __MASTER_CODE_STYLE_INCLUDE_H_LAST_LINE__ + \
-												 __MASTER_ARCHITECTURE_DETECT_INCLUDE_H_LAST_LINE__ + \
-												 __MASTER_OPERATING_SYSTEM_DETECT_INCLUDE_H_LAST_LINE__ + \
-												 __MASTER_COMPILER_DETECT_INCLUDE_H_LAST_LINE__ + \
-												 __MASTER_ABSTRACT_INCLUDE_H_LAST_LINE__ + \
-												 __MASTER_SIMD_DETECT_INCLUDE_H_LAST_LINE__ + \
-												 __MASTER_DISTANCES_INCLUDE_H_LAST_LINE__ + \
-												 __MASTER_BITLIB_INCLUDE_H_LAST_LINE__ + \
-												 __MASTER_CHARMAPLIB_INCLUDE_H_LAST_LINE__ + \
-												 __MASTER_RANDOMLIB_INCLUDE_H_LAST_LINE__ + \
-												 __MASTER_ALGOLIB_INCLUDE_H_LAST_LINE__ + \
-												 __MASTER_HASHLIB_INCLUDE_H_LAST_LINE__ + \
-												 __MASTER_CHECKSUM_INCLUDE_H_LAST_LINE__)
-	const UI4 __MASTER_INCLUDEALL_INCLUDE_H_LAST_LINE__ = MASTER_LINE + 6;
+	#define MASTER_FULL_LIBRARY_SUM_OF_LINES (MASTER_zRIVATE_INCLUDEALL_INCLUDE_H_LAST_LINE + \
+											  MASTER_zRIVATE_CODE_STYLE_INCLUDE_H_LAST_LINE + \
+											  MASTER_zRIVATE_ARCHITECTURE_DETECT_INCLUDE_H_LAST_LINE + \
+											  MASTER_zRIVATE_OPERATING_SYSTEM_DETECT_INCLUDE_H_LAST_LINE + \
+											  MASTER_zRIVATE_COMPILER_DETECT_INCLUDE_H_LAST_LINE + \
+											  MASTER_zRIVATE_ABSTRACT_INCLUDE_H_LAST_LINE + \
+											  MASTER_zRIVATE_SIMD_DETECT_INCLUDE_H_LAST_LINE + \
+											  MASTER_zRIVATE_DISTANCES_INCLUDE_H_LAST_LINE + \
+											  MASTER_zRIVATE_BITLIB_INCLUDE_H_LAST_LINE + \
+											  MASTER_zRIVATE_MASMATH_INCLUDE_H_LAST_LINE + \
+											  MASTER_zRIVATE_CHARMAPLIB_INCLUDE_H_LAST_LINE + \
+											  MASTER_zRIVATE_RANDOMLIB_INCLUDE_H_LAST_LINE + \
+											  MASTER_zRIVATE_ALGOLIB_INCLUDE_H_LAST_LINE + \
+											  MASTER_zRIVATE_HASHLIB_INCLUDE_H_LAST_LINE + \
+											  MASTER_zRIVATE_CHECKSUM_INCLUDE_H_LAST_LINE + \
+											  MASTER_zRIVATE_GCC_CONFIG_INCLUDE_H_LAST_LINE)
+	const UI4 MASTER_zRIVATE_INCLUDEALL_INCLUDE_H_LAST_LINE = MASTER_LINE + 6;
+#else
+#	define MASTER_FULL_LIBRARY_SUM_OF_LINES (-1)
 #endif /* #! MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS !# */
 
-#endif /* #! __MASTER_INCLUDE_ALL_INCLUDE_H__ !# */
+#endif /* #! MASTER_zRIVATE_INCLUDE_ALL_INCLUDE_H !# */
 
 /* #! be master~ !# */

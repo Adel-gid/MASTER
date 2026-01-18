@@ -1,13 +1,15 @@
 
-/*
+/* #!
  * Copyright (c) 2026 Adel'gid Aragami
  *
  * Licensed under the BSD 2-Clause License.
  * See the LICENSE file in the project root for more details.
- */
+ *
+ * Source : https://github.com/Adel-gid/MASTER
+ !# */
 
-#ifndef __MASTER_ARCHITECTURE_DETECT_INCLUDE_H__
-#define __MASTER_ARCHITECTURE_DETECT_INCLUDE_H__
+#ifndef MASTER_zRIVATE_ARCHITECTURE_DETECT_INCLUDE_H
+#define MASTER_zRIVATE_ARCHITECTURE_DETECT_INCLUDE_H
 
 #include <master_enum.h>
 
@@ -16,19 +18,19 @@ MASTER_BEGIN_DECLARATIONS
 #if defined(MASTER_ARCHITECTURE_USE_CUSTOM)
 #	if !defined(MASTER_ARCHITECTURE_NAME)
 #		warning "Custom architecture needs name, printed as ascii string in macros \"MASTER_ARCHITECTURE_NAME\" (optional)"
-#	endif /* #! MASTER_ARCHITECTURE_NAME !# */
+#	endif /* #! Architecture Name !# */
 #	if !defined(MASTER_ARCHITECTURE_CPU_WIDTH)
 #		error "Custom architecture needs cpu width in bits, printed as integer in macros \"MASTER_ARCHITECTURE_CPU_WIDTH\""
-#	endif /* #! MASTER_ARCHITECTURE_CPU_WIDTH !# */
+#	endif /* #! Architecture CPU Width !# */
 #	if !defined(MASTER_ARCHITECTURE_INSTRUCTIONS_TYPE)
 #		warning "Custom architecture needs instruction type, printed as ascii string in macros \"MASTER_ARCHITECTURE_INSTRUCTIONS_TYPE\" (optional)"
-#	endif /* #! MASTER_ARCHITECTURE_INSTRUCTIONS_TYPE !# */
+#	endif /* #! Architecture Instructions Type !# */
 #	if !defined(MASTER_ARCHITECTURE_UNALIGN_FRIENDLY)
 #		warning "Custom architecture needs to know about unalign friendly, printed as boolean 1 or 0 in macros \"MASTER_ARCHITECTURE_UNALIGN_FRIENDLY\" (optional)"
-#	endif /* #! MASTER_ARCHITECTURE_UNALIGN_FRIENDLY !# */
+#	endif /* #! Architecture Unalign Friendly !# */
 #	if !defined(MASTER_ARCHITECTURE_ENDIAN)
 #		warning "Custom architecture needs to know about endian, printed as macros MASTER_(LITTLE|BIG|PDP|UNKNOWN)_ENDIAN from master_enum.h in macros \"MASTER_ARCHITECTURE_ENDIAN\" (optional)"
-#	endif /* #! MASTER_ARCHITECTURE_ENDIAN !# */
+#	endif /* #! Architecture Endian !# */
 #elif defined(__alpha__) || defined(__alpha) || defined(_M_ALPHA)
 #	if defined(__alpha_ev4__)
 #		define MASTER_ARCHITECTURE_NAME "Alpha EV4"
@@ -109,8 +111,8 @@ MASTER_BEGIN_DECLARATIONS
 #		define MASTER_ARCHITECTURE_NAME "Elbrus"
 #	endif /* #! Elbrus Architecture Name !# */
 	/*
-#	define MASTER_ARCHITECTURE_CPU_WIDTH 
-#	define MASTER_ARCHITECTURE_INSTRUCTIONS_TYPE 
+#	define MASTER_ARCHITECTURE_CPU_WIDTH
+#	define MASTER_ARCHITECTURE_INSTRUCTIONS_TYPE
 	*/
 #elif defined(__epiphany__)
 #	define MASTER_ARCHITECTURE_NAME "Epiphany"
@@ -131,9 +133,9 @@ MASTER_BEGIN_DECLARATIONS
 #elif defined(__8080__) || defined(__8085__) || defined(__Z80) || defined(__Z180)
 #	define MASTER_ARCHITECTURE_NAME "Intel x80"
 	/*
-#	define MASTER_ARCHITECTURE_CPU_WIDTH 
-#	define MASTER_ARCHITECTURE_INSTRUCTIONS_TYPE 
-#	define MASTER_ARCHITECTURE_UNALIGN_FRIENDLY 
+#	define MASTER_ARCHITECTURE_CPU_WIDTH
+#	define MASTER_ARCHITECTURE_INSTRUCTIONS_TYPE
+#	define MASTER_ARCHITECTURE_UNALIGN_FRIENDLY
 	*/
 #elif defined(__i386__) || defined(__i386) || defined(i386) || defined(_M_IX86) || defined(_M_I386) || defined(_M_I86) || defined(__IA32__) || defined(__X86__) || defined(_X86_) || defined(__THW_INTEL__) || defined(__I86__) || defined(__INTEL__) || defined(__386)
 #	if (defined(_M_IX86) && _M_IX86 + 0 == 300) || (defined(__I86__) && __I86__ + 0 == 3)
@@ -158,8 +160,8 @@ MASTER_BEGIN_DECLARATIONS
 #elif defined(__loongarch__)
 #	define MASTER_ARCHITECTURE_NAME "Loong Arch"
 	/*
-#	define MASTER_ARCHITECTURE_CPU_WIDTH 
-#	define MASTER_ARCHITECTURE_INSTRUCTIONS_TYPE 
+#	define MASTER_ARCHITECTURE_CPU_WIDTH
+#	define MASTER_ARCHITECTURE_INSTRUCTIONS_TYPE
 	*/
 #elif defined(__m68k__) || defined(__mc68000__) || defined(M68000) || defined(__MC68K__)
 #	if defined(__mc68000__) || defined(__MC68000__)
@@ -200,14 +202,14 @@ MASTER_BEGIN_DECLARATIONS
 #elif defined(__ve__) || defined(__ve) || defined(__NEC__)
 #	define MASTER_ARCHITECTURE_NAME "NEC SX-Aurora TSUBASA"
 	/*
-#	define MASTER_ARCHITECTURE_CPU_WIDTH 
-#	define MASTER_ARCHITECTURE_INSTRUCTIONS_TYPE 
+#	define MASTER_ARCHITECTURE_CPU_WIDTH
+#	define MASTER_ARCHITECTURE_INSTRUCTIONS_TYPE
 	*/
 #elif defined(__pnacl__)
 #	define MASTER_ARCHITECTURE_NAME "PNaCl"
 	/*
-#	define MASTER_ARCHITECTURE_CPU_WIDTH 
-#	define MASTER_ARCHITECTURE_INSTRUCTIONS_TYPE 
+#	define MASTER_ARCHITECTURE_CPU_WIDTH
+#	define MASTER_ARCHITECTURE_INSTRUCTIONS_TYPE
 	*/
 #elif defined(__powerpc) || defined(__powerpc__) || defined(__POWERPC__) || defined(__powerpc64__) || defined(__ppc) || defined(__ppc__) || defined(__PPC__) || defined(__ppc64__) || defined(__PPC64__) || defined(_ARCH_PPC) || defined(_ARCH_PPC64) || defined(_M_PPC)
 #	if defined(_ARCH_440)
@@ -244,8 +246,8 @@ MASTER_BEGIN_DECLARATIONS
 #		define MASTER_ARCHITECTURE_NAME "RISC-V"
 #	endif /* #! RISC-V Architecture Name !# */
 	/*
-#	define MASTER_ARCHITECTURE_CPU_WIDTH 
-#	define MASTER_ARCHITECTURE_INSTRUCTIONS_TYPE 
+#	define MASTER_ARCHITECTURE_CPU_WIDTH
+#	define MASTER_ARCHITECTURE_INSTRUCTIONS_TYPE
 	*/
 #elif defined(__THW_RS6000) || defined(_IBMR2) || defined(_POWER) || defined(_ARCH_PWR) || defined(_ARCH_PWR2) || defined(_ARCH_PWR3) || defined(_ARCH_PWR4)
 #	define MASTER_ARCHITECTURE_NAME "RS/6000"
@@ -331,13 +333,13 @@ MASTER_BEGIN_DECLARATIONS
 
 #ifndef MASTER_ARCHITECTURE_ENDIAN
 #	ifdef __BYTE_ORDER__
-#		if defined(__ORDER_BIG_ENDIAN__) && __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+#		if defined(__ORDER_BIG_ENDIAN__) && __BYTE_ORDER__ + 0 == __ORDER_BIG_ENDIAN__
 #			define MASTER_ARCHITECTURE_ENDIAN MASTER_BIG_ENDIAN
-#		elif defined(__ORDER_LITTLE_ENDIAN__) && __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+#		elif defined(__ORDER_LITTLE_ENDIAN__) && __BYTE_ORDER__ + 0 == __ORDER_LITTLE_ENDIAN__
 #			define MASTER_ARCHITECTURE_ENDIAN MASTER_LITTLE_ENDIAN
-#		elif defined(__ORDER_NUXI_ENDIAN__) && __BYTE_ORDER__ == __ORDER_NUXI_ENDIAN__
+#		elif defined(__ORDER_NUXI_ENDIAN__) && __BYTE_ORDER__ + 0 == __ORDER_NUXI_ENDIAN__
 #			define MASTER_ARCHITECTURE_ENDIAN MASTER_NUXI_ENDIAN
-#		elif defined(__ORDER_PDP_ENDIAN__) && __BYTE_ORDER__ == __ORDER_PDP_ENDIAN__
+#		elif defined(__ORDER_PDP_ENDIAN__) && __BYTE_ORDER__ + 0 == __ORDER_PDP_ENDIAN__
 #			define MASTER_ARCHITECTURE_ENDIAN MASTER_PDP_ENDIAN
 #		endif /* #! Byte Order !# */
 #	endif /* #! __BYTE_ORDER__ !# */
@@ -345,13 +347,13 @@ MASTER_BEGIN_DECLARATIONS
 
 #ifndef MASTER_ARCHITECTURE_ENDIAN
 #	ifdef __FLOAT_WORD_ORDER__
-#		if defined(__ORDER_BIG_ENDIAN__) && __FLOAT_WORD_ORDER__ == __ORDER_BIG_ENDIAN__
+#		if defined(__ORDER_BIG_ENDIAN__) && __FLOAT_WORD_ORDER__ + 0 == __ORDER_BIG_ENDIAN__
 #			define MASTER_ARCHITECTURE_ENDIAN MASTER_BIG_ENDIAN
-#		elif defined(__ORDER_LITTLE_ENDIAN__) && __FLOAT_WORD_ORDER__ == __ORDER_LITTLE_ENDIAN__
+#		elif defined(__ORDER_LITTLE_ENDIAN__) && __FLOAT_WORD_ORDER__ + 0 == __ORDER_LITTLE_ENDIAN__
 #			define MASTER_ARCHITECTURE_ENDIAN MASTER_LITTLE_ENDIAN
-#		elif defined(__ORDER_NUXI_ENDIAN__) && __FLOAT_WORD_ORDER__ == __ORDER_NUXI_ENDIAN__
+#		elif defined(__ORDER_NUXI_ENDIAN__) && __FLOAT_WORD_ORDER__ + 0 == __ORDER_NUXI_ENDIAN__
 #			define MASTER_ARCHITECTURE_ENDIAN MASTER_NUXI_ENDIAN
-#		elif defined(__ORDER_PDP_ENDIAN__) && __FLOAT_WORD_ORDER__ == __ORDER_PDP_ENDIAN__
+#		elif defined(__ORDER_PDP_ENDIAN__) && __FLOAT_WORD_ORDER__ + 0 == __ORDER_PDP_ENDIAN__
 #			define MASTER_ARCHITECTURE_ENDIAN MASTER_PDP_ENDIAN
 #		endif /* #! Byte Order !# */
 #	endif /* #! Detecting !# */
@@ -409,9 +411,9 @@ MASTER_BEGIN_DECLARATIONS
 MASTER_END_DECLARATIONS
 
 #ifdef MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS
-	const UI4 __MASTER_ARCHITECTURE_DETECT_INCLUDE_H_LAST_LINE__ = MASTER_LINE + 6;
+	const UI4 MASTER_zRIVATE_ARCHITECTURE_DETECT_INCLUDE_H_LAST_LINE = MASTER_LINE + 6;
 #endif /* #! MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS !# */
 
-#endif /* #! __MASTER_ARCHITECTURE_DETECT_INCLUDE_H__ !# */
+#endif /* #! MASTER_zRIVATE_ARCHITECTURE_DETECT_INCLUDE_H !# */
 
 /* #! be master~ !# */

@@ -1,13 +1,15 @@
 
-/*
+/* #!
  * Copyright (c) 2026 Adel'gid Aragami
  *
  * Licensed under the BSD 2-Clause License.
  * See the LICENSE file in the project root for more details.
- */
+ *
+ * Source : https://github.com/Adel-gid/MASTER
+ !# */
 
-#ifndef __MASTER_SIMD_DETECT_INCLUDE_H__
-#define __MASTER_SIMD_DETECT_INCLUDE_H__
+#ifndef MASTER_zRIVATE_SIMD_DETECT_INCLUDE_H
+#define MASTER_zRIVATE_SIMD_DETECT_INCLUDE_H
 
 #include <master_enum.h>
 
@@ -36,7 +38,7 @@ MASTER_BEGIN_DECLARATIONS
 #	define MASTER_FUTURE_SSE 0
 #endif /* #! __SSE__ !# */
 
-#ifdef __SSE2__
+#if defined(__SSE2__) || defined (_M_AMD64) || (defined(_M_IX86_FP) && _M_IX86_FP + 0 >= 2)
 #	define MASTER_FUTURE_SSE2 1
 #else
 #	define MASTER_FUTURE_SSE2 0
@@ -490,201 +492,228 @@ MASTER_BEGIN_DECLARATIONS
 /* #! Available Future Extensions !# */
 const char * const
 MASTER_AvailableFutureExtensions[] = {
-#if MASTER_FUTURE_MMX == 1
-	"mmx",
-#endif /* #! MASTER_FUTURE_MMX !# */
 #if MASTER_FUTURE_3DNOW == 1
 	"3dnow",
-#endif /* #! MASTER_FUTURE_3DNOW !# */
-#if MASTER_FUTURE_SSE == 1
-	"sse",
-#endif /* #! MASTER_FUTURE_SSE !# */
-#if MASTER_FUTURE_SSE2 == 1
-	"sse2",
-#endif /* #! MASTER_FUTURE_SSE2 !# */
-#if MASTER_FUTURE_SSE3 == 1
-	"sse3",
-#endif /* #! MASTER_FUTURE_SSE3 !# */
-#if MASTER_FUTURE_SSSE3 == 1
-	"ssse3",
-#endif /* #! MASTER_FUTURE_SSSE3 !# */
-#if MASTER_FUTURE_SSE4_1 == 1
-	"sse4.1",
-#endif /* #! MASTER_FUTURE_SSE4_1 !# */
-#if MASTER_FUTURE_SSE4_2 == 1
-	"sse4.2",
-#endif /* #! MASTER_FUTURE_SSE4_2 !# */
-#if MASTER_FUTURE_POPCNT == 1
-	"popcnt",
-#endif /* #! MASTER_FUTURE_POPCNT !# */
-#if MASTER_FUTURE_LZCNT == 1
-	"lzcnt",
-#endif /* #! MASTER_FUTURE_LZCNT !# */
-#if MASTER_FUTURE_AVX == 1
-	"avx",
-#endif /* #! MASTER_FUTURE_AVX !# */
-#if MASTER_FUTURE_AVX2 == 1
-	"avx2",
-#endif /* #! MASTER_FUTURE_AVX2 !# */
-#if MASTER_FUTURE_AVX512F == 1
-	"avx512f",
-#endif /* #! MASTER_FUTURE_AVX512F !# */
-#if MASTER_FUTURE_AVX512DQ == 1
-	"avx512dq",
-#endif /* #! MASTER_FUTURE_AVX512DQ !# */
-#if MASTER_FUTURE_AVX512IFMA == 1
-	"avx512ifma",
-#endif /* #! MASTER_FUTURE_AVX512IFMA !# */
-#if MASTER_FUTURE_AVX512PF == 1
-	"avx512pf",
-#endif /* #! MASTER_FUTURE_AVX512PF !# */
-#if MASTER_FUTURE_AVX512ER == 1
-	"avx512er",
-#endif /* #! MASTER_FUTURE_AVX512ER !# */
-#if MASTER_FUTURE_AVX512CD == 1
-	"avx512cd",
-#endif /* #! MASTER_FUTURE_AVX512CD !# */
-#if MASTER_FUTURE_AVX512BW == 1
-	"avx512bw",
-#endif /* #! MASTER_FUTURE_AVX512BW !# */
-#if MASTER_FUTURE_AVX512VL == 1
-	"avx512vl",
-#endif /* #! MASTER_FUTURE_AVX512VL !# */
-#if MASTER_FUTURE_AVX512VBMI == 1
-	"avx512vbmi",
-#endif /* #! MASTER_FUTURE_AVX512VBMI !# */
-#if MASTER_FUTURE_AVX512VNNI == 1
-	"avx512vnni",
-#endif /* #! MASTER_FUTURE_AVX512VNNI !# */
-#if MASTER_FUTURE_AVX512BF16 == 1
-	"avx512bf16",
-#endif /* #! MASTER_FUTURE_AVX512BF16 !# */
-#if MASTER_FUTURE_AVX512_VPOPCNTDQ == 1
-	"avx512_vpopcntdq",
-#endif /* #! MASTER_FUTURE_AVX512_VPOPCNTDQ !# */
-#if MASTER_FUTURE_AVX512_BITALG == 1
-	"avx512_bitalg",
-#endif /* #! MASTER_FUTURE_AVX512_BITALG !# */
-#if MASTER_FUTURE_AVX512_VBMI2 == 1
-	"avx512_vbmi2",
-#endif /* #! MASTER_FUTURE_AVX512_VBMI2 !# */
-#if MASTER_FUTURE_AVX512_VPCLMULQDQ == 1
-	"avx512_vpclmulqdq",
-#endif /* #! MASTER_FUTURE_AVX512_VPCLMULQDQ !# */
-#if MASTER_FUTURE_AVX512_GFNI == 1
-	"avx512_gfni",
-#endif /* #! MASTER_FUTURE_AVX512_GFNI !# */
-#if MASTER_FUTURE_AVX512_VAES == 1
-	"avx512_vaes",
-#endif /* #! MASTER_FUTURE_AVX512_VAES !# */
-#if MASTER_FUTURE_AVX512_FP16 == 1
-	"avx512_fp16",
-#endif /* #! MASTER_FUTURE_AVX512_FP16 !# */
-#if MASTER_FUTURE_AVX512_4VNNIW == 1
-	"avx512_4vnniw",
-#endif /* #! MASTER_FUTURE_AVX512_4VNNIW !# */
-#if MASTER_FUTURE_AVX512_4FMAPS == 1
-	"avx512_4fmaps",
-#endif /* #! MASTER_FUTURE_AVX512_4FMAPS !# */
-#if MASTER_FUTURE_FMA == 1
-	"fma",
-#endif /* #! MASTER_FUTURE_FMA !# */
-#if MASTER_FUTURE_FMA4 == 1
-	"fma4",
-#endif /* #! MASTER_FUTURE_FMA !# */
-#if MASTER_FUTURE_F16C == 1
-	"f16c",
-#endif /* #! MASTER_FUTURE_F16C !# */
-#if MASTER_FUTURE_XOP == 1
-	"xop",
-#endif /* #! MASTER_FUTURE_XOP !# */
-#if MASTER_FUTURE_TBM == 1
-	"tbm",
-#endif /* #! MASTER_FUTURE_TBM !# */
-#if MASTER_FUTURE_BMI1 == 1
-	"bmi1",
-#endif /* #! MASTER_FUTURE_BMI1 !# */
-#if MASTER_FUTURE_BMI2 == 1
-	"bmi2",
-#endif /* #! MASTER_FUTURE_BMI2 !# */
+#endif /* #! 3DNOW !# */
+#if MASTER_FUTURE_ADX == 1
+	"adx",
+#endif /* #! ADX !# */
 #if MASTER_FUTURE_AESNI == 1
 	"aesni",
-#endif /* #! MASTER_FUTURE_AESNI !# */
-#if MASTER_FUTURE_PCLMUL == 1
-	"pclmul",
-#endif /* #! MASTER_FUTURE_PCLMUL !# */
-#if MASTER_FUTURE_RDRAND == 1
-	"rdrand",
-#endif /* #! MASTER_FUTURE_RDRAND !# */
-#if MASTER_FUTURE_RDSEED == 1
-	"rdseed",
-#endif /* #! MASTER_FUTURE_RDSEED !# */
-#if MASTER_FUTURE_NEON == 1
-	"neon",
-#endif /* #! MASTER_FUTURE_NEON !# */
-#if MASTER_FUTURE_ARM_CRYPTO == 1
-	"arm_crypto",
-#endif /* #! MASTER_FUTURE_ARM_CRYPTO !# */
-#if MASTER_FUTURE_ARM_FP16 == 1
-	"arm_fp16",
-#endif /* #! MASTER_FUTURE_ARM_FP16 !# */
-#if MASTER_FUTURE_SVE == 1
-	"sve",
-#endif /* #! MASTER_FUTURE_SVE !# */
-#if MASTER_FUTURE_SVE2 == 1
-	"sve2",
-#endif /* #! MASTER_FUTURE_SVE2 !# */
+#endif /* #! AESNI !# */
 #if MASTER_FUTURE_ALTIVEC == 1
 	"altivec",
-#endif /* #! MASTER_FUTURE_ALTIVEC !# */
-#if MASTER_FUTURE_MSA == 1
-	"msa",
-#endif /* #! MASTER_FUTURE_MSA !# */
-#if MASTER_FUTURE_RISCV_VECTOR == 1
-	"riscv_vector",
-#endif /* #! MASTER_FUTURE_RISCV_VECTOR !# */
-#if MASTER_FUTURE_LOONGARCH_SX == 1
-	"loongarch_sx",
-#endif /* #! MASTER_FUTURE_LOONGARCH_SX !# */
-#if MASTER_FUTURE_LOONGARCH_ASX == 1
-	"loongarch_asx",
-#endif /* #! MASTER_FUTURE_LOONGARCH_ASX !# */
-#if MASTER_FUTURE_CMOV == 1
-	"cmov",
-#endif /* #! MASTER_FUTURE_CMOV !# */
-#if MASTER_FUTURE_PREFETCHW == 1
-	"prefetchw",
-#endif /* #! MASTER_FUTURE_PREFETCHW !# */
-#if MASTER_FUTURE_AMX_TILE == 1
-	"amx_tile",
-#endif /* #! MASTER_FUTURE_AMX_TILE !# */
-#if MASTER_FUTURE_AMX_INT8 == 1
-	"amx_int8",
-#endif /* #! MASTER_FUTURE_AMX_INT8 !# */
+#endif /* #! ALTIVEC !# */
 #if MASTER_FUTURE_AMX_BF16 == 1
-	"amx_bf16",
-#endif /* #! MASTER_FUTURE_AMX_BF16 !# */
-#if MASTER_FUTURE_SHA == 1
-	"sha",
-#endif /* #! MASTER_FUTURE_SHA !# */
+	"amx bf16",
+#endif /* #! AMX BF16 !# */
+#if MASTER_FUTURE_AMX_INT8 == 1
+	"amx int8",
+#endif /* #! AMX INT8 !# */
+#if MASTER_FUTURE_AMX_TILE == 1
+	"amx tile",
+#endif /* #! AMX TILE !# */
+#if MASTER_FUTURE_ARM_CRYPTO == 1
+	"arm crypto",
+#endif /* #! ARM CRYPTO !# */
 #if MASTER_FUTURE_ARM_DOTPROD == 1
-	"arm_dotprod",
-#endif /* #! MASTER_FUTURE_ARM_DOTPROD !# */
+	"arm dotprod",
+#endif /* #! ARM DOTPROD !# */
+#if MASTER_FUTURE_ARM_FP16 == 1
+	"arm fp16",
+#endif /* #! ARM FP16 !# */
 #if MASTER_FUTURE_ARM_SME == 1
-	"arm_sme",
-#endif /* #! MASTER_FUTURE_ARM_SME !# */
-#if MASTER_FUTURE_ARM_SVE_FP16_SCALAR == 1
-	"arm_sve_fp16_scalar",
-#endif /* #! MASTER_FUTURE_ARM_SVE_FP16_SCALAR !# */
+	"arm sme",
+#endif /* #! ARM SME !# */
 #if MASTER_FUTURE_ARM_SVE_BF16 == 1
-	"arm_sve_bf16",
-#endif /* #! MASTER_FUTURE_ARM_SVE_BF16 !# */
-#if MASTER_FUTURE_BUILTINS == 1
-	"builtins",
-#endif /* #! MASTER_FUTURE_BUILTINS !# */
+	"arm sve bf16",
+#endif /* #! ARM SVE BF16 !# */
+#if MASTER_FUTURE_ARM_SVE_FP16_SCALAR == 1
+	"arm sve fp16 scalar",
+#endif /* #! ARM SVE FP16 SCALAR !# */
+#if MASTER_FUTURE_AVX == 1
+	"avx",
+#endif /* #! AVX !# */
+#if MASTER_FUTURE_AVX2 == 1
+	"avx2",
+#endif /* #! AVX2 !# */
+#if MASTER_FUTURE_AVX512BF16 == 1
+	"avx512bf16",
+#endif /* #! AVX512BF16 !# */
+#if MASTER_FUTURE_AVX512BW == 1
+	"avx512bw",
+#endif /* #! AVX512BW !# */
+#if MASTER_FUTURE_AVX512CD == 1
+	"avx512cd",
+#endif /* #! AVX512CD !# */
+#if MASTER_FUTURE_AVX512DQ == 1
+	"avx512dq",
+#endif /* #! AVX512DQ !# */
+#if MASTER_FUTURE_AVX512ER == 1
+	"avx512er",
+#endif /* #! AVX512ER !# */
+#if MASTER_FUTURE_AVX512F == 1
+	"avx512f",
+#endif /* #! AVX512F !# */
+#if MASTER_FUTURE_AVX512IFMA == 1
+	"avx512ifma",
+#endif /* #! AVX512IFMA !# */
+#if MASTER_FUTURE_AVX512PF == 1
+	"avx512pf",
+#endif /* #! AVX512PF !# */
+#if MASTER_FUTURE_AVX512VBMI == 1
+	"avx512vbmi",
+#endif /* #! AVX512VBMI !# */
+#if MASTER_FUTURE_AVX512VL == 1
+	"avx512vl",
+#endif /* #! AVX512VL !# */
+#if MASTER_FUTURE_AVX512VNNI == 1
+	"avx512vnni",
+#endif /* #! AVX512VNNI !# */
+#if MASTER_FUTURE_AVX512_4FMAPS == 1
+	"avx512 4fmaps",
+#endif /* #! AVX512 4FMAPS !# */
+#if MASTER_FUTURE_AVX512_4VNNIW == 1
+	"avx512 4vnniw",
+#endif /* #! AVX512 4VNNIW !# */
+#if MASTER_FUTURE_AVX512_BITALG == 1
+	"avx512 bitalg",
+#endif /* #! AVX512 BITALG !# */
+#if MASTER_FUTURE_AVX512_FP16 == 1
+	"avx512 fp16",
+#endif /* #! AVX512 FP16 !# */
+#if MASTER_FUTURE_AVX512_GFNI == 1
+	"avx512 gfni",
+#endif /* #! AVX512 GFNI !# */
+#if MASTER_FUTURE_AVX512_VAES == 1
+	"avx512 vaes",
+#endif /* #! AVX512 VAES !# */
+#if MASTER_FUTURE_AVX512_VBMI2 == 1
+	"avx512 vbmi2",
+#endif /* #! AVX512 VBMI2 !# */
+#if MASTER_FUTURE_AVX512_VP2INTERSECT == 1
+	"avx512 vp2intersect",
+#endif /* #! AVX512 VP2INTERSECT !# */
+#if MASTER_FUTURE_AVX512_VPCLMULQDQ == 1
+	"avx512 vpclmulqdq",
+#endif /* #! AVX512 VPCLMULQDQ !# */
+#if MASTER_FUTURE_AVX512_VPOPCNTDQ == 1
+	"avx512 vpopcntdq",
+#endif /* #! AVX512 VPOPCNTDQ !# */
+#if MASTER_FUTURE_AVX_VNNI == 1
+	"avx vnni",
+#endif /* #! AVX VNNI !# */
 #if MASTER_FUTURE_BIONIC == 1
 	"bionic",
-#endif /* #! MASTER_FUTURE_BIONIC !# */
+#endif /* #! BIONIC !# */
+#if MASTER_FUTURE_BMI1 == 1
+	"bmi1",
+#endif /* #! BMI1 !# */
+#if MASTER_FUTURE_BMI2 == 1
+	"bmi2",
+#endif /* #! BMI2 !# */
+#if MASTER_FUTURE_CET_SS == 1
+	"cet ss",
+#endif /* #! CET SS !# */
+#if MASTER_FUTURE_CLFLUSHOPT == 1
+	"clflushopt",
+#endif /* #! CLFLUSHOPT !# */
+#if MASTER_FUTURE_CLWB == 1
+	"clwb",
+#endif /* #! CLWB !# */
+#if MASTER_FUTURE_CLZERO == 1
+	"clzero",
+#endif /* #! CLZERO !# */
+#if MASTER_FUTURE_CMOV == 1
+	"cmov",
+#endif /* #! CMOV !# */
+#if MASTER_FUTURE_F16C == 1
+	"f16c",
+#endif /* #! F16C !# */
+#if MASTER_FUTURE_FMA == 1
+	"fma",
+#endif /* #! FMA !# */
+#if MASTER_FUTURE_FMA4 == 1
+	"fma4",
+#endif /* #! FMA4 !# */
+#if MASTER_FUTURE_LOONGARCH_ASX == 1
+	"loongarch asx",
+#endif /* #! LOONGARCH ASX !# */
+#if MASTER_FUTURE_LOONGARCH_SX == 1
+	"loongarch sx",
+#endif /* #! LOONGARCH SX !# */
+#if MASTER_FUTURE_LZCNT == 1
+	"lzcnt",
+#endif /* #! LZCNT !# */
+#if MASTER_FUTURE_MMX == 1
+	"mmx",
+#endif /* #! MMX !# */
+#if MASTER_FUTURE_MOVBE == 1
+	"movbe",
+#endif /* #! MOVBE !# */
+#if MASTER_FUTURE_MSA == 1
+	"msa",
+#endif /* #! MSA !# */
+#if MASTER_FUTURE_NEON == 1
+	"neon",
+#endif /* #! NEON !# */
+#if MASTER_FUTURE_PCLMUL == 1
+	"pclmul",
+#endif /* #! PCLMUL !# */
+#if MASTER_FUTURE_POPCNT == 1
+	"popcnt",
+#endif /* #! POPCNT !# */
+#if MASTER_FUTURE_PREFETCHW == 1
+	"prefetchw",
+#endif /* #! PREFETCHW !# */
+#if MASTER_FUTURE_RDRAND == 1
+	"rdrand",
+#endif /* #! RDRAND !# */
+#if MASTER_FUTURE_RDSEED == 1
+	"rdseed",
+#endif /* #! RDSEED !# */
+#if MASTER_FUTURE_RISCV_VECTOR == 1
+	"riscv vector",
+#endif /* #! RISCV VECTOR !# */
+#if MASTER_FUTURE_SERIALIZE == 1
+	"serialize",
+#endif /* #! SERIALIZE !# */
+#if MASTER_FUTURE_SHA == 1
+	"sha",
+#endif /* #! SHA !# */
+#if MASTER_FUTURE_SSE == 1
+	"sse",
+#endif /* #! SSE !# */
+#if MASTER_FUTURE_SSE2 == 1
+	"sse2",
+#endif /* #! SSE2 !# */
+#if MASTER_FUTURE_SSE3 == 1
+	"sse3",
+#endif /* #! SSE3 !# */
+#if MASTER_FUTURE_SSE4_1 == 1
+	"sse4 1",
+#endif /* #! SSE4 1 !# */
+#if MASTER_FUTURE_SSE4_2 == 1
+	"sse4 2",
+#endif /* #! SSE4 2 !# */
+#if MASTER_FUTURE_SSSE3 == 1
+	"ssse3",
+#endif /* #! SSSE3 !# */
+#if MASTER_FUTURE_SVE == 1
+	"sve",
+#endif /* #! SVE !# */
+#if MASTER_FUTURE_SVE2 == 1
+	"sve2",
+#endif /* #! SVE2 !# */
+#if MASTER_FUTURE_TBM == 1
+	"tbm",
+#endif /* #! TBM !# */
+#if MASTER_FUTURE_WAITPKG == 1
+	"waitpkg",
+#endif /* #! WAITPKG !# */
+#if MASTER_FUTURE_XOP == 1
+	"xop",
+#endif /* #! XOP !# */
 };
 
 const UI2 MASTER_AvailableFutureExtensionsCount = sizeof(MASTER_AvailableFutureExtensions) / sizeof(MASTER_AvailableFutureExtensions[0]);
@@ -692,9 +721,9 @@ const UI2 MASTER_AvailableFutureExtensionsCount = sizeof(MASTER_AvailableFutureE
 MASTER_END_DECLARATIONS
 
 #ifdef MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS
-	const UI4 __MASTER_SIMD_DETECT_INCLUDE_H_LAST_LINE__ = MASTER_LINE + 6;
+	const UI4 MASTER_zRIVATE_SIMD_DETECT_INCLUDE_H_LAST_LINE = MASTER_LINE + 6;
 #endif /* #! MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS !# */
 
-#endif /* #! __MASTER_SIMD_DETECT_INCLUDE_H__ !# */
+#endif /* #! MASTER_zRIVATE_SIMD_DETECT_INCLUDE_H !# */
 
 /* #! be master~ !# */
