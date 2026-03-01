@@ -1,4 +1,4 @@
-What added and changed on <todo> ?
+What added and changed on 01.03.2026 ?
  !!! CHANGE "WHATNEW.MD" - MINOR UPDATE (SEE **<{1}>**) ;
  ! API change :
  ! Now using "MASTER_zzz" namespace for all private macroses and function instead of "MASTER_zRIVATE" ;
