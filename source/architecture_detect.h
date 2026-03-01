@@ -8,8 +8,8 @@
  * Source : https://github.com/Adel-gid/MASTER
  !# */
 
-#ifndef MASTER_zRIVATE_ARCHITECTURE_DETECT_INCLUDE_H
-#define MASTER_zRIVATE_ARCHITECTURE_DETECT_INCLUDE_H
+#ifndef MASTER_zzz_ARCH_DETECT_H
+#define MASTER_zzz_ARCH_DETECT_H
 
 #include <master_enum.h>
 
@@ -17,19 +17,31 @@ MASTER_BEGIN_DECLARATIONS
 
 #if defined(MASTER_ARCHITECTURE_USE_CUSTOM)
 #	if !defined(MASTER_ARCHITECTURE_NAME)
-#		warning "Custom architecture needs name, printed as ascii string in macros \"MASTER_ARCHITECTURE_NAME\" (optional)"
+#		if MASTER_COMPILER_WARNING_AVAIL == 1
+ #			warning "Custom architecture needs name, printed as ascii string in macros \"MASTER_ARCHITECTURE_NAME\" (optional)"
+#		endif /* #! Warning !# */
 #	endif /* #! Architecture Name !# */
 #	if !defined(MASTER_ARCHITECTURE_CPU_WIDTH)
-#		error "Custom architecture needs cpu width in bits, printed as integer in macros \"MASTER_ARCHITECTURE_CPU_WIDTH\""
+#		if MASTER_PREFER_C89_SUPPORTED
+ #			error "Custom architecture needs cpu width in bits, printed as integer in macros \"MASTER_ARCHITECTURE_CPU_WIDTH\""
+#		else
+			MASTER_ERRORRISE "Custom architecture needs cpu width in bits, printed as integer in macros \"MASTER_ARCHITECTURE_CPU_WIDTH\""
+#		endif /* #! C89+ !# */
 #	endif /* #! Architecture CPU Width !# */
 #	if !defined(MASTER_ARCHITECTURE_INSTRUCTIONS_TYPE)
-#		warning "Custom architecture needs instruction type, printed as ascii string in macros \"MASTER_ARCHITECTURE_INSTRUCTIONS_TYPE\" (optional)"
+#		if MASTER_COMPILER_WARNING_AVAIL == 1
+ #			warning "Custom architecture needs instruction type, printed as ascii string in macros \"MASTER_ARCHITECTURE_INSTRUCTIONS_TYPE\" (optional)"
+#		endif /* #! Warning !# */
 #	endif /* #! Architecture Instructions Type !# */
 #	if !defined(MASTER_ARCHITECTURE_UNALIGN_FRIENDLY)
-#		warning "Custom architecture needs to know about unalign friendly, printed as boolean 1 or 0 in macros \"MASTER_ARCHITECTURE_UNALIGN_FRIENDLY\" (optional)"
+#		if MASTER_COMPILER_WARNING_AVAIL == 1
+ #			warning "Custom architecture needs to know about unalign friendly, printed as boolean 1 or 0 in macros \"MASTER_ARCHITECTURE_UNALIGN_FRIENDLY\" (optional)"
+#		endif /* #! Warning !# */
 #	endif /* #! Architecture Unalign Friendly !# */
 #	if !defined(MASTER_ARCHITECTURE_ENDIAN)
-#		warning "Custom architecture needs to know about endian, printed as macros MASTER_(LITTLE|BIG|PDP|UNKNOWN)_ENDIAN from master_enum.h in macros \"MASTER_ARCHITECTURE_ENDIAN\" (optional)"
+#		if MASTER_COMPILER_WARNING_AVAIL == 1
+ #			warning "Custom architecture needs to know about endian, printed as macros MASTER_(LITTLE|BIG|PDP|UNKNOWN)_ENDIAN from master_enum.h in macros \"MASTER_ARCHITECTURE_ENDIAN\" (optional)"
+#		endif /* #! Warning !# */
 #	endif /* #! Architecture Endian !# */
 #elif defined(__alpha__) || defined(__alpha) || defined(_M_ALPHA)
 #	if defined(__alpha_ev4__)
@@ -43,6 +55,7 @@ MASTER_BEGIN_DECLARATIONS
 #	endif /* #! Alpha Architecture Name !# */
 #	define MASTER_ARCHITECTURE_CPU_WIDTH 64
 #	define MASTER_ARCHITECTURE_INSTRUCTIONS_TYPE "RISC"
+#	define MASTER_ARCHITECTURE_ISBIENDIAN (1)
 #elif defined(__amd64__) || defined(__amd64) || defined(__x86_64__) || defined(__x86_64) || defined(_M_X64) || defined(_M_AMD64)
 #	define MASTER_ARCHITECTURE_NAME "AMD64"
 #	define MASTER_ARCHITECTURE_CPU_WIDTH 64
@@ -70,11 +83,13 @@ MASTER_BEGIN_DECLARATIONS
 #	endif /* #! ARM Architecture Name !# */
 #	define MASTER_ARCHITECTURE_CPU_WIDTH 32
 #	define MASTER_ARCHITECTURE_INSTRUCTIONS_TYPE "RISC"
+#	define MASTER_ARCHITECTURE_ISBIENDIAN (1)
 #elif defined(__aarch64__) || defined(_M_ARM64)
 #	define MASTER_ARCHITECTURE_NAME "ARM64"
 #	define MASTER_ARCHITECTURE_CPU_WIDTH 64
 #	define MASTER_ARCHITECTURE_INSTRUCTIONS_TYPE "RISC"
 #	define MASTER_ARCHITECTURE_UNALIGN_FRIENDLY 1
+#	define MASTER_ARCHITECTURE_ISBIENDIAN (1)
 #elif defined(__bfin) || defined(__BFIN__) || defined(__ADSPBLACKFIN__)
 	/* #! https://www.analog.com/media/en/dsp-documentation/software-manuals/cces-blackfincompiler-library-manual.pdf !# */
 #	define MASTER_ARCHITECTURE_NAME "Blackfin"
@@ -130,6 +145,7 @@ MASTER_BEGIN_DECLARATIONS
 #	endif /* #! HP/PA RISC Architecture Name !# */
 #	define MASTER_ARCHITECTURE_CPU_WIDTH 64
 #	define MASTER_ARCHITECTURE_INSTRUCTIONS_TYPE "RISC"
+#	define MASTER_ARCHITECTURE_ISBIENDIAN (1)
 #elif defined(__8080__) || defined(__8085__) || defined(__Z80) || defined(__Z180)
 #	define MASTER_ARCHITECTURE_NAME "Intel x80"
 	/*
@@ -157,6 +173,7 @@ MASTER_BEGIN_DECLARATIONS
 #	define MASTER_ARCHITECTURE_CPU_WIDTH 64
 #	define MASTER_ARCHITECTURE_INSTRUCTIONS_TYPE "EPIC"
 #	define MASTER_ARCHITECTURE_UNALIGN_FRIENDLY 1
+#	define MASTER_ARCHITECTURE_ISBIENDIAN (1)
 #elif defined(__loongarch__)
 #	define MASTER_ARCHITECTURE_NAME "Loong Arch"
 	/*
@@ -199,6 +216,7 @@ MASTER_BEGIN_DECLARATIONS
 #	endif /* #! MIPS Architecture Name !# */
 #	define MASTER_ARCHITECTURE_CPU_WIDTH 32
 #	define MASTER_ARCHITECTURE_INSTRUCTIONS_TYPE "RISC"
+#	define MASTER_ARCHITECTURE_ISBIENDIAN (1)
 #elif defined(__ve__) || defined(__ve) || defined(__NEC__)
 #	define MASTER_ARCHITECTURE_NAME "NEC SX-Aurora TSUBASA"
 	/*
@@ -207,10 +225,8 @@ MASTER_BEGIN_DECLARATIONS
 	*/
 #elif defined(__pnacl__)
 #	define MASTER_ARCHITECTURE_NAME "PNaCl"
-	/*
-#	define MASTER_ARCHITECTURE_CPU_WIDTH
-#	define MASTER_ARCHITECTURE_INSTRUCTIONS_TYPE
-	*/
+#	define MASTER_ARCHITECTURE_CPU_WIDTH 32
+#	define MASTER_ARCHITECTURE_INSTRUCTIONS_TYPE "LLVM Bitcode"
 #elif defined(__powerpc) || defined(__powerpc__) || defined(__POWERPC__) || defined(__powerpc64__) || defined(__ppc) || defined(__ppc__) || defined(__PPC__) || defined(__ppc64__) || defined(__PPC64__) || defined(_ARCH_PPC) || defined(_ARCH_PPC64) || defined(_M_PPC)
 #	if defined(_ARCH_440)
 #		define MASTER_ARCHITECTURE_NAME "PowerPC 440"
@@ -235,6 +251,7 @@ MASTER_BEGIN_DECLARATIONS
 #		define MASTER_ARCHITECTURE_CPU_WIDTH 32
 #	endif /* #! 64 !# */
 #	define MASTER_ARCHITECTURE_INSTRUCTIONS_TYPE "RISC"
+#	define MASTER_ARCHITECTURE_ISBIENDIAN (1)
 #elif defined(pyr)
 #	define MASTER_ARCHITECTURE_NAME "Pyramid 9810"
 #	define MASTER_ARCHITECTURE_CPU_WIDTH 32
@@ -249,14 +266,15 @@ MASTER_BEGIN_DECLARATIONS
 #	define MASTER_ARCHITECTURE_CPU_WIDTH
 #	define MASTER_ARCHITECTURE_INSTRUCTIONS_TYPE
 	*/
+#	define MASTER_ARCHITECTURE_ISBIENDIAN (1)
 #elif defined(__THW_RS6000) || defined(_IBMR2) || defined(_POWER) || defined(_ARCH_PWR) || defined(_ARCH_PWR2) || defined(_ARCH_PWR3) || defined(_ARCH_PWR4)
 #	define MASTER_ARCHITECTURE_NAME "RS/6000"
 #	define MASTER_ARCHITECTURE_CPU_WIDTH 32
 #	define MASTER_ARCHITECTURE_INSTRUCTIONS_TYPE "RISC"
 #elif defined(__sparc) || defined(__sparc__) || defined(__sparc_v8__) || defined(__sparcv8) || defined(__sparc_v9__) || defined(__sparcv9)
-#	if defiend(__sparcv8) || defined(__sparc_v8__)
+#	if defined(__sparcv8) || defined(__sparc_v8__)
 #		define MASTER_ARCHITECTURE_NAME "SPARC v8 / SuperSPARC"
-#	elif defiend(__sparcv9) || defined(__sparc_v9__)
+#	elif defined(__sparcv9) || defined(__sparc_v9__)
 #		define MASTER_ARCHITECTURE_NAME "SPARC v9 / UltraSPARC"
 #	else
 #		define MASTER_ARCHITECTURE_NAME "SPARC"
@@ -267,6 +285,9 @@ MASTER_BEGIN_DECLARATIONS
 #		define MASTER_ARCHITECTURE_CPU_WIDTH 32
 #	endif /* #! V9 !# */
 #	define MASTER_ARCHITECTURE_INSTRUCTIONS_TYPE "RISC"
+#	if defined(__sparc_v9__) || defined(__sparcv9)
+#		define MASTER_ARCHITECTURE_ISBIENDIAN (1)
+#	endif /* #! Bi-Endian !# */
 #elif defined(__sh__) || defined(__sh1__) || defined(__sh2__) || defined(__sh3__) || defined(__sh4__) || defined(__SH3__) || defined(__SH4__) || defined(__SH5__)
 #	if defined(__sh1__)
 #		define MASTER_ARCHITECTURE_NAME "SuperH 1"
@@ -283,6 +304,7 @@ MASTER_BEGIN_DECLARATIONS
 #	endif /* #! SuperH Architecture Name !# */
 #	define MASTER_ARCHITECTURE_CPU_WIDTH 32
 #	define MASTER_ARCHITECTURE_INSTRUCTIONS_TYPE "RISC"
+#	define MASTER_ARCHITECTURE_ISBIENDIAN (1)
 #elif defined(__370__) || defined(__THW_370__) || defined(__s390__) || defined(__s390x__) || defined(__zarch__) || defined(__SYSC_ZARCH__)
 #	if defined(__370__) || defined(__THW_370__)
 #		define MASTER_ARCHITECTURE_NAME "SystemZ /370"
@@ -321,10 +343,14 @@ MASTER_BEGIN_DECLARATIONS
 #	endif /* #! TMS320 Architecture Name !# */
 #	define MASTER_ARCHITECTURE_CPU_WIDTH 32
 #	define MASTER_ARCHITECTURE_INSTRUCTIONS_TYPE "DSP"
+#	if !defined(_TMS320C28X) && !defined(_TMS320C5XX) && !defined(__TMS320C55X__)
+#		define MASTER_ARCHITECTURE_ISBIENDIAN (1)
+#	endif /* #! Bi-Endian !# */
 #elif defined(__TMS470__)
 #	define MASTER_ARCHITECTURE_NAME "TMS470"
 #	define MASTER_ARCHITECTURE_CPU_WIDTH 32
 #	define MASTER_ARCHITECTURE_INSTRUCTIONS_TYPE "DSP"
+#	define MASTER_ARCHITECTURE_ISBIENDIAN (1)
 #else
 #	define MASTER_ARCHITECTURE_NAME "undefined"
 #	define MASTER_ARCHITECTURE_CPU_WIDTH 0
@@ -361,6 +387,7 @@ MASTER_BEGIN_DECLARATIONS
 
 #ifndef MASTER_ARCHITECTURE_ENDIAN
 #	if defined(__LITTLE_ENDIAN__) || \
+	   defined(_LITTLE_ENDIAN) || \
 	   defined(__ARMEL__) || \
 	   defined(__THUMBEL__) || \
 	   defined(__AARCH64EL__) || \
@@ -393,16 +420,14 @@ MASTER_BEGIN_DECLARATIONS
 #		define MASTER_ARCHITECTURE_ENDIAN MASTER_BIG_ENDIAN
 #	elif defined(__arm__) || defined(__aarch64__)
 #		define MASTER_ARCHITECTURE_ENDIAN MASTER_LITTLE_ENDIAN
-#	elif defined(__powerpc__) || defined(__ppc__) || defined(_ARCH_PPC)
-#		if defined(_LITTLE_ENDIAN)
-#			define MASTER_ARCHITECTURE_ENDIAN MASTER_LITTLE_ENDIAN
-#		else
-#			define MASTER_ARCHITECTURE_ENDIAN MASTER_BIG_ENDIAN
-#		endif /* #! POWERPC !# */
 #	elif defined(__mips__)
 #		define MASTER_ARCHITECTURE_ENDIAN MASTER_BIG_ENDIAN
 #	endif /* #! Architecture Endian !# */
-#endif /* #! MASTER_ARCHITECTURE_ENDIAN !# */
+#endif /* #! Architecture Endian !# */
+
+#ifndef MASTER_ARCHITECTURE_ENDIAN
+#	define MASTER_ARCHITECTURE_ENDIAN MASTER_UNKNOWN_ENDIAN
+#endif /* #! Architecture Endian !# */
 
 #if !defined(MASTER_ARCHITECTURE_UNALIGN_FRIENDLY)
 #	define MASTER_ARCHITECTURE_UNALIGN_FRIENDLY 0
@@ -410,10 +435,10 @@ MASTER_BEGIN_DECLARATIONS
 
 MASTER_END_DECLARATIONS
 
-#ifdef MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS
-	const UI4 MASTER_zRIVATE_ARCHITECTURE_DETECT_INCLUDE_H_LAST_LINE = MASTER_LINE + 6;
-#endif /* #! MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS !# */
+#ifdef MASTER_LAST_LINE_LIBRARY_NUMBERS
+	const unsigned int MASTER_zzz_ARCH_DETECT_H_LLINE = MASTER_LINE + 6;
+#endif /* #! MASTER_LAST_LINE_LIBRARY_NUMBERS !# */
 
-#endif /* #! MASTER_zRIVATE_ARCHITECTURE_DETECT_INCLUDE_H !# */
+#endif /* #! MASTER_zzz_ARCH_DETECT_H !# */
 
 /* #! be master~ !# */

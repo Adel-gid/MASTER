@@ -8,8 +8,8 @@
  * Source : https://github.com/Adel-gid/MASTER
  !# */
 
-#ifndef MASTER_zRIVATE_COMPILER_DETECT_INCLUDE_H
-#define MASTER_zRIVATE_COMPILER_DETECT_INCLUDE_H
+#ifndef MASTER_zzz_COMPILER_DETECT_H
+#define MASTER_zzz_COMPILER_DETECT_H
 
 #include <master_enum.h>
 
@@ -21,9 +21,30 @@ MASTER_BEGIN_DECLARATIONS
 #	define MASTER_LANGUAGE_NAME "C"
 #endif /* #! C++ !# */
 
+#define MASTER_zzz_COMPILER_GENNAME( format, arguments, argumentList ) \
+\
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, char *, MASTER_zzz_GetCompilerName, ( void ) ); \
+\
+MASTER_DEFINE_FUNCTION0( \
+	MASTER_NO_FLAGS, \
+	MASTER_EMPTY_DESCRIPTION, \
+	/* ! */ MASTER_zzz_GetCompilerName /* ! */, \
+	char * \
+) { \
+	static char compilerName[32]; \
+	static int isGened = 0; \
+	if (isGened == 0) { \
+		snprintf(compilerName, 32, format MASTER_CONCAT_FALL(MASTER_UNARG_END, arguments) argumentList); \
+		isGened = 1; \
+	} \
+	return compilerName; \
+}
+
 #ifdef MASTER_COMPILER_USE_CUSTOM
 #	ifndef MASTER_COMPILER_NAME
-#		warning "Custom compiler needs name, printed as ascii string in macros \"MASTER_COMPILER_NAME\" (optional)"
+#		if MASTER_COMPILER_WARNING_AVAIL == 1
+ #			warning "Custom compiler needs name, printed as ascii string in macros \"MASTER_COMPILER_NAME\" (optional)"
+#		endif /* #! Warning !# */
 #	endif /* #! MASTER_COMPILER_NAME !# */
 #elif defined(_ACC_)
 #	define MASTER_COMPILER_NAME "ACC"
@@ -132,13 +153,33 @@ MASTER_BEGIN_DECLARATIONS
 #	define MASTER_COMPILER_NAME "Cray C"
 #elif defined(__GNUC__)
 #	if defined(__GNUC_MINOR__) && defined(__GNUC_PATCHLEVEL__)
-#		define MASTER_COMPILER_NAME "GCC " MASTER_LANGUAGE_NAME " " MASTER_STRINGIFY_FALL(__GNUC__) "." MASTER_STRINGIFY_FALL(__GNUC_MINOR__) "." MASTER_STRINGIFY_FALL(__GNUC_PATCHLEVEL__)
+#		ifdef MASTER_REJECT_STRING_CONCAT
+			MASTER_zzz_COMPILER_GENNAME( "GCC %s %d.%d.%d", 4, (MASTER_LANGUAGE_NAME, __GNUC__, __GNUC_MINOR__, __GNUC_PATCHLEVEL__) )
+#			define MASTER_COMPILER_NAME MASTER_zzz_GetCompilerName()
+#		else
+#			define MASTER_COMPILER_NAME "GCC " MASTER_LANGUAGE_NAME " " MASTER_STRINGIFY_FALL(__GNUC__) "." MASTER_STRINGIFY_FALL(__GNUC_MINOR__) "." MASTER_STRINGIFY_FALL(__GNUC_PATCHLEVEL__)
+#		endif /* #! String concatenation !# */
 #	elif defined(__GNUC_MINOR__)
-#		define MASTER_COMPILER_NAME "GCC " MASTER_LANGUAGE_NAME " " MASTER_STRINGIFY_FALL(__GNUC__) "." MASTER_STRINGIFY_FALL(__GNUC_MINOR__) ".x"
+#		ifdef MASTER_REJECT_STRING_CONCAT
+			MASTER_zzz_COMPILER_GENNAME( "GCC %s %d.%d.x", 3, (MASTER_LANGUAGE_NAME, __GNUC__, __GNUC_MINOR__) )
+#			define MASTER_COMPILER_NAME MASTER_zzz_GetCompilerName()
+#		else
+#			define MASTER_COMPILER_NAME "GCC " MASTER_LANGUAGE_NAME " " MASTER_STRINGIFY_FALL(__GNUC__) "." MASTER_STRINGIFY_FALL(__GNUC_MINOR__) ".x"
+#		endif /* #! String concatenation !# */
 #	elif defined(__GNUC_PATCHLEVEL__)
-#		define MASTER_COMPILER_NAME "GCC " MASTER_LANGUAGE_NAME " " MASTER_STRINGIFY_FALL(__GNUC__) ".x." MASTER_STRINGIFY_FALL(__GNUC_PATCHLEVEL__)
+#		ifdef MASTER_REJECT_STRING_CONCAT
+			MASTER_zzz_COMPILER_GENNAME( "GCC %s %d.x.%d", 3, (MASTER_LANGUAGE_NAME, __GNUC__, __GNUC_PATCHLEVEL__) )
+#			define MASTER_COMPILER_NAME MASTER_zzz_GetCompilerName()
+#		else
+#			define MASTER_COMPILER_NAME "GCC " MASTER_LANGUAGE_NAME " " MASTER_STRINGIFY_FALL(__GNUC__) ".x." MASTER_STRINGIFY_FALL(__GNUC_PATCHLEVEL__)
+#		endif /* #! String concatenation !# */
 #	else
-#		define MASTER_COMPILER_NAME "GCC " MASTER_LANGUAGE_NAME " " MASTER_STRINGIFY_FALL(__GNUC__) ".x.x"
+#		ifdef MASTER_REJECT_STRING_CONCAT
+			MASTER_zzz_COMPILER_GENNAME( "GCC %s %d.x.x", 2, (MASTER_LANGUAGE_NAME, __GNUC__) )
+#			define MASTER_COMPILER_NAME MASTER_zzz_GetCompilerName()
+#		else
+#			define MASTER_COMPILER_NAME "GCC " MASTER_LANGUAGE_NAME " " MASTER_STRINGIFY_FALL(__GNUC__) ".x.x"
+#		endif /* #! String concatenation !# */
 #	endif /* #! GCC Compiler Name !# */
 #	include <compilers/gcc_config.h>
 #elif defined(THINKC3) || defined(THINKC4)
@@ -163,8 +204,10 @@ MASTER_BEGIN_DECLARATIONS
 #	endif /* #! MinGW Compiler Name !# */
 #elif defined(__TINYC__)
 #	define MASTER_COMPILER_NAME "Tiny C"
+#	include <compilers/tcc_config.h>
 #elif defined(__TURBOC__)
 #	define MASTER_COMPILER_NAME "Turbo " MASTER_LANGUAGE_NAME
+#	include <compilers/tc_config.h>
 #elif defined(_UCC)
 #	if _MAJOR_REV + 0 == 2 && _MINOR_REV + 0 == 1
 #		define MASTER_COMPILER_NAME "Ultimate " MASTER_LANGUAGE_NAME " 2.1"
@@ -199,14 +242,18 @@ MASTER_BEGIN_DECLARATIONS
 #	define MASTER_COMPILER_NAME "Zortech C++"
 #else
 #	define MASTER_COMPILER_NAME "undefined"
-#endif /* #! MASTER_zRIVATE_INTEGER_INCLUDE_H !# */
+#endif /* #! MASTER_zzz_INTEGER_H !# */
+
+#ifndef MASTER_COMPILER_SIMD_USES
+#	define MASTER_COMPILER_SIMD_USES 0
+#endif /* #! Using SIMD !# */
 
 MASTER_END_DECLARATIONS
 
-#ifdef MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS
-	const UI4 MASTER_zRIVATE_COMPILER_DETECT_INCLUDE_H_LAST_LINE = MASTER_LINE + 6;
-#endif /* #! MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS !# */
+#ifdef MASTER_LAST_LINE_LIBRARY_NUMBERS
+	const unsigned int MASTER_zzz_COMPILER_DETECT_H_LLINE = MASTER_LINE + 6;
+#endif /* #! MASTER_LAST_LINE_LIBRARY_NUMBERS !# */
 
-#endif /* #! MASTER_zRIVATE_COMPILER_DETECT_INCLUDE_H !# */
+#endif /* #! MASTER_zzz_COMPILER_DETECT_H !# */
 
 /* #! be master~ !# */

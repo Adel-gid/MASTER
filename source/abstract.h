@@ -8,8 +8,8 @@
  * Source : https://github.com/Adel-gid/MASTER
  !# */
 
-#ifndef MASTER_zRIVATE_ABSTRACT_INCLUDE_H
-#define MASTER_zRIVATE_ABSTRACT_INCLUDE_H
+#ifndef MASTER_zzz_ABSTRACT_H
+#define MASTER_zzz_ABSTRACT_H
 
 #include <master_enum.h>
 
@@ -33,8 +33,8 @@ MASTER_BEGIN_DECLARATIONS
 #	endif /* #! Whitelist Setting !# */
 #	ifdef MASTER_ABSTRACT_BIT_STREAM_EXTERN
 #		define MASTER_ABSTRACT_BIT_STREAM_IMPLEMENT 0
-#		ifdef MASTER_ABSTRACT_BIT_STREAM_USE
-#			warning "Bit Stream is defined to USE, but also defined to EXTERN. Bit Stream will NOT be compiled."
+#		if defined(MASTER_ABSTRACT_BIT_STREAM_USE) && MASTER_COMPILER_WARNING_AVAIL == 1
+ #			warning "Bit Stream is defined to USE, but also defined to EXTERN. Bit Stream will NOT be compiled."
 #		endif /* #! Bit Stream Conflict of Use & Extern !# */
 #	elif MASTER_ABSTRACT_WHITELIST_MODE == 1
 #		ifdef MASTER_ABSTRACT_BIT_STREAM_USE
@@ -47,8 +47,8 @@ MASTER_BEGIN_DECLARATIONS
 #	endif /* #! Bit Stream !# */
 #	ifdef MASTER_ABSTRACT_BYTE_STACK_EXTERN
 #		define MASTER_ABSTRACT_BYTE_STACK_IMPLEMENT 0
-#		ifdef MASTER_ABSTRACT_BYTE_STACK_USE
-#			warning "Byte Stack is defined to USE, but also defined to EXTERN. Byte Stack will NOT be compiled."
+#		if defined(MASTER_ABSTRACT_BYTE_STACK_USE) && MASTER_COMPILER_WARNING_AVAIL == 1
+ #			warning "Byte Stack is defined to USE, but also defined to EXTERN. Byte Stack will NOT be compiled."
 #		endif /* #! Byte Stack Conflict of Use & Extern !# */
 #	elif MASTER_ABSTRACT_WHITELIST_MODE == 1
 #		ifdef MASTER_ABSTRACT_BYTE_STACK_USE
@@ -61,8 +61,8 @@ MASTER_BEGIN_DECLARATIONS
 #	endif /* #! Byte Stack !# */
 #	ifdef MASTER_ABSTRACT_MONOTONIC_STACK_EXTERN
 #		define MASTER_ABSTRACT_MONOTONIC_STACK_IMPLEMENT 0
-#		ifdef MASTER_ABSTRACT_MONOTONIC_STACK_USE
-#			warning "Monotonic Stack is defined to USE, but also defined to EXTERN. Monotonic Stack will NOT be compiled."
+#		if defined(MASTER_ABSTRACT_MONOTONIC_STACK_USE) && MASTER_COMPILER_WARNING_AVAIL == 1
+ #			warning "Monotonic Stack is defined to USE, but also defined to EXTERN. Monotonic Stack will NOT be compiled."
 #		endif /* #! Monotonic Stack Conflict of Use & Extern !# */
 #	elif MASTER_ABSTRACT_WHITELIST_MODE == 1
 #		ifdef MASTER_ABSTRACT_MONOTONIC_STACK_USE
@@ -75,8 +75,8 @@ MASTER_BEGIN_DECLARATIONS
 #	endif /* #! Monotonic Stack !# */
 #	ifdef MASTER_ABSTRACT_RING_BUFFER_EXTERN
 #		define MASTER_ABSTRACT_RING_BUFFER_IMPLEMENT 0
-#		ifdef MASTER_ABSTRACT_RING_BUFFER_USE
-#			warning "Ring Buffer is defined to USE, but also defined to EXTERN. Ring Buffer will NOT be compiled."
+#		if defined(MASTER_ABSTRACT_RING_BUFFER_USE) && MASTER_COMPILER_WARNING_AVAIL == 1
+ #			warning "Ring Buffer is defined to USE, but also defined to EXTERN. Ring Buffer will NOT be compiled."
 #		endif /* #! Ring Buffer Conflict of Use & Extern !# */
 #	elif MASTER_ABSTRACT_WHITELIST_MODE == 1
 #		ifdef MASTER_ABSTRACT_RING_BUFFER_USE
@@ -89,8 +89,8 @@ MASTER_BEGIN_DECLARATIONS
 #	endif /* #! Ring Buffer !# */
 #	ifdef MASTER_ABSTRACT_BIMAP_EXTERN
 #		define MASTER_ABSTRACT_BIMAP_IMPLEMENT 0
-#		ifdef MASTER_ABSTRACT_BIMAP_USE
-#			warning "BiMap is defined to USE, but also defined to EXTERN. BiMap will NOT be compiled."
+#		if defined(MASTER_ABSTRACT_BIMAP_USE) && MASTER_COMPILER_WARNING_AVAIL == 1
+ #			warning "BiMap is defined to USE, but also defined to EXTERN. BiMap will NOT be compiled."
 #		endif /* #! BiMap Conflict of Use & Extern !# */
 #	elif MASTER_ABSTRACT_WHITELIST_MODE == 1
 #		ifdef MASTER_ABSTRACT_BIMAP_USE
@@ -110,7 +110,7 @@ typedef struct {
 	const UI1 * data;
 	UI4 available;
 	UI4 value;
-	UI1 value_bits;
+	UI1 valueBits;
 } MASTER_BitStream;
 
 MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI1, MASTER_BitStream_Grant, ( MASTER_BitStream * const, const UI1 ) );
@@ -129,13 +129,13 @@ MASTER_DEFINE_FUNCTION2(
 	( const UI1, bits )
 ) {
 	if (stream == nul || stream->data == nul || bits > 32) return 0;
-	while (stream->value_bits < bits && stream->available > 0) {
-		stream->value |= *(stream->data) << stream->value_bits;
-		stream->value_bits += 8;
+	while (stream->valueBits < bits && stream->available > 0) {
+		stream->value |= *(stream->data) << stream->valueBits;
+		stream->valueBits += 8;
 		stream->data += 1;
 		stream->available -= 1;
 	}
-	return stream->value_bits >= bits;
+	return stream->valueBits >= bits;
 }
 
 MASTER_DEFINE_FUNCTION2(
@@ -147,7 +147,7 @@ MASTER_DEFINE_FUNCTION2(
 	( const UI1, bits )
 ) {
 	if (stream == nul || stream->data == nul || bits > 32) return 0;
-	return (bits == 32) ? (stream->value) : (stream->value & ((1 << bits) - 1));
+	return (bits == 32) ? (stream->value) : (stream->value & (((UI4)1 << bits) - 1));
 }
 
 MASTER_DEFINE_FUNCTION2(
@@ -161,15 +161,20 @@ MASTER_DEFINE_FUNCTION2(
 	if (stream == nul || stream->data == nul) return;
 	if (bits >= 32) stream->value = 0;
 	else stream->value >>= bits;
-	if ((SI1)(stream->value_bits -= bits) < 0)
-		stream->value_bits = 0;
+	if ((SI1)(stream->valueBits -= bits) < 0)
+		stream->valueBits = 0;
 }
 
-void
-MASTER_BitStream_ByteAlign( MASTER_BitStream * const stream ) {
+MASTER_DEFINE_FUNCTION1(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_BitStream_ByteAlign /* ! */,
+	void,
+	( MASTER_BitStream * const, stream )
+) {
 	if (stream == nul || stream->data == nul) return;
-	stream->value >>= stream->value_bits & 7;
-	stream->value_bits &= ~7;
+	stream->value >>= stream->valueBits & 7;
+	stream->valueBits &= (UI1)~7;
 }
 
 #endif /* #! Bit Stream !# */
@@ -177,9 +182,9 @@ MASTER_BitStream_ByteAlign( MASTER_BitStream * const stream ) {
 /* #! Byte Stack !# */
 
 typedef struct {
-	UI1 * byte_buffer;
-	UI4 buffer_capacity;
-	UI4 buffer_position;
+	UI1 * byteBuffer;
+	UI4 bufferCapacity;
+	UI4 bufferPosition;
 } MASTER_ByteStack;
 
 MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, void, MASTER_ByteStack_Init, ( MASTER_ByteStack * const, const UI4 ) );
@@ -194,31 +199,52 @@ MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI1, MASTER_ByteStack_IsEmpty, ( MASTER
 
 #if MASTER_ABSTRACT_BYTE_STACK_IMPLEMENT == 1
 
-void
-MASTER_ByteStack_Init( MASTER_ByteStack * const bstack, const UI4 capacity ) {
+MASTER_DEFINE_FUNCTION2(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_ByteStack_Init /* ! */,
+	void,
+	( MASTER_ByteStack * const, bstack ),
+	( const UI4, capacity )
+) {
 	if (bstack == nul) return;
-	bstack->byte_buffer = (UI1 *)MASTER_MALLOC(capacity);
-	bstack->buffer_capacity = capacity;
-	bstack->buffer_position = 0;
+	bstack->byteBuffer = (UI1 *)MASTER_MALLOC(capacity);
+	bstack->bufferCapacity = capacity;
+	bstack->bufferPosition = 0;
 }
 
-MASTER_ByteStack
-MASTER_ByteStack_Create( const UI4 capacity ) {
+MASTER_DEFINE_FUNCTION1(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_ByteStack_Create /* ! */,
+	MASTER_ByteStack,
+	( const UI4, capacity )
+) {
 	MASTER_ByteStack bstack;
 	MASTER_ByteStack_Init(&bstack, capacity);
 	return bstack;
 }
 
-void
-MASTER_ByteStack_Flush( MASTER_ByteStack * const bstack ) {
+MASTER_DEFINE_FUNCTION1(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_ByteStack_Flush /* ! */,
+	void,
+	( MASTER_ByteStack * const, bstack )
+) {
 	if (bstack == nul) return;
-	bstack->buffer_position = 0;
+	bstack->bufferPosition = 0;
 }
 
-void
-MASTER_ByteStack_Free( MASTER_ByteStack * const bstack ) {
+MASTER_DEFINE_FUNCTION1(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_ByteStack_Free /* ! */,
+	void,
+	( MASTER_ByteStack * const, bstack )
+) {
 	if (bstack == nul) return;
-	MASTER_FREE(bstack->byte_buffer);
+	MASTER_FREE(bstack->byteBuffer);
 }
 
 MASTER_DEFINE_FUNCTION2(
@@ -230,39 +256,61 @@ MASTER_DEFINE_FUNCTION2(
 	( const UI1, value )
 ) {
 	if (bstack == nul) return MASTER_ERROR;
-	if (bstack->buffer_position >= bstack->buffer_capacity) {
-		bstack->buffer_capacity <<= 1;
-		bstack->byte_buffer = (UI1 *)MASTER_REALLOC(bstack->byte_buffer, bstack->buffer_capacity);
+	if (bstack->bufferPosition >= bstack->bufferCapacity) {
+		bstack->bufferCapacity <<= 1;
+		bstack->byteBuffer = (UI1 *)MASTER_REALLOC(bstack->byteBuffer, bstack->bufferCapacity);
 	}
-	bstack->byte_buffer[bstack->buffer_position] = value;
-	bstack->buffer_position += 1;
+	bstack->byteBuffer[bstack->bufferPosition] = value;
+	bstack->bufferPosition += 1;
 	return MASTER_NO_ERROR;
 }
 
-UI1
-MASTER_ByteStack_PopByte( MASTER_ByteStack * const bstack ) {
-	if (bstack == nul || bstack->buffer_position == 0) return MASTER_ERROR;
-	bstack->buffer_position -= 1;
+MASTER_DEFINE_FUNCTION1(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_ByteStack_PopByte /* ! */,
+	UI1,
+	( MASTER_ByteStack * const, bstack )
+) {
+	if (bstack == nul || bstack->bufferPosition == 0) return MASTER_ERROR;
+	bstack->bufferPosition -= 1;
 	return MASTER_NO_ERROR;
 }
 
-UI1
-MASTER_ByteStack_PopBytes( MASTER_ByteStack * const bstack, const UI4 count ) {
-	if (bstack == nul || bstack->buffer_position < count) return MASTER_ERROR;
-	bstack->buffer_position -= count;
+MASTER_DEFINE_FUNCTION2(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_ByteStack_PopBytes /* ! */,
+	UI1,
+	( MASTER_ByteStack * const, bstack ),
+	( const UI4, count )
+) {
+	if (bstack == nul || bstack->bufferPosition < count) return MASTER_ERROR;
+	bstack->bufferPosition -= count;
 	return MASTER_NO_ERROR;
 }
 
-UI1
-MASTER_ByteStack_PeekByte( MASTER_ByteStack * const bstack, const UI4 offset ) {
-	if (bstack == nul || offset + 1 > bstack->buffer_position) return 0;
-	return bstack->byte_buffer[bstack->buffer_position - offset - 1];
+MASTER_DEFINE_FUNCTION2(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_ByteStack_PeekByte /* ! */,
+	UI1,
+	( MASTER_ByteStack * const, bstack ),
+	( const UI4, offset )
+) {
+	if (bstack == nul || offset + 1 > bstack->bufferPosition) return 0;
+	return bstack->byteBuffer[bstack->bufferPosition - offset - 1];
 }
 
-UI1
-MASTER_ByteStack_IsEmpty( MASTER_ByteStack * const bstack ) {
+MASTER_DEFINE_FUNCTION1(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_ByteStack_IsEmpty /* ! */,
+	UI1,
+	( MASTER_ByteStack * const, bstack )
+) {
 	if (bstack == nul) return 0;
-	return bstack->buffer_position == 0;
+	return bstack->bufferPosition == 0;
 }
 
 #endif /* #! Byte Stack !# */
@@ -274,10 +322,10 @@ MASTER_ByteStack_IsEmpty( MASTER_ByteStack * const bstack ) {
 
 typedef struct {
 	void * buffer;
-	UI4 buffer_capacity;
-	UI4 buffer_element_size;
-	UI4 buffer_position;
-	UI1 monotone_type;
+	UI4 bufferCapacity;
+	UI4 bufferElementSize;
+	UI4 bufferPosition;
+	UI1 monotoneType;
 } MASTER_MonotonicStack;
 
 MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, void, MASTER_MonotonicStack_Init, ( MASTER_MonotonicStack * const, const UI4, const UI4, const UI1 ) );
@@ -298,15 +346,15 @@ MASTER_DEFINE_FUNCTION4(
 	void,
 	( MASTER_MonotonicStack * const, mstack ),
 	( const UI4, capacity ),
-	( const UI4, element_size ),
-	( const UI1, monotone_type )
+	( const UI4, elementSize ),
+	( const UI1, monotoneType )
 ) {
 	if (mstack == nul) return;
-	mstack->buffer = (UT *)MASTER_MALLOC(capacity * element_size);
-	mstack->buffer_capacity = capacity;
-	mstack->buffer_element_size = element_size;
-	mstack->buffer_position = 0;
-	mstack->monotone_type = monotone_type;
+	mstack->buffer = (UT *)MASTER_MALLOC(capacity * elementSize);
+	mstack->bufferCapacity = capacity;
+	mstack->bufferElementSize = elementSize;
+	mstack->bufferPosition = 0;
+	mstack->monotoneType = monotoneType;
 }
 
 MASTER_DEFINE_FUNCTION3(
@@ -315,62 +363,95 @@ MASTER_DEFINE_FUNCTION3(
 	/* ! */ MASTER_MonotonicStack_Create /* ! */,
 	MASTER_MonotonicStack,
 	( const UI4, capacity ),
-	( const UI4, element_size ),
-	( const UI1, monotone_type )
+	( const UI4, elementSize ),
+	( const UI1, monotoneType )
 ) {
 	MASTER_MonotonicStack mstack;
 	mstack.buffer = nul;
-	MASTER_MonotonicStack_Init(&mstack, capacity, element_size, monotone_type);
+	MASTER_MonotonicStack_Init(&mstack, capacity, elementSize, monotoneType);
 	return mstack;
 }
 
-void
-MASTER_MonotonicStack_Flush( MASTER_MonotonicStack * const mstack ) {
+MASTER_DEFINE_FUNCTION1(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_MonotonicStack_Flush /* ! */,
+	void,
+	( MASTER_MonotonicStack * const, mstack )
+) {
 	if (mstack == nul) return;
-	mstack->buffer_position = 0;
+	mstack->bufferPosition = 0;
 }
 
-void
-MASTER_MonotonicStack_Free( MASTER_MonotonicStack * const mstack ) {
+MASTER_DEFINE_FUNCTION1(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_MonotonicStack_Free /* ! */,
+	void,
+	( MASTER_MonotonicStack * const, mstack )
+) {
 	if (mstack == nul) return;
 	MASTER_FREE(mstack->buffer);
 }
 
-UI1
-MASTER_MonotonicStack_Pop( MASTER_MonotonicStack * const mstack ) {
-	if (mstack == nul || mstack->buffer_position == 0) return MASTER_ERROR;
-	mstack->buffer_position -= 1;
+MASTER_DEFINE_FUNCTION1(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_MonotonicStack_Pop /* ! */,
+	UI1,
+	( MASTER_MonotonicStack * const, mstack )
+) {
+	if (mstack == nul || mstack->bufferPosition == 0) return MASTER_ERROR;
+	mstack->bufferPosition -= 1;
 	return MASTER_NO_ERROR;
 }
 
-UI1
-MASTER_MonotonicStack_Insert( MASTER_MonotonicStack * const mstack, const void * value ) {
+MASTER_DEFINE_FUNCTION2(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_MonotonicStack_Insert /* ! */,
+	UI1,
+	( MASTER_MonotonicStack * const, mstack ),
+	( const void *, value )
+) {
 	if (mstack == nul) return MASTER_ERROR;
 	/* #! Unoptimized !# */
-	while (mstack->buffer_position > 0 &&
-		   MASTER_MEMCMP((UI1 *)mstack->buffer + (mstack->buffer_position - 1) * mstack->buffer_element_size, (const UI1 *)value, mstack->buffer_element_size) *
-		   ((mstack->monotone_type == MASTER_MONOTONICSTACK_INCREASING) ? (-1) : (+1)) <= 0)
-		mstack->buffer_position -= 1;
-	if (mstack->buffer_position >= mstack->buffer_capacity) {
-		mstack->buffer_capacity <<= 1;
-		mstack->buffer = (UT *)MASTER_REALLOC(mstack->buffer, mstack->buffer_capacity * mstack->buffer_element_size);
+	while (mstack->bufferPosition > 0 &&
+		   MASTER_MEMCMP((UI1 *)mstack->buffer + (mstack->bufferPosition - 1) * mstack->bufferElementSize, (const UI1 *)value, mstack->bufferElementSize) *
+		   ((mstack->monotoneType == MASTER_MONOTONICSTACK_INCREASING) ? (-1) : (1)) <= 0)
+		mstack->bufferPosition -= 1;
+	if (mstack->bufferPosition >= mstack->bufferCapacity) {
+		mstack->bufferCapacity <<= 1;
+		mstack->buffer = (UT *)MASTER_REALLOC(mstack->buffer, mstack->bufferCapacity * mstack->bufferElementSize);
 	}
-	MASTER_MEMCPY((UI1 *)mstack->buffer + mstack->buffer_position * mstack->buffer_element_size, (const UI1 *)value, mstack->buffer_element_size);
-	mstack->buffer_position += 1;
+	MASTER_MEMCPY((UI1 *)mstack->buffer + mstack->bufferPosition * mstack->bufferElementSize, (const UI1 *)value, mstack->bufferElementSize);
+	mstack->bufferPosition += 1;
 	return MASTER_NO_ERROR;
 }
 
-UI1
-MASTER_MonotonicStack_Peek( MASTER_MonotonicStack * const mstack, const UI4 offset, void * const output_value ) {
-	if (mstack == nul || offset + 1 > mstack->buffer_position) return MASTER_ERROR;
-	MASTER_MEMCPY((UI1 *)output_value, (UI1 *)mstack->buffer + (mstack->buffer_position - offset - 1) * mstack->buffer_element_size, mstack->buffer_element_size);
+MASTER_DEFINE_FUNCTION3(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_MonotonicStack_Peek /* ! */,
+	UI1,
+	( MASTER_MonotonicStack * const, mstack ),
+	( const UI4, offset ),
+	( void * const, outputValue )
+) {
+	if (mstack == nul || offset + 1 > mstack->bufferPosition) return MASTER_ERROR;
+	MASTER_MEMCPY((UI1 *)outputValue, (UI1 *)mstack->buffer + (mstack->bufferPosition - offset - 1) * mstack->bufferElementSize, mstack->bufferElementSize);
 	return MASTER_NO_ERROR;
 }
 
-UI1
-MASTER_MonotonicStack_IsEmpty( MASTER_MonotonicStack * const mstack ) {
+MASTER_DEFINE_FUNCTION1(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_MonotonicStack_IsEmpty /* ! */,
+	UI1,
+	( MASTER_MonotonicStack * const, mstack )
+) {
 	if (mstack == nul) return 0;
-	return mstack->buffer_position == 0;
+	return mstack->bufferPosition == 0;
 }
 
 #endif /* #! Monotonic Stack !# */
@@ -395,24 +476,42 @@ MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, void, MASTER_RingBuffer_CopyAndUpdateBy
 
 #if MASTER_ABSTRACT_RING_BUFFER_IMPLEMENT == 1
 
-void
-MASTER_RingBuffer_Flush( MASTER_RingBuffer * const ringbuf ) {
+MASTER_DEFINE_FUNCTION1(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_RingBuffer_Flush /* ! */,
+	void,
+	( MASTER_RingBuffer * const, ringbuf )
+) {
 	if (ringbuf == nul) return;
 	ringbuf->pointer = nul;
 	ringbuf->size = 0;
 	ringbuf->source = 0;
 }
 
-void
-MASTER_RingBuffer_Init( MASTER_RingBuffer * const ringbuf, UI1 * const pointer, const UI4 size ) {
+MASTER_DEFINE_FUNCTION3(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_RingBuffer_Init /* ! */,
+	void,
+	( MASTER_RingBuffer * const, ringbuf ),
+	( UI1 * const, pointer ),
+	( const UI4, size )
+) {
 	if (ringbuf == nul) return;
 	ringbuf->pointer = pointer;
 	ringbuf->size = size;
 	ringbuf->source = 0;
 }
 
-MASTER_RingBuffer
-MASTER_RingBuffer_Create( UI1 * const pointer, const UI4 size ) {
+MASTER_DEFINE_FUNCTION2(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_RingBuffer_Create /* ! */,
+	MASTER_RingBuffer,
+	( UI1 * const, pointer ), 
+	( const UI4, size )
+) {
 	MASTER_RingBuffer ringbuf;
 	MASTER_RingBuffer_Init(&ringbuf, pointer, size);
 	return ringbuf;
@@ -424,81 +523,115 @@ MASTER_DEFINE_FUNCTION2(
 	/* ! */ MASTER_RingBuffer_AddByte /* ! */,
 	void,
 	( MASTER_RingBuffer * const, ringbuf ),
-	( const UI1, byte )
+	( const UI1, byteValue )
 ) {
 	if (ringbuf == nul || ringbuf->pointer == nul) return;
-	ringbuf->pointer[ringbuf->source] = byte;
+	ringbuf->pointer[ringbuf->source] = byteValue;
 	ringbuf->source = (ringbuf->source + 1) % ringbuf->size;
 }
 
 /* #! Unoptimized !# */
-void
-MASTER_RingBuffer_AddBytes( MASTER_RingBuffer * const ringbuf, const UI1 * bytes, UI4 length ) {
+MASTER_DEFINE_FUNCTION3(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_RingBuffer_AddBytes /* ! */,
+	void,
+	( MASTER_RingBuffer * const, ringbuf ),
+	( const UI1 *, bytes ),
+	( UI4, length )
+) {
 	UI4 range;
-	UI4 end_pos;
+	UI4 endPos;
 	if (ringbuf == nul || ringbuf->pointer == nul) return;
 	while (length > 0) {
 		range = MASTER_MIN(ringbuf->size, length);
 
-		end_pos = (ringbuf->source + range) % ringbuf->size;
+		endPos = (ringbuf->source + range) % ringbuf->size;
 
 		if (ringbuf->source + range > ringbuf->size) {
 			MASTER_MEMCPY(ringbuf->pointer + ringbuf->source, bytes, ringbuf->size - ringbuf->source);
-			MASTER_MEMCPY(ringbuf->pointer, bytes + ringbuf->size - ringbuf->source, end_pos);
+			MASTER_MEMCPY(ringbuf->pointer, bytes + ringbuf->size - ringbuf->source, endPos);
 		} else MASTER_MEMCPY(ringbuf->pointer + ringbuf->source, bytes, range);
 
 		length -= range;
 		bytes += range;
-		ringbuf->source = end_pos;
+		ringbuf->source = endPos;
 	}
 }
 
-void
-MASTER_RingBuffer_FlushByte( MASTER_RingBuffer * const ringbuf ) {
+MASTER_DEFINE_FUNCTION1(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_RingBuffer_FlushByte /* ! */,
+	void,
+	( MASTER_RingBuffer * const, ringbuf )
+) {
 	if (ringbuf == nul || ringbuf->pointer == nul) return;
 	ringbuf->source = (ringbuf->source + ringbuf->size - 1) % ringbuf->size;
 	ringbuf->pointer[ringbuf->source] = 0;
 }
 
 /* #! Hyper unoptimized !# */
-void
-MASTER_RingBuffer_FlushBytes( MASTER_RingBuffer * const ringbuf, const UI4 count ) {
+MASTER_DEFINE_FUNCTION2(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_RingBuffer_FlushBytes /* ! */,
+	void,
+	( MASTER_RingBuffer * const, ringbuf ),
+	( const UI4, count )
+) {
 	UI4 index = 0;
 	if (ringbuf == nul || ringbuf->pointer == nul) return;
-	for (; index < count; index += 1)
+	for (/* #! Inited above !# */; index < count; index += 1)
 		MASTER_RingBuffer_FlushByte(ringbuf);
 }
 
-void
-MASTER_RingBuffer_CopyBytes( MASTER_RingBuffer * const ringbuf, UI1 * output, UI4 offset, UI4 length ) {
+MASTER_DEFINE_FUNCTION4(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_RingBuffer_CopyBytes /* ! */,
+	void,
+	( MASTER_RingBuffer * const, ringbuf ),
+	( UI1 *, output ),
+	( UI4, offset ),
+	( UI4, length )
+) {
 	UI4 range;
-	UI4 begin_pos;
-	UI4 end_pos;
+	UI4 beginPos;
+	UI4 endPos;
 	if (ringbuf == nul || ringbuf->pointer == nul) return;
 	offset %= ringbuf->size;
-	begin_pos = (ringbuf->source + ringbuf->size - offset) % ringbuf->size;
+	beginPos = (ringbuf->source + ringbuf->size - offset) % ringbuf->size;
 	while (length >= ringbuf->size) {
-		MASTER_MEMCPY(output, ringbuf->pointer + begin_pos, ringbuf->size - begin_pos);
-		MASTER_MEMCPY(output + ringbuf->size - begin_pos, ringbuf->pointer, ringbuf->source);
+		MASTER_MEMCPY(output, ringbuf->pointer + beginPos, ringbuf->size - beginPos);
+		MASTER_MEMCPY(output + ringbuf->size - beginPos, ringbuf->pointer, ringbuf->source);
 		length -= ringbuf->size;
 		output += ringbuf->size;
 	}
 	while (length > 0) {
 		range = MASTER_MIN(length, offset);
 
-		end_pos = (begin_pos + range) % ringbuf->size;
-		if (begin_pos + range > ringbuf->size) {
-			MASTER_MEMCPY(output, ringbuf->pointer + begin_pos, ringbuf->size - begin_pos);
-			MASTER_MEMCPY(output + ringbuf->size - begin_pos, ringbuf->pointer, end_pos);
-		} else MASTER_MEMCPY(output, ringbuf->pointer + begin_pos, range);
+		endPos = (beginPos + range) % ringbuf->size;
+		if (beginPos + range > ringbuf->size) {
+			MASTER_MEMCPY(output, ringbuf->pointer + beginPos, ringbuf->size - beginPos);
+			MASTER_MEMCPY(output + ringbuf->size - beginPos, ringbuf->pointer, endPos);
+		} else MASTER_MEMCPY(output, ringbuf->pointer + beginPos, range);
 
 		length -= range;
 		output += range;
 	}
 }
 
-void
-MASTER_RingBuffer_CopyAndUpdateBytes( MASTER_RingBuffer * const ringbuf, UI1 * output, const UI4 offset, UI4 length ) {
+MASTER_DEFINE_FUNCTION4(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_RingBuffer_CopyAndUpdateBytes /* ! */,
+	void,
+	( MASTER_RingBuffer * const, ringbuf ),
+	( UI1 *, output ),
+	( const UI4, offset ),
+	( UI4, length )
+) {
 	if (ringbuf == nul || ringbuf->pointer == nul) return;
 	MASTER_RingBuffer_CopyBytes(ringbuf, output, offset, length);
 	MASTER_RingBuffer_AddBytes(ringbuf, output, length);
@@ -531,8 +664,14 @@ MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, void *, MASTER_BiMap_SearchByValue, ( c
 
 #if MASTER_ABSTRACT_BIMAP_IMPLEMENT == 1
 
-void
-MASTER_BiMap_Init( MASTER_BiMap * const bimap, const UI4 size ) {
+MASTER_DEFINE_FUNCTION2(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_BiMap_Init /* ! */,
+	void,
+	( MASTER_BiMap * const, bimap ),
+	( const UI4, size )
+) {
 	if (bimap == nul) return;
 	bimap->elements = (MASTER_BiMapElement *)MASTER_CALLOC(size << 1, sizeof(MASTER_BiMapElement));
 	bimap->capacity = size;
@@ -540,25 +679,40 @@ MASTER_BiMap_Init( MASTER_BiMap * const bimap, const UI4 size ) {
 	bimap->compareKeys = bimap->compareValues = nul;
 }
 
-MASTER_BiMap
-MASTER_BiMap_Create( const UI4 size ) {
+MASTER_DEFINE_FUNCTION1(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_BiMap_Create /* ! */,
+	MASTER_BiMap,
+	( const UI4, size )
+) {
 	MASTER_BiMap bimap;
 	MASTER_BiMap_Init(&bimap, size);
 	return bimap;
 }
 
-void
-MASTER_BiMap_Flush( MASTER_BiMap * const bimap ) {
+MASTER_DEFINE_FUNCTION1(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_BiMap_Flush /* ! */,
+	void,
+	( MASTER_BiMap * const, bimap )
+) {
 	if (bimap == nul) return;
 	bimap->size = 0;
 }
 
-void
-MASTER_BiMap_Free( MASTER_BiMap * const bimap ) {
+MASTER_DEFINE_FUNCTION1(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_BiMap_Free /* ! */,
+	void,
+	( MASTER_BiMap * const, bimap )
+) {
 	UI4 index = 0;
 	if (bimap == nul) return;
 	if (bimap->freeKey != nul || bimap->compareValues)
-		for (; index < bimap->size; index += 1) {
+		for (/* #! Inited above !# */; index < bimap->size; index += 1) {
 			if (bimap->freeKey != nul)
 				bimap->freeKey(bimap->elements[index << 1].value);
 			if (bimap->freeValue != nul)
@@ -567,13 +721,20 @@ MASTER_BiMap_Free( MASTER_BiMap * const bimap ) {
 	MASTER_FREE(bimap->elements);
 }
 
-void
-MASTER_BiMap_Add( MASTER_BiMap * const bimap, void * const key, void * const value ) {
+MASTER_DEFINE_FUNCTION3(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_BiMap_Add /* ! */,
+	void,
+	( MASTER_BiMap * const, bimap ),
+	( void * const, key ),
+	( void * const, value )
+) {
 	SI4 compare;
 	UI4 left;
 	UI4 right;
 	UI4 middle;
-	UI4 keyptr;
+	UI4 keyptr = 0;
 	if (bimap == nul || key == nul || value == nul) return;
 	if (bimap->size >= bimap->capacity)
 		bimap->elements = (MASTER_BiMapElement *)MASTER_REALLOC(bimap->elements, (bimap->capacity <<= 1) * sizeof(MASTER_BiMapElement));
@@ -620,8 +781,14 @@ MASTER_BiMap_Add( MASTER_BiMap * const bimap, void * const key, void * const val
 	bimap->size += 1;
 }
 
-void *
-MASTER_BiMap_SearchByKey( const MASTER_BiMap * const bimap, const void * const key ) {
+MASTER_DEFINE_FUNCTION2(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_BiMap_SearchByKey /* ! */,
+	void *,
+	( const MASTER_BiMap * const, bimap ),
+	( const void * const, key )
+) {
 	SI4 compare;
 	UI4 left;
 	UI4 right;
@@ -641,8 +808,14 @@ MASTER_BiMap_SearchByKey( const MASTER_BiMap * const bimap, const void * const k
 	return nul;
 }
 
-void *
-MASTER_BiMap_SearchByValue( const MASTER_BiMap * const bimap, const void * const value ) {
+MASTER_DEFINE_FUNCTION2(
+	MASTER_NO_FLAGS,
+	MASTER_EMPTY_DESCRIPTION,
+	/* ! */ MASTER_BiMap_SearchByValue /* ! */,
+	void *,
+	( const MASTER_BiMap * const, bimap ),
+	( const void * const, value )
+) {
 	SI4 compare;
 	UI4 left;
 	UI4 right;
@@ -666,10 +839,10 @@ MASTER_BiMap_SearchByValue( const MASTER_BiMap * const bimap, const void * const
 
 MASTER_END_DECLARATIONS
 
-#ifdef MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS
-	const UI4 MASTER_zRIVATE_ABSTRACT_INCLUDE_H_LAST_LINE = MASTER_LINE + 6;
-#endif /* #! MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS !# */
+#ifdef MASTER_LAST_LINE_LIBRARY_NUMBERS
+	const UI4 MASTER_zzz_ABSTRACT_H_LLINE = MASTER_LINE + 6;
+#endif /* #! MASTER_LAST_LINE_LIBRARY_NUMBERS !# */
 
-#endif /* #! MASTER_zRIVATE_ABSTRACT_INCLUDE_H !# */
+#endif /* #! MASTER_zzz_ABSTRACT_H !# */
 
 /* #! be master~ !# */

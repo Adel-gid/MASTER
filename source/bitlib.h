@@ -8,8 +8,8 @@
  * Source : https://github.com/Adel-gid/MASTER
  !# */
 
-#ifndef MASTER_zRIVATE_BITLIB_INCLUDE_H
-#define MASTER_zRIVATE_BITLIB_INCLUDE_H
+#ifndef MASTER_zzz_BITLIB_H
+#define MASTER_zzz_BITLIB_H
 
 #include <master_enum.h>
 
@@ -17,24 +17,24 @@ MASTER_BEGIN_DECLARATIONS
 
 MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI4, MASTER_Bit_ReverseIncrement, ( const UI4 ) );
 MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI4, MASTER_Bit_ReverseIncrementFrom, ( const UI4, const UI1 ) );
-MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI4, MASTER_Bit_Mirror, ( const UI4, const UI1 ) );
-MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI1, MASTER_Bit_Mirror1, ( const UI1 ) );
-MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI2, MASTER_Bit_Mirror2, ( const UI2 ) );
-MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI4, MASTER_Bit_Mirror4, ( const UI4 ) );
-MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI4, MASTER_Bit_CountOnes4, ( const UI4 ) );
-MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI1, MASTER_Bit_IsParity4, ( const UI4 ) );
-MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI1, MASTER_Bit_Smear1, ( const UI1 ) );
-MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI2, MASTER_Bit_Smear2, ( const UI2 ) );
-MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI4, MASTER_Bit_Smear4, ( const UI4 ) );
-MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI1, MASTER_Bit_Bitlen1, ( const UI1 ) );
-MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI2, MASTER_Bit_Bitlen2, ( const UI2 ) );
-MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI4, MASTER_Bit_Bitlen4, ( const UI4 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI4, MASTER_Bit_Mirror, ( UI4, UI1 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI1, MASTER_Bit_Mirror1, ( UI1 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI2, MASTER_Bit_Mirror2, ( UI2 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI4, MASTER_Bit_Mirror4, ( UI4 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI4, MASTER_Bit_CountOnes4, ( UI4 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI1, MASTER_Bit_IsParity4, ( UI4 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI1, MASTER_Bit_Smear1, ( UI1 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI2, MASTER_Bit_Smear2, ( UI2 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI4, MASTER_Bit_Smear4, ( UI4 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI1, MASTER_Bit_Bitlen1, ( UI1 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI2, MASTER_Bit_Bitlen2, ( UI2 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI4, MASTER_Bit_Bitlen4, ( UI4 ) );
 MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI1, MASTER_BIT_POW2ROUND1, ( const UI1 ) );
 MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI2, MASTER_BIT_POW2ROUND2, ( const UI2 ) );
 MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI4, MASTER_BIT_POW2ROUND4, ( const UI4 ) );
-MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI1, MASTER_BIT_LOG2ROUND1, ( const UI1 ) );
-MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI2, MASTER_BIT_LOG2ROUND2, ( const UI2 ) );
-MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI4, MASTER_BIT_LOG2ROUND4, ( const UI4 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, SI1, MASTER_BIT_LOG2ROUND1, ( const SI1 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, SI2, MASTER_BIT_LOG2ROUND2, ( const SI2 ) );
+MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, SI4, MASTER_BIT_LOG2ROUND4, ( const SI4 ) );
 MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI1, MASTER_BIT_LOG2MATHROUND1, ( const UI1 ) );
 MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI1, MASTER_BIT_LOG2MATHROUND2, ( const UI2 ) );
 MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI1, MASTER_BIT_LOG2MATHROUND4, ( const UI4 ) );
@@ -42,7 +42,7 @@ MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI1, MASTER_BIT_LOG2MATHROUND4, ( const
 	MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI8, MASTER_Bit_Smear8, ( const UI8 ) );
 	MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI8, MASTER_Bit_Bitlen8, ( const UI8 ) );
 	MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI8, MASTER_BIT_POW2ROUND8, ( const UI8 ) );
-	MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI8, MASTER_BIT_LOG2ROUND8, ( const UI8 ) );
+	MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, SI8, MASTER_BIT_LOG2ROUND8, ( const SI8 ) );
 	MASTER_EXTERN_FUNCTION( MASTER_NO_FLAGS, UI1, MASTER_BIT_LOG2MATHROUND8, ( const UI8 ) );
 #endif /* #! 64 Bits !# */
 
@@ -86,7 +86,7 @@ MASTER_DEFINE_FUNCTION2(
 	( UI1, width )
 ) {
 	UI4 out = 0;
-	for (; width > 0; width -= 1) {
+	for (/* #! Inited above !# */; width > 0; width -= 1) {
 		out <<= 1;
 		out |= phrase & 1;
 		phrase >>= 1;
@@ -128,10 +128,10 @@ MASTER_DEFINE_FUNCTION1(
 	UI4,
 	( UI4, phrase )
 ) {
-	phrase = ((phrase & MASTER_UI4_POSTFIX_C(0xAAAAAAAA)) >> 1) | ((phrase & MASTER_UI4_POSTFIX_C(0x55555555)) << 1);
-	phrase = ((phrase & MASTER_UI4_POSTFIX_C(0xCCCCCCCC)) >> 2) | ((phrase & MASTER_UI4_POSTFIX_C(0x33333333)) << 2);
-	phrase = ((phrase & MASTER_UI4_POSTFIX_C(0xF0F0F0F0)) >> 4) | ((phrase & MASTER_UI4_POSTFIX_C(0x0F0F0F0F)) << 4);
-	phrase = ((phrase & MASTER_UI4_POSTFIX_C(0xFF00FF00)) >> 8) | ((phrase & MASTER_UI4_POSTFIX_C(0x00FF00FF)) << 8);
+	phrase = ((phrase & (UI4)0xAAAAAAAA) >> 1) | ((phrase & (UI4)0x55555555) << 1);
+	phrase = ((phrase & (UI4)0xCCCCCCCC) >> 2) | ((phrase & (UI4)0x33333333) << 2);
+	phrase = ((phrase & (UI4)0xF0F0F0F0) >> 4) | ((phrase & (UI4)0x0F0F0F0F) << 4);
+	phrase = ((phrase & (UI4)0xFF00FF00) >> 8) | ((phrase & (UI4)0x00FF00FF) << 8);
 	phrase = (phrase >> 16) | (phrase << 16);
 	return phrase;
 }
@@ -166,12 +166,6 @@ MASTER_DEFINE_FUNCTION1(
 		phrase = phrase - ((phrase >> 1) & 0x55555555);
 		phrase = (phrase & 0x33333333) + ((phrase >> 2) & 0x33333333);
 		return ((phrase + ((phrase >> 4) & 0x0F0F0F0F)) * 0x01010101) >> 24;
-		/* #!
-		UI1 result = 0;
-		for (; phrase > 0; phrase >>= 1)
-			result += phrase & 1;
-		return result;
-		!# */
 	}
 #endif /* #! MASTER_BITLIB_USE_OPTIMIZED_COUNTING_ALGORITHM !# */
 MASTER_DEFINE_FUNCTION1(
@@ -247,10 +241,10 @@ MASTER_DEFINE_FUNCTION1(
 	}
 #endif /* #! MASTER_64_AVAILABLE !# */
 
-#define MASTER_zRIVATE_BITLEN_MACROS_PROCESS( value, bitcount, bit_count, cast_type ) do { \
-		if ((value) >= ((cast_type)1 << (bit_count))) { \
-			(bitcount) += (bit_count); \
-			(value) >>= (bit_count); \
+#define MASTER_zzz_BITLEN_MACROS_PROCESS( value, bitCountVar, bitCount, castType ) do { \
+		if ((value) >= ((castType)1 << (bitCount))) { \
+			(bitCountVar) += (bitCount); \
+			(value) >>= (bitCount); \
 		} \
 	} while (0)
 
@@ -261,12 +255,12 @@ MASTER_DEFINE_FUNCTION1(
 	MASTER_PREFER_INLINE UI1,
 	( UI1, value )
 ) {
-	UI1 bitcount = 0;
-	MASTER_zRIVATE_BITLEN_MACROS_PROCESS(value, bitcount, 4, UI4);
-	MASTER_zRIVATE_BITLEN_MACROS_PROCESS(value, bitcount, 2, UI4);
-	MASTER_zRIVATE_BITLEN_MACROS_PROCESS(value, bitcount, 1, UI4);
-	if (value > 0) bitcount += 1;
-	return bitcount;
+	UI1 bitCountVar = 0;
+	MASTER_zzz_BITLEN_MACROS_PROCESS(value, bitCountVar, 4, UI4);
+	MASTER_zzz_BITLEN_MACROS_PROCESS(value, bitCountVar, 2, UI4);
+	MASTER_zzz_BITLEN_MACROS_PROCESS(value, bitCountVar, 1, UI4);
+	if (value > 0) bitCountVar += 1;
+	return bitCountVar;
 }
 
 MASTER_DEFINE_FUNCTION1(
@@ -277,10 +271,10 @@ MASTER_DEFINE_FUNCTION1(
 	( UI2, value )
 ) {
 	UI1 bitcount = 0;
-	MASTER_zRIVATE_BITLEN_MACROS_PROCESS(value, bitcount, 8, UI4);
-	MASTER_zRIVATE_BITLEN_MACROS_PROCESS(value, bitcount, 4, UI4);
-	MASTER_zRIVATE_BITLEN_MACROS_PROCESS(value, bitcount, 2, UI4);
-	MASTER_zRIVATE_BITLEN_MACROS_PROCESS(value, bitcount, 1, UI4);
+	MASTER_zzz_BITLEN_MACROS_PROCESS(value, bitcount, 8, UI4);
+	MASTER_zzz_BITLEN_MACROS_PROCESS(value, bitcount, 4, UI4);
+	MASTER_zzz_BITLEN_MACROS_PROCESS(value, bitcount, 2, UI4);
+	MASTER_zzz_BITLEN_MACROS_PROCESS(value, bitcount, 1, UI4);
 	if (value > 0) bitcount += 1;
 	return bitcount;
 }
@@ -293,11 +287,11 @@ MASTER_DEFINE_FUNCTION1(
 	( UI4, value )
 ) {
 	UI1 bitcount = 0;
-	MASTER_zRIVATE_BITLEN_MACROS_PROCESS(value, bitcount, 16, UI4);
-	MASTER_zRIVATE_BITLEN_MACROS_PROCESS(value, bitcount, 8, UI4);
-	MASTER_zRIVATE_BITLEN_MACROS_PROCESS(value, bitcount, 4, UI4);
-	MASTER_zRIVATE_BITLEN_MACROS_PROCESS(value, bitcount, 2, UI4);
-	MASTER_zRIVATE_BITLEN_MACROS_PROCESS(value, bitcount, 1, UI4);
+	MASTER_zzz_BITLEN_MACROS_PROCESS(value, bitcount, 16, UI4);
+	MASTER_zzz_BITLEN_MACROS_PROCESS(value, bitcount, 8, UI4);
+	MASTER_zzz_BITLEN_MACROS_PROCESS(value, bitcount, 4, UI4);
+	MASTER_zzz_BITLEN_MACROS_PROCESS(value, bitcount, 2, UI4);
+	MASTER_zzz_BITLEN_MACROS_PROCESS(value, bitcount, 1, UI4);
 	if (value > 0) bitcount += 1;
 	return bitcount;
 }
@@ -311,12 +305,12 @@ MASTER_DEFINE_FUNCTION1(
 		( UI8, value )
 	) {
 		UI1 bitcount = 0;
-		MASTER_zRIVATE_BITLEN_MACROS_PROCESS(value, bitcount, 32, UI8);
-		MASTER_zRIVATE_BITLEN_MACROS_PROCESS(value, bitcount, 16, UI4);
-		MASTER_zRIVATE_BITLEN_MACROS_PROCESS(value, bitcount, 8, UI4);
-		MASTER_zRIVATE_BITLEN_MACROS_PROCESS(value, bitcount, 4, UI4);
-		MASTER_zRIVATE_BITLEN_MACROS_PROCESS(value, bitcount, 2, UI4);
-		MASTER_zRIVATE_BITLEN_MACROS_PROCESS(value, bitcount, 1, UI4);
+		MASTER_zzz_BITLEN_MACROS_PROCESS(value, bitcount, 32, UI8);
+		MASTER_zzz_BITLEN_MACROS_PROCESS(value, bitcount, 16, UI4);
+		MASTER_zzz_BITLEN_MACROS_PROCESS(value, bitcount, 8, UI4);
+		MASTER_zzz_BITLEN_MACROS_PROCESS(value, bitcount, 4, UI4);
+		MASTER_zzz_BITLEN_MACROS_PROCESS(value, bitcount, 2, UI4);
+		MASTER_zzz_BITLEN_MACROS_PROCESS(value, bitcount, 1, UI4);
 		if (value > 0) bitcount += 1;
 		return bitcount;
 	}
@@ -354,45 +348,45 @@ MASTER_DEFINE_FUNCTION1(
 #		define MASTER_BIT_LOG2ROUND8( value ) (((value) < (MASTER_BIT_POW2FLOOR8(value) | (MASTER_BIT_POW2FLOOR8(value) >> 1))) ? (MASTER_BIT_LOG2FLOOR8(value)) : (MASTER_BIT_LOG2CEIL8(value)))
 #	endif /* #! MASTER_64_AVAILABLE !# */
 #else
-#	define MASTER_zRIVATE_BIT_POW2ROUNDX_GENERATE_MACRO( suffix ) \
+#	define MASTER_zzz_BIT_POW2ROUNDX_DEFMAC( suffix ) \
 		MASTER_DEFINE_FUNCTION1( \
 			MASTER_NO_FLAGS, \
 			MASTER_EMPTY_DESCRIPTION, \
 			/* ! */ MASTER_BIT_POW2ROUND ## suffix /* ! */, \
-			MASTER_PREFER_INLINE UI ## suffix, \
-			( UI ## suffix, value ) \
+			MASTER_PREFER_INLINE MASTER_UNSIGNED_TYPE(suffix), \
+			( const MASTER_UNSIGNED_TYPE(suffix), value ) \
 		) { \
-			UI ## suffix floored = MASTER_BIT_POW2FLOOR ## suffix(value); \
+			MASTER_UNSIGNED_TYPE(suffix) floored = MASTER_BIT_POW2FLOOR ## suffix(value); \
 			floored |= floored >> 1; \
 			if (value < floored) return floored & (floored << 1); \
 			return MASTER_BIT_POW2CEIL ## suffix(value); \
 		}
-#	define MASTER_zRIVATE_BIT_LOG2ROUNDX_GENERATE_MACRO( suffix, numsuff ) \
+#	define MASTER_zzz_BIT_LOG2ROUNDX_DEFMAC( suffix ) \
 		MASTER_DEFINE_FUNCTION1( \
 			MASTER_NO_FLAGS, \
 			MASTER_EMPTY_DESCRIPTION, \
 			/* ! */ MASTER_BIT_LOG2ROUND ## suffix /* ! */, \
-			MASTER_PREFER_INLINE UI ## suffix, \
-			( UI ## suffix, value ) \
+			MASTER_PREFER_INLINE MASTER_SIGNED_TYPE(suffix), \
+			( const MASTER_SIGNED_TYPE(suffix), value ) \
 		) { \
-			const UI1 bits = MASTER_BIT_LOG2FLOOR ## suffix(value); \
-			UI ## suffix floored = 1 ## numsuff << bits; \
+			const UI1 bits = (UI1)MASTER_BIT_LOG2FLOOR ## suffix((MASTER_UNSIGNED_TYPE(suffix))value); \
+			MASTER_SIGNED_TYPE(suffix) floored = (MASTER_UNSIGNED_TYPE(suffix))1 << bits; \
 			if (value <= 1) return value - 1; \
 			floored |= floored >> 1; \
-			return bits + (value >= floored); \
+			return (MASTER_SIGNED_TYPE(suffix))(bits + (value >= floored)); \
 		}
-		MASTER_zRIVATE_BIT_POW2ROUNDX_GENERATE_MACRO( 1 )
-		MASTER_zRIVATE_BIT_POW2ROUNDX_GENERATE_MACRO( 2 )
-		MASTER_zRIVATE_BIT_POW2ROUNDX_GENERATE_MACRO( 4 )
-		MASTER_zRIVATE_BIT_LOG2ROUNDX_GENERATE_MACRO( 1, U )
-		MASTER_zRIVATE_BIT_LOG2ROUNDX_GENERATE_MACRO( 2, U )
-		MASTER_zRIVATE_BIT_LOG2ROUNDX_GENERATE_MACRO( 4, U )
+		MASTER_zzz_BIT_POW2ROUNDX_DEFMAC( 1 )
+		MASTER_zzz_BIT_POW2ROUNDX_DEFMAC( 2 )
+		MASTER_zzz_BIT_POW2ROUNDX_DEFMAC( 4 )
+		MASTER_zzz_BIT_LOG2ROUNDX_DEFMAC( 1 )
+		MASTER_zzz_BIT_LOG2ROUNDX_DEFMAC( 2 )
+		MASTER_zzz_BIT_LOG2ROUNDX_DEFMAC( 4 )
 #		if MASTER_64_AVAILABLE == 1
-			MASTER_zRIVATE_BIT_POW2ROUNDX_GENERATE_MACRO( 8 )
-			MASTER_zRIVATE_BIT_LOG2ROUNDX_GENERATE_MACRO( 8, L )
+			MASTER_zzz_BIT_POW2ROUNDX_DEFMAC( 8 )
+			MASTER_zzz_BIT_LOG2ROUNDX_DEFMAC( 8 )
 #		endif /* #! MASTER_64_AVAILABLE !# */
-#	undef MASTER_zRIVATE_BIT_POW2ROUNDX_GENERATE_MACRO
-#	undef MASTER_zRIVATE_BIT_LOG2ROUNDX_GENERATE_MACRO
+#	undef MASTER_zzz_BIT_POW2ROUNDX_DEFMAC
+#	undef MASTER_zzz_BIT_LOG2ROUNDX_DEFMAC
 #endif /* #! MASTER_ROUND_FUNCS_INSTEAD_OF_MACROS !# */
 
 MASTER_DEFINE_FUNCTION1(
@@ -400,7 +394,7 @@ MASTER_DEFINE_FUNCTION1(
 	MASTER_EMPTY_DESCRIPTION,
 	/* ! */ MASTER_BIT_LOG2MATHROUND1 /* ! */,
 	MASTER_PREFER_INLINE UI1,
-	( UI1, value )
+	( const UI1, value )
 ) {
 	if (value >= 0xB6) return 8;
 	if (value >= 0x5B) return 7;
@@ -417,7 +411,7 @@ MASTER_DEFINE_FUNCTION1(
 	MASTER_EMPTY_DESCRIPTION,
 	/* ! */ MASTER_BIT_LOG2MATHROUND2 /* ! */,
 	MASTER_PREFER_INLINE UI1,
-	( UI2, value )
+	( const UI2, value )
 ) {
 	if (value >= 0xB505) return 16;
 	if (value >= 0x5A83) return 15;
@@ -427,7 +421,7 @@ MASTER_DEFINE_FUNCTION1(
 	if (value >= 0x5A9) return 11;
 	if (value >= 0x2D5) return 10;
 	if (value >= 0x16B) return 9;
-	return MASTER_BIT_LOG2MATHROUND1(value);
+	return MASTER_BIT_LOG2MATHROUND1((UI1)value);
 }
 
 MASTER_DEFINE_FUNCTION1(
@@ -435,25 +429,25 @@ MASTER_DEFINE_FUNCTION1(
 	MASTER_EMPTY_DESCRIPTION,
 	/* ! */ MASTER_BIT_LOG2MATHROUND4 /* ! */,
 	MASTER_PREFER_INLINE UI1,
-	( UI4, value )
+	( const UI4, value )
 ) {
-	if (value >= 0xB504F334) return 32;
-	if (value >= 0x5A82799A) return 31;
-	if (value >= 0x2D413CCD) return 30;
-	if (value >= 0x16A09E67) return 29;
-	if (value >= 0xB504F34) return 28;
-	if (value >= 0x5A8279A) return 27;
-	if (value >= 0x2D413CD) return 26;
-	if (value >= 0x16A09E7) return 25;
-	if (value >= 0xB504F4) return 24;
-	if (value >= 0x5A827A) return 23;
-	if (value >= 0x2D413D) return 22;
-	if (value >= 0x16A09F) return 21;
-	if (value >= 0xB5050) return 20;
-	if (value >= 0x5A828) return 19;
-	if (value >= 0x2D414) return 18;
-	if (value >= 0x16A0A) return 17;
-	return MASTER_BIT_LOG2MATHROUND2(value);
+	if (value >= (UI4)0xB504F334) return 32;
+	if (value >= (UI4)0x5A82799A) return 31;
+	if (value >= (UI4)0x2D413CCD) return 30;
+	if (value >= (UI4)0x16A09E67) return 29;
+	if (value >= (UI4)0xB504F34) return 28;
+	if (value >= (UI4)0x5A8279A) return 27;
+	if (value >= (UI4)0x2D413CD) return 26;
+	if (value >= (UI4)0x16A09E7) return 25;
+	if (value >= (UI4)0xB504F4) return 24;
+	if (value >= (UI4)0x5A827A) return 23;
+	if (value >= (UI4)0x2D413D) return 22;
+	if (value >= (UI4)0x16A09F) return 21;
+	if (value >= (UI4)0xB5050) return 20;
+	if (value >= (UI4)0x5A828) return 19;
+	if (value >= (UI4)0x2D414) return 18;
+	if (value >= (UI4)0x16A0A) return 17;
+	return MASTER_BIT_LOG2MATHROUND2((UI2)value);
 }
 
 #if MASTER_64_AVAILABLE == 1
@@ -462,7 +456,7 @@ MASTER_DEFINE_FUNCTION1(
 		MASTER_EMPTY_DESCRIPTION,
 		/* ! */ MASTER_BIT_LOG2MATHROUND8 /* ! */,
 		MASTER_PREFER_INLINE UI1,
-		( UI8, value )
+		( const UI8, value )
 	) {
 		if (value >= 0xB504F333F9DDE401) return 64;
 		if (value >= 0x5A827999FCEEF201) return 63;
@@ -496,7 +490,7 @@ MASTER_DEFINE_FUNCTION1(
 		if (value >= 0x5A82799A0) return 35;
 		if (value >= 0x2D413CCD0) return 34;
 		if (value >= 0x16A09E668) return 33;
-		return MASTER_BIT_LOG2MATHROUND4(value);
+		return MASTER_BIT_LOG2MATHROUND4((UI4)value);
 	}
 #endif /* #! MASTER_64_AVAILABLE !# */
 
@@ -507,17 +501,17 @@ MASTER_DEFINE_FUNCTION1(
 #	define MASTER_BIT_POW2MATHROUND8( value ) (1L << MASTER_BIT_LOG2MATHROUND8(value))
 #endif /* #! MASTER_64_AVAILABLE !# */
 
-#define MASTER_BIT_GETBIT( value, bit_index ) (((value) >> (bit_index)) & 1)
-#define MASTER_BIT_SETBIT( value, bit_index, bit_value ) (((value) & (~(1 << (bit_index)))) | ((bit_value) << (bit_index)))
+#define MASTER_BIT_GETBIT( value, bitIndex ) (((value) >> (bitIndex)) & 1)
+#define MASTER_BIT_SETBIT( value, bitIndex, bitValue ) (((value) & (~(1 << (bitIndex)))) | ((bitValue) << (bitIndex)))
 #define MASTER_BIT_HASZEROBYTE( value ) ((((value) - 0x01010101) & (~(value)) & 0x80808080) > 0)
-#define MASTER_BIT_HASBYTE( value, byte_value ) MASTER_BIT_HASZEROBYTE(value ^ ((~(UI4)0) / 0xFF * (byte_value)))
+#define MASTER_BIT_HASBYTE( value, byteValue ) MASTER_BIT_HASZEROBYTE(value ^ ((~(UI4)0) / 0xFF * (byteValue)))
 
 MASTER_END_DECLARATIONS
 
-#ifdef MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS
-	const UI4 MASTER_zRIVATE_BITLIB_INCLUDE_H_LAST_LINE = MASTER_LINE + 6;
-#endif /* #! MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS !# */
+#ifdef MASTER_LAST_LINE_LIBRARY_NUMBERS
+	const UI4 MASTER_zzz_BITLIB_H_LLINE = MASTER_LINE + 6;
+#endif /* #! MASTER_LAST_LINE_LIBRARY_NUMBERS !# */
 
-#endif /* #! MASTER_zRIVATE_BITLIB_INCLUDE_H !# */
+#endif /* #! MASTER_zzz_BITLIB_H !# */
 
 /* #! be master !# */

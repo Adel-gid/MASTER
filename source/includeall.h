@@ -8,8 +8,8 @@
  * Source : https://github.com/Adel-gid/MASTER
  !# */
 
-#ifndef MASTER_zRIVATE_INCLUDE_ALL_INCLUDE_H
-#define MASTER_zRIVATE_INCLUDE_ALL_INCLUDE_H
+#ifndef MASTER_zzz_INCLUDE_ALL_H
+#define MASTER_zzz_INCLUDE_ALL_H
 
 #include <master_enum.h>
 
@@ -44,33 +44,41 @@ MASTER_BEGIN_DECLARATIONS
 #include <hashlib.h>
 #include <checksum.h>
 
+/* #! Some Dependencies !# */
+#include <library.h>
+
 /* #! For metadata only !# */
 #include <compilers/gcc_config.h>
+#include <compilers/tc_config.h>
+#include <compilers/tcc_config.h>
 
 MASTER_END_DECLARATIONS
 
-#ifdef MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS
-	#define MASTER_FULL_LIBRARY_SUM_OF_LINES (MASTER_zRIVATE_INCLUDEALL_INCLUDE_H_LAST_LINE + \
-											  MASTER_zRIVATE_CODE_STYLE_INCLUDE_H_LAST_LINE + \
-											  MASTER_zRIVATE_ARCHITECTURE_DETECT_INCLUDE_H_LAST_LINE + \
-											  MASTER_zRIVATE_OPERATING_SYSTEM_DETECT_INCLUDE_H_LAST_LINE + \
-											  MASTER_zRIVATE_COMPILER_DETECT_INCLUDE_H_LAST_LINE + \
-											  MASTER_zRIVATE_ABSTRACT_INCLUDE_H_LAST_LINE + \
-											  MASTER_zRIVATE_SIMD_DETECT_INCLUDE_H_LAST_LINE + \
-											  MASTER_zRIVATE_DISTANCES_INCLUDE_H_LAST_LINE + \
-											  MASTER_zRIVATE_BITLIB_INCLUDE_H_LAST_LINE + \
-											  MASTER_zRIVATE_MASMATH_INCLUDE_H_LAST_LINE + \
-											  MASTER_zRIVATE_CHARMAPLIB_INCLUDE_H_LAST_LINE + \
-											  MASTER_zRIVATE_RANDOMLIB_INCLUDE_H_LAST_LINE + \
-											  MASTER_zRIVATE_ALGOLIB_INCLUDE_H_LAST_LINE + \
-											  MASTER_zRIVATE_HASHLIB_INCLUDE_H_LAST_LINE + \
-											  MASTER_zRIVATE_CHECKSUM_INCLUDE_H_LAST_LINE + \
-											  MASTER_zRIVATE_GCC_CONFIG_INCLUDE_H_LAST_LINE)
-	const UI4 MASTER_zRIVATE_INCLUDEALL_INCLUDE_H_LAST_LINE = MASTER_LINE + 6;
+#ifdef MASTER_LAST_LINE_LIBRARY_NUMBERS
+#	define MASTER_FULL_LIBRARY_SUM_OF_LINES (MASTER_zzz_INCLUDEALL_H_LLINE + \
+											 MASTER_zzz_CODE_STYLE_H_LLINE + \
+											 MASTER_zzz_ARCH_DETECT_H_LLINE + \
+											 MASTER_zzz_OS_DETECT_H_LLINE + \
+											 MASTER_zzz_COMPILER_DETECT_H_LLINE + \
+											 MASTER_zzz_ABSTRACT_H_LLINE + \
+											 MASTER_zzz_SIMD_DETECT_H_LLINE + \
+											 MASTER_zzz_DISTANCES_H_LLINE + \
+											 MASTER_zzz_BITLIB_H_LLINE + \
+											 MASTER_zzz_MASMATH_H_LLINE + \
+											 MASTER_zzz_CHARMAPLIB_H_LLINE + \
+											 MASTER_zzz_RANDOMLIB_H_LLINE + \
+											 MASTER_zzz_ALGOLIB_H_LLINE + \
+											 MASTER_zzz_HASHLIB_H_LLINE + \
+											 MASTER_zzz_CHECKSUM_H_LLINE + \
+											 MASTER_zzz_LIBRARY_H_LLINE + \
+											 MASTER_zzz_GCC_CONFIG_H_LLINE + \
+											 MASTER_zzz_TC_CONFIG_H_LLINE + \
+											 MASTER_zzz_TCC_CONFIG_H_LLINE)
+	const UI4 MASTER_zzz_INCLUDEALL_H_LLINE = MASTER_LINE + 8;
 #else
 #	define MASTER_FULL_LIBRARY_SUM_OF_LINES (-1)
-#endif /* #! MASTER_ADD_LAST_LINE_LIBRARY_NUMBERS !# */
+#endif /* #! MASTER_LAST_LINE_LIBRARY_NUMBERS !# */
 
-#endif /* #! MASTER_zRIVATE_INCLUDE_ALL_INCLUDE_H !# */
+#endif /* #! MASTER_zzz_INCLUDE_ALL_H !# */
 
 /* #! be master~ !# */
